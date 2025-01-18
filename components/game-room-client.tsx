@@ -23,6 +23,7 @@ import { supabase } from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import { RoomSettings } from '@/app/game/[id]/room-settings';
 import { PlayerCard } from './player-card';
+import { PokerHandsChart } from './poker-hands-chart';
 
 interface GameRoomClientProps {
   gameId: string;
@@ -34,6 +35,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
   const [loading, setLoading] = useState(true);
   const [currentUsername, setCurrentUsername] = useState<string | null>(null);
   const [showAnalysis, setShowAnalysis] = useState(false);
+  const [showPokerHands, setShowPokerHands] = useState(false);
 
   // Initialize game state and fetch data
   useEffect(() => {
@@ -316,7 +318,9 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
                   />
                 ))}
             </div>
+          </div>
 
+          <div className="space-y-3">
             {/* Collapsible Analysis Section */}
             <Collapsible
               open={showAnalysis}
@@ -336,6 +340,29 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
               <CollapsibleContent className="mt-4">
                 <Card className="p-6">
                   <HandInput />
+                </Card>
+              </CollapsibleContent>
+            </Collapsible>
+
+            {/* Collapsible Poker Hands Section */}
+            <Collapsible
+              open={showPokerHands}
+              onOpenChange={setShowPokerHands}
+              className="lg:hidden"
+            >
+              <CollapsibleTrigger asChild>
+                <Button variant="outline" className="w-full">
+                  {showPokerHands ? (
+                    <ChevronUp className="h-4 w-4 mr-2" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4 mr-2" />
+                  )}
+                  Poker Hands
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-4">
+                <Card className="p-6">
+                  <PokerHandsChart />
                 </Card>
               </CollapsibleContent>
             </Collapsible>

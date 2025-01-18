@@ -96,7 +96,7 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
       requiredCards: []
     });
 
-    const ranks = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
+    const ranks = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
     const rank1Index = ranks.indexOf(rank1);
     const rank2Index = ranks.indexOf(rank2);
     const distance = Math.abs(rank1Index - rank2Index);
@@ -112,7 +112,7 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
   }
 
   // Check for straight potential
-  const ranks = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
+  const ranks = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
   const rank1Index = ranks.indexOf(rank1);
   const rank2Index = ranks.indexOf(rank2);
   const distance = Math.abs(rank1Index - rank2Index);

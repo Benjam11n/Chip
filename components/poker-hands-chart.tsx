@@ -2,6 +2,13 @@
 
 import { Card } from '@/components/ui/card';
 
+const SUIT_COLORS = {
+  '♠': 'text-white',
+  '♥': 'text-red-500',
+  '♦': 'text-red-500',
+  '♣': 'text-white',
+};
+
 const POKER_HANDS = [
   {
     name: 'Royal Flush',
@@ -65,20 +72,39 @@ const POKER_HANDS = [
   },
 ];
 
+function formatCardExample(example: string) {
+  return example.split(' ').map((card) => {
+    const suit = card.slice(-1); // Last character is the suit
+    const rank = card.slice(0, -1); // The rest is the rank
+    return (
+      <span key={card}>
+        <span className={SUIT_COLORS[suit as keyof typeof SUIT_COLORS]}>
+          {suit}
+        </span>{' '}
+        {rank}{' '}
+      </span>
+    );
+  });
+}
+
 export function PokerHandsChart() {
   return (
-    <Card className="p-6">
+    <div className="py-3">
       <h2 className="text-2xl font-bold mb-6">Poker Hand Rankings</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {POKER_HANDS.map((hand) => (
           <Card key={hand.name} className="p-4 space-y-2">
             <h3 className="font-bold text-lg">{hand.name}</h3>
             <p className="text-sm text-muted-foreground">{hand.description}</p>
-            <div className="font-mono text-lg">{hand.example}</div>
-            <p className="text-sm font-medium">{hand.strength}</p>
+            <div className="font-mono text-lg">
+              {formatCardExample(hand.example)}
+            </div>
+            <p className="text-sm font-medium text-muted-foreground">
+              {hand.strength}
+            </p>
           </Card>
         ))}
       </div>
-    </Card>
+    </div>
   );
 }

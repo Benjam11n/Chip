@@ -5,7 +5,21 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-const RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
+const RANKS = [
+  'A',
+  'K',
+  'Q',
+  'J',
+  '10',
+  '9',
+  '8',
+  '7',
+  '6',
+  '5',
+  '4',
+  '3',
+  '2',
+];
 const SUITS = ['♠', '♥', '♦', '♣'];
 const SUIT_COLORS = {
   '♠': 'text-white',
