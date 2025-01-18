@@ -21,8 +21,8 @@ export default function CreateGamePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
-  const [maxPlayers, setMaxPlayers] = useState(8);
-  const [initialBuyIn, setInitialBuyIn] = useState(500);
+  const [maxPlayers, setMaxPlayers] = useState(6);
+  const [initialBuyIn, setInitialBuyIn] = useState(1000);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,11 +52,11 @@ export default function CreateGamePage() {
 
       const data = await response.json();
 
-      toast('Success', {
+      toast.success('Success', {
         description: 'Game created successfully',
       });
 
-      router.push(`/game/${data.id}/players`);
+      router.push(`/join/${data.code}`);
     } catch (error) {
       toast.error('Error', {
         description:
@@ -116,6 +116,7 @@ export default function CreateGamePage() {
                 id="buyIn"
                 type="number"
                 min={100}
+                max={100000000}
                 step={5}
                 value={initialBuyIn}
                 onChange={handleBuyInChange}

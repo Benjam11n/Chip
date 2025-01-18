@@ -8,10 +8,10 @@ import { cn } from '@/lib/utils';
 const RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
 const SUITS = ['♠', '♥', '♦', '♣'];
 const SUIT_COLORS = {
-  '♠': 'text-black',
+  '♠': 'text-white',
   '♥': 'text-red-500',
   '♦': 'text-red-500',
-  '♣': 'text-black'
+  '♣': 'text-white',
 };
 
 interface CardSelectorProps {
@@ -19,7 +19,10 @@ interface CardSelectorProps {
   onSelectCard: (card: string) => void;
 }
 
-export function CardSelector({ selectedCards, onSelectCard }: CardSelectorProps) {
+export function CardSelector({
+  selectedCards,
+  onSelectCard,
+}: CardSelectorProps) {
   const [selectedRank, setSelectedRank] = useState<string | null>(null);
   const [selectedSuit, setSelectedSuit] = useState<string | null>(null);
 
@@ -36,15 +39,17 @@ export function CardSelector({ selectedCards, onSelectCard }: CardSelectorProps)
     <Card className="p-4">
       <div className="space-y-4">
         <div className="grid grid-cols-4 gap-2">
-          {SUITS.map(suit => (
+          {SUITS.map((suit) => (
             <Button
               key={suit}
-              variant={selectedSuit === suit ? "default" : "outline"}
+              variant={selectedSuit === suit ? 'default' : 'outline'}
               className={cn(
-                "text-2xl font-normal h-12",
+                'text-2xl font-normal h-12',
                 SUIT_COLORS[suit as keyof typeof SUIT_COLORS]
               )}
-              onClick={() => setSelectedSuit(suit === selectedSuit ? null : suit)}
+              onClick={() =>
+                setSelectedSuit(suit === selectedSuit ? null : suit)
+              }
             >
               {suit}
             </Button>
@@ -52,12 +57,14 @@ export function CardSelector({ selectedCards, onSelectCard }: CardSelectorProps)
         </div>
 
         <div className="grid grid-cols-7 gap-2">
-          {RANKS.map(rank => (
+          {RANKS.map((rank) => (
             <Button
               key={rank}
-              variant={selectedRank === rank ? "default" : "outline"}
+              variant={selectedRank === rank ? 'default' : 'outline'}
               className="h-12"
-              onClick={() => setSelectedRank(rank === selectedRank ? null : rank)}
+              onClick={() =>
+                setSelectedRank(rank === selectedRank ? null : rank)
+              }
             >
               {rank}
             </Button>
@@ -69,17 +76,18 @@ export function CardSelector({ selectedCards, onSelectCard }: CardSelectorProps)
             className="w-full"
             onClick={() => handleCardClick(selectedRank, selectedSuit)}
           >
-            Add {selectedRank}{selectedSuit}
+            Add {selectedRank}
+            {selectedSuit}
           </Button>
         )}
 
         <div className="flex justify-center gap-4">
-          {selectedCards.map(card => (
+          {selectedCards.map((card) => (
             <Button
               key={card}
               variant="outline"
               className={cn(
-                "text-xl font-normal h-16 w-12",
+                'text-xl font-normal h-16 w-12',
                 SUIT_COLORS[card[1] as keyof typeof SUIT_COLORS]
               )}
               onClick={() => onSelectCard(card)}

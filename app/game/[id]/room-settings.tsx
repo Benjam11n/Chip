@@ -25,6 +25,8 @@ import { Share2, Copy, QrCode, UserMinus } from 'lucide-react';
 import QRCode from 'qrcode';
 import { Player } from '@/app/types';
 import { toast } from 'sonner';
+import Image from 'next/image';
+import { Badge } from '@/components/ui/badge';
 
 interface RoomSettingsProps {
   gameId: string;
@@ -88,7 +90,7 @@ export function RoomSettings({
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-2">
+      <div className="grid grid-cols-2 gap-2">
         <Button variant="outline" className="flex-1" onClick={handleShare}>
           <Share2 className="h-4 w-4 mr-2" />
           Share Room
@@ -97,9 +99,11 @@ export function RoomSettings({
           <Copy className="h-4 w-4 mr-2" />
           Copy Link
         </Button>
+      </div>
+      <div className="flex">
         <Dialog open={showQR} onOpenChange={setShowQR}>
           <DialogTrigger asChild>
-            <Button variant="outline" className="flex-1" onClick={handleShowQR}>
+            <Button variant="default" className="flex-1" onClick={handleShowQR}>
               <QrCode className="h-4 w-4 mr-2" />
               Show QR
             </Button>
@@ -110,7 +114,12 @@ export function RoomSettings({
             </DialogHeader>
             {qrCode && (
               <div className="flex justify-center p-4">
-                <img src={qrCode} alt="Room QR Code" className="w-64 h-64" />
+                <Image
+                  width={256}
+                  height={256}
+                  src={qrCode}
+                  alt="Room QR Code"
+                />
               </div>
             )}
           </DialogContent>
@@ -133,13 +142,13 @@ export function RoomSettings({
               >
                 <div className="flex items-center gap-2">
                   <span className="font-medium">{player.name}</span>
-                  {player.id === currentUserId && (
-                    <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                  {player.name === currentUserId && (
+                    <Badge className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
                       You
-                    </span>
+                    </Badge>
                   )}
                 </div>
-                {player.id !== currentUserId && (
+                {player.name !== currentUserId && (
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="ghost" size="icon">

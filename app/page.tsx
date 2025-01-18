@@ -26,12 +26,11 @@ export default function Home() {
         <div className="relative h-full flex flex-col items-center justify-center text-white p-4">
           <div className="flex items-center gap-4 mb-6">
             <Dices className="h-16 w-16 text-red-500" />
-            <h1 className="text-5xl md:text-6xl font-bold">
-              Poker<span className="text-red-500">Track</span>
-            </h1>
+            <h1 className="text-5xl md:text-6xl font-bold">Chip</h1>
           </div>
           <p className="text-xl md:text-2xl text-gray-300 text-center max-w-2xl mb-12">
-            Track chips, manage players, and elevate your poker game to the next level
+            Track chips, manage players, and elevate your poker game to the next
+            level
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Button
@@ -67,7 +66,8 @@ export default function Home() {
             </div>
             <h3 className="text-xl font-bold mb-2">Real-time Tracking</h3>
             <p className="text-gray-400">
-              Monitor chip counts, player actions, and game progress in real-time
+              Monitor chip counts, player actions, and game progress in
+              real-time
             </p>
           </Card>
 
@@ -77,7 +77,8 @@ export default function Home() {
             </div>
             <h3 className="text-xl font-bold mb-2">Hand Analysis</h3>
             <p className="text-gray-400">
-              Get instant analysis of your poker hands with probability calculations
+              Get instant analysis of your poker hands with probability
+              calculations
             </p>
           </Card>
 

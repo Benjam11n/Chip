@@ -17,8 +17,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <div className="flex min-h-screen flex-col">
+          <main className="w-full flex-1 bg-background/85">
+            <div className="container mx-auto px-4 py-4 sm:px-6 lg:px-8">
+              <Providers>{children}</Providers>
+            </div>
+          </main>
+        </div>
       </body>
     </html>
   );

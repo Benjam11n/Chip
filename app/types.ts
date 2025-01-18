@@ -2,17 +2,13 @@ export interface Player {
   id: string;
   name: string;
   stack: number;
-  position: number;
 }
-
-export type MoneyAction = 'add' | 'remove';
 
 export interface MoveHistory {
   id: string;
   playerId: string;
-  timestamp: number;
-  type: 'money';
-  moneyAction: MoneyAction;
+  createdAt: number;
+  action: 'add' | 'remove';
   amount: number;
 }
 
@@ -20,6 +16,7 @@ export type Game = {
   id: string;
   name: string;
   code: string;
+  pot: number;
   initial_buy_in: number;
   maxPlayers: number;
   isLocked: boolean;
@@ -32,6 +29,7 @@ export type Game = {
 
 export interface GameState {
   id: string;
+  code: string;
   players: Player[];
   pot: number;
   moves: MoveHistory[];

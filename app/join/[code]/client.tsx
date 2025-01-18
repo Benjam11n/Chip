@@ -142,14 +142,22 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
       const { error: insertError } = await supabase.from('players').insert({
         game_id: game.id,
         name: playerName.trim(),
-        position: game.players.length + 1,
+        stack: game.initial_buy_in,
       });
 
       if (insertError) {
         throw new Error(insertError.message);
       }
 
-      toast('Success', {
+      localStorage.setItem(
+        'currentPlayer',
+        JSON.stringify({
+          name: playerName,
+          gameId: game.id,
+        })
+      );
+
+      toast.success('Success', {
         description: 'Successfully joined the game',
       });
 
@@ -167,7 +175,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
   const copyJoinLink = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      toast('Success', {
+      toast.success('Success', {
         description: 'Join link copied to clipboard',
       });
     } catch (error) {
