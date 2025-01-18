@@ -8,7 +8,7 @@ export interface MoveHistory {
   id: string;
   playerId: string;
   createdAt: number;
-  action: 'add' | 'remove';
+  action_type: 'add' | 'remove';
   amount: number;
 }
 
@@ -29,6 +29,7 @@ export type Game = {
 
 export interface GameState {
   id: string;
+  name: string;
   code: string;
   players: Player[];
   pot: number;

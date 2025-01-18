@@ -1,7 +1,6 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import Image from 'next/image';
 
 const POKER_HANDS = [
   {

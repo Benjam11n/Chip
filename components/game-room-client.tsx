@@ -64,6 +64,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
         // Transform the data into GameState format
         setGameState({
           id: game.id,
+          name: game.name,
           pot: game.pot,
           initialBuyIn: game.initial_buy_in,
           code: game.code,
@@ -74,6 +75,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
             totalBuyIn: player.total_buy_in,
           })),
           moves: gameHistory.map((history) => ({
+            ...history,
             id: history.id,
             playerId: history.player_id,
             createdAt: history.created_at,
@@ -89,7 +91,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
           setCurrentUsername(currentPlayer.name);
         }
       } catch (err) {
-        console.error('Error fetching game data:', err);
+        toast.error('Error fetching game data:' + err);
       } finally {
         setLoading(false);
       }
@@ -141,7 +143,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
   const handlePotAction = async (
     playerId: string,
     amount: number,
-    action: 'add' | 'remove'
+    action_type: 'add' | 'remove'
   ) => {
     try {
       if (!gameState) return;
@@ -151,9 +153,9 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
 
       // Calculate new stack for player
       const newStack =
-        action === 'add' ? player.stack - amount : player.stack + amount;
+        action_type === 'add' ? player.stack - amount : player.stack + amount;
       const newPot =
-        action === 'add' ? gameState.pot + amount : gameState.pot - amount;
+        action_type === 'add' ? gameState.pot + amount : gameState.pot - amount;
 
       // Update player's stack
       const { error: playerError } = await supabase
@@ -179,7 +181,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
         .insert({
           player_id: playerId,
           game_id: gameState.id,
-          action_type: action,
+          action_type: action_type,
           amount: amount,
         });
 
@@ -192,7 +194,9 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
         return {
           ...prevState,
           pot:
-            action === 'add' ? prevState.pot + amount : prevState.pot - amount,
+            action_type === 'add'
+              ? prevState.pot + amount
+              : prevState.pot - amount,
           players: prevState.players.map((p) =>
             p.id === playerId ? { ...p, stack: newStack } : p
           ),
@@ -247,9 +251,11 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
       <div className="border-b border-border bg-gradient-to-br from-primary/10 to-background">
         <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Game Room</h1>
+            <h1 className="text-2xl font-bold text-foreground">
+              {gameState.name}
+            </h1>
             <div className="flex gap-4 text-sm text-muted-foreground">
-              <span className="font-medium text-primary">
+              <span className="font-medium text-primary mt-1">
                 Game ID: {gameState.code}
               </span>
             </div>
@@ -293,15 +299,22 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
             </div>
 
             <div className="grid grid-cols-1 gap-6">
-              {gameState.players.map((player) => (
-                <PlayerCard
-                  key={player.id}
-                  player={player}
-                  isCurrentUser={player.name === currentUsername}
-                  onPotAction={handlePotAction}
-                  pot={gameState.pot}
-                />
-              ))}
+              {gameState.players
+                .sort((a, b) => {
+                  // Move the current user to the top
+                  if (a.name === currentUsername) return -1;
+                  if (b.name === currentUsername) return 1;
+                  return 0;
+                })
+                .map((player) => (
+                  <PlayerCard
+                    key={player.id}
+                    player={player}
+                    isCurrentUser={player.name === currentUsername}
+                    onPotAction={handlePotAction}
+                    pot={gameState.pot}
+                  />
+                ))}
             </div>
 
             {/* Collapsible Analysis Section */}

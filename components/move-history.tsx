@@ -25,9 +25,9 @@ export function MoveHistory({ moves, players, totalPot }: MoveHistoryProps) {
 
   const formatMove = (move: MoveHistoryType) => {
     const playerName = getPlayerName(move.playerId);
-    const action = move.action === 'add' ? 'places' : 'takes';
+    const action = move.action_type === 'add' ? 'places' : 'takes';
     return `${playerName} ${action} ${formatAmount(move.amount || 0)} ${
-      move.action === 'add' ? 'in the pot' : 'from the pot'
+      move.action_type === 'add' ? 'in the pot' : 'from the pot'
     }`;
   };
 
