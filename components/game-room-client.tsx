@@ -24,13 +24,14 @@ import { toast } from 'sonner';
 import { RoomSettings } from '@/app/game/[id]/room-settings';
 import { PlayerCard } from './player-card';
 import { PokerHandsChart } from './poker-hands-chart';
+import { useRouter } from 'next/navigation';
 
 interface GameRoomClientProps {
   gameId: string;
 }
 
 export function GameRoomClient({ gameId }: GameRoomClientProps) {
-  // Move all your state and handlers here
+  const router = useRouter();
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentUsername, setCurrentUsername] = useState<string | null>(null);
@@ -239,7 +240,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
     );
   }
 
-  if (!gameState || !currentUsername) {
+  if (!gameState) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-foreground">Game not found</div>
@@ -247,13 +248,25 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
     );
   }
 
+  if (!currentUsername) {
+    router.push(`/join/${gameState.code}`);
+  }
+
+  const inGame = gameState.players
+    .map((player) => player.name)
+    .includes(currentUsername!);
+
+  if (!inGame) {
+    router.push(`/join/${gameState.code}`);
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header Section */}
-      <div className="border-b border-border bg-gradient-to-br from-primary/10 to-background">
+      <div className="border-b border-border">
         <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">
+            <h1 className="text-2xl font-bold text-foreground mt-3">
               {gameState.name}
             </h1>
             <div className="flex gap-4 text-sm text-muted-foreground">
@@ -277,8 +290,9 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
               <div className="mt-6">
                 <RoomSettings
                   gameId={gameState.id}
+                  gameCode={gameState.code}
                   players={gameState.players}
-                  currentUserId={currentUsername}
+                  currentUsername={currentUsername!}
                   onKickPlayer={handleKickPlayer}
                 />
               </div>

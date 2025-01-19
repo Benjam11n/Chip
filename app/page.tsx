@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <div className="relative h-[60vh] bg-gradient-to-br from-red-900 to-black overflow-hidden">
+      <div className="relative h-auto mt-12">
         {/* Decorative cards */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-[10%] left-[10%] transform -rotate-12">
@@ -52,9 +52,6 @@ export default function Home() {
             </Button>
           </div>
         </div>
-
-        {/* Bottom fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black to-transparent" />
       </div>
 
       {/* Features Section */}

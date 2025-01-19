@@ -27,26 +27,32 @@ import { Player } from '@/app/types';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
+import { SheetFooter } from '@/components/ui/sheet';
+import { supabase } from '@/lib/supabase/client';
+import { useRouter } from 'next/navigation';
 
 interface RoomSettingsProps {
   gameId: string;
+  gameCode: string;
   players: Player[];
-  currentUserId: string;
+  currentUsername: string;
   onKickPlayer: (playerId: string) => void;
 }
 
 export function RoomSettings({
   gameId,
+  gameCode,
   players,
-  currentUserId,
+  currentUsername,
   onKickPlayer,
 }: RoomSettingsProps) {
+  const router = useRouter();
   const [qrCode, setQrCode] = useState<string>('');
   const [showQR, setShowQR] = useState(false);
 
   const roomUrl =
     typeof window !== 'undefined'
-      ? `${window.location.origin}/join/${gameId}`
+      ? `${window.location.origin}/join/${gameCode}`
       : '';
 
   const handleShare = async () => {
@@ -86,6 +92,27 @@ export function RoomSettings({
       }
     }
     setShowQR(true);
+  };
+
+  const handleEndGame = async (gameId: string) => {
+    try {
+      await supabase.rpc('set_config', {
+        key: 'app.current_game_id',
+        value: gameId,
+      });
+
+      const { error } = await supabase.from('games').delete().eq('id', gameId);
+
+      if (error) throw error;
+      toast.success('Success', { description: 'Game ended successfully' });
+
+      localStorage.removeItem('currentPlayer');
+      router.push('/');
+    } catch (error) {
+      toast.error(
+        'Error ending game: ' + (error instanceof Error ? error.message : error)
+      );
+    }
   };
 
   return (
@@ -142,13 +169,13 @@ export function RoomSettings({
               >
                 <div className="flex items-center gap-2">
                   <span className="font-medium">{player.name}</span>
-                  {player.name === currentUserId && (
+                  {player.name === currentUsername && (
                     <Badge className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
                       You
                     </Badge>
                   )}
                 </div>
-                {player.name !== currentUserId && (
+                {player.name !== currentUsername && (
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="ghost" size="icon">
@@ -179,6 +206,29 @@ export function RoomSettings({
           </div>
         </div>
       </Card>
+
+      <SheetFooter className="absolute inset-x-0 bottom-0 mt-6 flex-col p-6">
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive">End game</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>End Game</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to end the game for all players? This
+                action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={() => handleEndGame(gameId)}>
+                End
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </SheetFooter>
     </div>
   );
 }

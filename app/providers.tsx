@@ -12,7 +12,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange
     >
       {children}
-      <Toaster richColors />
+      <Toaster richColors duration={2500} closeButton />
     </ThemeProvider>
   );
 }

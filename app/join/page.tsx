@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 export default function JoinPage() {
   const router = useRouter();
@@ -22,6 +22,15 @@ export default function JoinPage() {
   return (
     <div className="min-h-screen bg-background p-4">
       <div className="max-w-md mx-auto space-y-6">
+        <Button
+          variant="ghost"
+          className="flex items-center gap-2"
+          onClick={() => router.push('/')}
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </Button>
+
         <div className="text-center">
           <h1 className="text-3xl font-bold">Join Game</h1>
           <p className="text-muted-foreground mt-2">
@@ -37,17 +46,13 @@ export default function JoinPage() {
                 id="code"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
-                placeholder="Enter game code"
-                className="text-center text-xl tracking-wider"
+                placeholder="Your game code..."
+                className="text-center"
                 maxLength={6}
               />
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={!code.trim()}
-            >
+            <Button type="submit" className="w-full" disabled={!code.trim()}>
               Continue
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
-import { QrCode, Copy, Users } from 'lucide-react';
+import { QrCode, Copy, Users, ArrowLeft } from 'lucide-react';
 import QRCode from 'qrcode';
 import { supabase } from '@/lib/supabase/client';
 import { Game } from '@/app/types';
@@ -25,12 +25,10 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
   const [joining, setJoining] = useState(false);
   const [playerName, setPlayerName] = useState('');
   const [qrCode, setQrCode] = useState('');
-  const [error, setError] = useState<string | null>(null);
 
   // Memoize loadGame function to prevent unnecessary recreations
   const loadGame = useCallback(async () => {
     try {
-      setError(null);
       const { data: game, error: fetchError } = await supabase
         .from('games')
         .select('*, players(*)')
@@ -61,7 +59,6 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
         // Don't throw - QR code is non-critical
       }
     } catch (error: any) {
-      setError(error.message);
       toast.error('Error', {
         description: error.message || 'Game not found or invalid code',
       });
@@ -92,13 +89,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
           }
         }
       )
-      .subscribe((status) => {
-        if (status === 'SUBSCRIBED') {
-          console.log('Successfully subscribed to game updates');
-        } else {
-          console.error('Failed to subscribe to game updates:', status);
-        }
-      });
+      .subscribe();
 
     return () => {
       subscription.unsubscribe();
@@ -110,7 +101,6 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
     if (!game || !playerName.trim()) return;
 
     setJoining(true);
-    setError(null);
 
     try {
       // Input validation
@@ -127,7 +117,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
         throw new Error('Game is locked');
       }
 
-      if (game.players.length >= game.maxPlayers) {
+      if (game.players.length >= game.max_players) {
         throw new Error('Game is full');
       }
 
@@ -136,7 +126,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
           (p) => p.name.toLowerCase() === playerName.toLowerCase()
         )
       ) {
-        throw new Error('Name already taken');
+        throw new Error('Name already taken. Please choose another name');
       }
 
       const { error: insertError } = await supabase.from('players').insert({
@@ -163,7 +153,6 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
 
       router.push(`/game/${game.id}`);
     } catch (error: any) {
-      setError(error.message);
       toast.error('Error', {
         description: error.message || 'Failed to join game',
       });
@@ -196,14 +185,13 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
     );
   }
 
-  if (error || !game) {
+  if (!game) {
     return (
       <div className="min-h-screen bg-background p-4">
         <div className="max-w-md mx-auto text-center">
           <h1 className="text-2xl font-bold mb-4">Game Not Found</h1>
           <p className="text-muted-foreground">
-            {error ||
-              "The game you're looking for doesn't exist or has expired."}
+            {"The game you're looking for doesn't exist or has expired."}
           </p>
           <Button
             variant="outline"
@@ -220,6 +208,14 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
   return (
     <div className="min-h-screen bg-background p-4">
       <div className="max-w-md mx-auto space-y-6">
+        <Button
+          variant="ghost"
+          className="flex items-center gap-2"
+          onClick={() => router.push('/')}
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Home
+        </Button>
         <Card className="p-6">
           <div className="space-y-6">
             <div className="space-y-2 text-center">
@@ -227,7 +223,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
               <div className="flex items-center justify-center gap-2 text-muted-foreground">
                 <Users className="h-4 w-4" />
                 <span>
-                  {game.players.length} / {game.maxPlayers} players
+                  {game?.players?.length} / {game.max_players} players
                 </span>
               </div>
             </div>
@@ -264,6 +260,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
                     height={252}
                     src={qrCode}
                     alt="Join QR Code"
+                    className="rounded-md"
                   />
                 </div>
               ) : (
@@ -300,7 +297,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
           </div>
         </Card>
 
-        {game.players.length > 0 && (
+        {game?.players?.length > 0 && (
           <Card className="p-6">
             <h2 className="font-semibold mb-4">Current Players</h2>
             <div className="space-y-2">

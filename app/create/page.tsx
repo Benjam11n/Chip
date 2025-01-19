@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { Dices } from 'lucide-react';
+import { ArrowLeft, Dices } from 'lucide-react';
 import { toast } from 'sonner';
 
 // Type for the game data
@@ -77,7 +77,16 @@ export default function CreateGamePage() {
   return (
     <div className="min-h-screen bg-background p-4">
       <div className="max-w-md mx-auto space-y-6">
-        <div className="flex items-center justify-center gap-2">
+        <Button
+          variant="ghost"
+          className="flex items-center gap-2"
+          onClick={() => router.push('/')}
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </Button>
+
+        <div className="flex items-center justify-center gap-2 mt-6">
           <Dices className="h-8 w-8" />
           <h1 className="text-3xl font-bold">Create Game</h1>
         </div>

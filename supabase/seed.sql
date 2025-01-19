@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS games (
     is_locked boolean NOT NULL DEFAULT false,
     max_players integer NOT NULL,
     status text NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'completed', 'cancelled')),
+    last_activity timestamptz DEFAULT now(),
     created_at timestamptz DEFAULT now(),
     updated_at timestamptz DEFAULT now()
 );
@@ -43,6 +44,10 @@ ALTER TABLE game_actions ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Anyone can view games" ON games FOR SELECT USING (true);
 CREATE POLICY "Anyone can create games" ON games FOR INSERT WITH CHECK (true);
 CREATE POLICY "Anyone can update games" ON games FOR UPDATE USING (true);
+CREATE POLICY "Players within the same game can delete game"
+ON games
+FOR DELETE
+USING (id = current_setting('app.current_game_id')::uuid);
 
 CREATE POLICY "Anyone can view players" ON players FOR SELECT USING (true);
 CREATE POLICY "Anyone can join games" ON players FOR INSERT WITH CHECK (true);
@@ -81,6 +86,38 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Add trigger to update last_activity on any game-related action
+CREATE OR REPLACE FUNCTION update_game_activity_on_action()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE games 
+    SET last_activity = now()
+    WHERE id = NEW.game_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create triggers for player actions and game actions
+CREATE TRIGGER update_game_activity_on_player_change
+    AFTER INSERT OR UPDATE ON players
+    FOR EACH ROW
+    EXECUTE FUNCTION update_game_activity_on_action();
+
+CREATE TRIGGER update_game_activity_on_game_action
+    AFTER INSERT ON game_actions
+    FOR EACH ROW
+    EXECUTE FUNCTION update_game_activity_on_action();
+
+CREATE OR REPLACE FUNCTION cleanup_inactive_games()
+RETURNS void AS $$
+BEGIN
+    -- Delete games inactive for more than 1 hour
+    DELETE FROM games 
+    WHERE last_activity < NOW() - INTERVAL '1 hour'
+    AND status != 'completed';
+    -- Cascading delete will handle related tables
+END;
+$$ LANGUAGE plpgsql;
 
 -- Create new publication
 CREATE PUBLICATION supabase_realtime FOR TABLE games, players, game_actions;

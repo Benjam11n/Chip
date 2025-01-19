@@ -1,35 +1,58 @@
-'use client';
-
-interface HandStrength {
+export interface HandStrength {
   value: number;
   label: string;
-  color: string;
 }
 
-interface PossibleHand {
+export interface PossibleHand {
   name: string;
-  probability: number;
   description: string;
   requiredCards: string[];
 }
 
-interface HandAnalysis {
+export interface HandAnalysis {
   strength: HandStrength;
   possibleHands: PossibleHand[];
 }
 
-const HAND_RANKINGS = {
-  'AA': 100,
-  'KK': 95,
-  'QQ': 90,
-  'AKs': 85,
-  'JJ': 80,
-  'AQs': 75,
-  'KQs': 70,
-  'AJs': 65,
-  'KJs': 60,
-  'QJs': 55,
-  // Add more rankings as needed
+const HAND_STRENGTHS = {
+  'AA': { category: 'Extremely Strong', value: 4 },
+  'KK': { category: 'Extremely Strong', value: 4 },
+  'QQ': { category: 'Extremely Strong', value: 4 },
+  'AKs': { category: 'Extremely Strong', value: 4 },
+  'JJ': { category: 'Strong', value: 3 },
+  'AQs': { category: 'Strong', value: 3 },
+  'KQs': { category: 'Strong', value: 3 },
+  'AJs': { category: 'Strong', value: 3 },
+  'KJs': { category: 'Strong', value: 3 },
+  'QJs': { category: 'Strong', value: 3 },
+  'ATs': { category: 'Normal', value: 2 },
+  'KTs': { category: 'Normal', value: 2 },
+  'QTs': { category: 'Normal', value: 2 },
+  'JTs': { category: 'Normal', value: 2 },
+  '109s': { category: 'Normal', value: 2 },
+  '98s': { category: 'Normal', value: 2 },
+  '87s': { category: 'Normal', value: 2 },
+  '76s': { category: 'Normal', value: 2 },
+  '65s': { category: 'Normal', value: 2 },
+  '54s': { category: 'Normal', value: 2 },
+  '43s': { category: 'Normal', value: 2 },
+  '32s': { category: 'Weak', value: 1 },
+  'AKo': { category: 'Strong', value: 3 },
+  'KQo': { category: 'Strong', value: 3 },
+  'AQo': { category: 'Strong', value: 3 },
+  'KJo': { category: 'Normal', value: 2 },
+  'QJo': { category: 'Normal', value: 2 },
+  'J10o': { category: 'Normal', value: 2 },
+  'T8o': { category: 'Weak', value: 1 },
+  '97o': { category: 'Weak', value: 1 },
+  '86o': { category: 'Weak', value: 1 },
+  '75o': { category: 'Weak', value: 1 },
+  '64o': { category: 'Weak', value: 1 },
+  '53o': { category: 'Weak', value: 1 },
+  '42o': { category: 'Weak', value: 1 },
+  '32o': { category: 'Fold', value: 0 },
+  '33': { category: 'Fold', value: 0 },
+  '22': { category: 'Fold', value: 0 },
 };
 
 export function analyzeHand(cards: string[]): HandAnalysis {
@@ -41,25 +64,39 @@ export function analyzeHand(cards: string[]): HandAnalysis {
   const isSuited = suit1 === suit2;
   const isPair = rank1 === rank2;
 
-  const handKey = isPair ? `${rank1}${rank1}` : `${rank1}${rank2}${isSuited ? 's' : 'o'}`;
-  const baseStrength = HAND_RANKINGS[handKey as keyof typeof HAND_RANKINGS] || 30;
+  // Normalize the order of ranks (higher rank first)
+  const [highRank, lowRank] = [rank1, rank2].sort((a, b) => {
+    const rankOrder = 'AKQJT98765432';
+    return rankOrder.indexOf(a) - rankOrder.indexOf(b);
+  });
+  
+  // Construct the hand key
+  const handKey = isPair
+    ? `${highRank}${highRank}`
+    : `${highRank}${lowRank}${isSuited ? 's' : 'o'}`;
 
-  const getStrengthLabel = (value: number): HandStrength => {
-    if (value >= 90) return { value, label: 'Premium', color: 'bg-green-500' };
-    if (value >= 75) return { value, label: 'Strong', color: 'bg-emerald-500' };
-    if (value >= 60) return { value, label: 'Playable', color: 'bg-yellow-500' };
-    if (value >= 45) return { value, label: 'Marginal', color: 'bg-orange-500' };
-    return { value, label: 'Weak', color: 'bg-red-500' };
+  // Lookup the hand information
+  const handInfo = HAND_STRENGTHS[handKey as keyof typeof HAND_STRENGTHS] || {
+    category: 'Weak',
+    value: 1,
   };
 
+  const getStrengthLabel = (category: string, value: number): HandStrength => {
+    return {
+      label: category,
+      value: value,
+    };
+  };
+
+  const strengthAssessment = getStrengthLabel(handInfo.category, handInfo.value);
   const possibleHands = calculatePossibleHands(cards);
-  const strengthAssessment = getStrengthLabel(baseStrength);
 
   return {
     strength: strengthAssessment,
-    possibleHands
+    possibleHands,
   };
 }
+
 
 function calculatePossibleHands(cards: string[]): PossibleHand[] {
   const [card1, card2] = cards;
@@ -72,31 +109,33 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
 
   const possibleHands: PossibleHand[] = [];
 
+  // Helper function to get ranks in order
+  const ranks = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
+  
+  // Check for Four of a Kind
   if (isPair) {
     possibleHands.push({
       name: 'Four of a Kind',
-      probability: 0.2,
       description: `Need two more ${rank1}'s`,
       requiredCards: [`${rank1}♠`, `${rank1}♥`, `${rank1}♦`, `${rank1}♣`].filter(c => !cards.includes(c))
     });
 
     possibleHands.push({
       name: 'Full House',
-      probability: 2.5,
       description: 'Need three of any other rank',
       requiredCards: []
     });
   }
 
+  // Check for Flush (same suit)
   if (isSuited) {
     possibleHands.push({
       name: 'Flush',
-      probability: 6.5,
       description: `Need three more ${suit1} cards`,
       requiredCards: []
     });
-
-    const ranks = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
+    
+    // Check for Straight Flush
     const rank1Index = ranks.indexOf(rank1);
     const rank2Index = ranks.indexOf(rank2);
     const distance = Math.abs(rank1Index - rank2Index);
@@ -104,23 +143,25 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
     if (distance <= 4) {
       possibleHands.push({
         name: 'Straight Flush',
-        probability: 0.3,
         description: 'Need three consecutive suited cards',
         requiredCards: []
       });
     }
+
+    // Check for Royal Flush
+    if (rank1 === 'A' && rank2 === 'K') {
+      possibleHands.push({
+        name: 'Royal Flush',
+        description: 'Need 10, J, Q of the same suit',
+        requiredCards: [`10${suit1}`, `J${suit1}`, `Q${suit1}`].filter(c => !cards.includes(c))
+      });
+    }
   }
 
-  // Check for straight potential
-  const ranks = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
-  const rank1Index = ranks.indexOf(rank1);
-  const rank2Index = ranks.indexOf(rank2);
-  const distance = Math.abs(rank1Index - rank2Index);
-  
-  if (distance <= 4) {
+  // Check for Straight
+  if (ranks.indexOf(rank1) - ranks.indexOf(rank2) <= 4) {
     possibleHands.push({
       name: 'Straight',
-      probability: 5.0,
       description: 'Need three connecting cards',
       requiredCards: []
     });
@@ -129,25 +170,28 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
   // Always possible hands
   possibleHands.push({
     name: 'Three of a Kind',
-    probability: isPair ? 12.0 : 2.0,
     description: isPair ? 'Need one more matching card' : 'Need two matching cards',
     requiredCards: []
   });
 
   possibleHands.push({
     name: 'Two Pair',
-    probability: isPair ? 4.0 : 3.5,
     description: isPair ? 'Need another pair' : 'Need matching cards for both',
     requiredCards: []
   });
 
   possibleHands.push({
     name: 'One Pair',
-    probability: isPair ? 100 : 25.0,
     description: isPair ? 'Already have a pair' : 'Need one matching card',
     requiredCards: []
   });
 
-  // Sort by probability
-  return possibleHands.sort((a, b) => b.probability - a.probability);
+  // High Card (if no other hands are possible)
+  possibleHands.push({
+    name: 'High Card',
+    description: 'No other hand, high card is the best',
+    requiredCards: []
+  });
+
+  return possibleHands;
 }

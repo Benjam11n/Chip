@@ -18,7 +18,7 @@ export type Game = {
   code: string;
   pot: number;
   initial_buy_in: number;
-  maxPlayers: number;
+  max_players: number;
   isLocked: boolean;
   status: 'active' | 'completed' | 'cancelled';
   createdAt?: string;
