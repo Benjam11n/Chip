@@ -108,16 +108,61 @@ CREATE TRIGGER update_game_activity_on_game_action
     FOR EACH ROW
     EXECUTE FUNCTION update_game_activity_on_action();
 
+-- Add cleanup function
 CREATE OR REPLACE FUNCTION cleanup_inactive_games()
-RETURNS void AS $$
+RETURNS integer AS $$
+DECLARE
+    deleted_count integer;
 BEGIN
-    -- Delete games inactive for more than 1 hour
-    DELETE FROM games 
-    WHERE last_activity < NOW() - INTERVAL '1 hour'
-    AND status != 'completed';
-    -- Cascading delete will handle related tables
+    WITH deleted AS (
+        DELETE FROM games 
+        WHERE last_activity < NOW() - INTERVAL '24 hours'
+        AND status != 'completed'
+        RETURNING id
+    )
+    SELECT count(*) INTO deleted_count FROM deleted;
+
+    -- Log the cleanup
+    INSERT INTO cleanup_logs (cleaned_games_count, cleaned_at)
+    VALUES (deleted_count, now());
+
+    RETURN deleted_count;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Create logs table if it doesn't exist
+CREATE TABLE IF NOT EXISTS cleanup_logs (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    cleaned_games_count integer NOT NULL,
+    cleaned_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- Enable RLS for cleanup_logs
+ALTER TABLE cleanup_logs ENABLE ROW LEVEL SECURITY;
+
+-- Only allow authenticated users with admin role to view logs
+CREATE POLICY "Allow admins to view cleanup logs" 
+ON cleanup_logs
+FOR SELECT 
+USING (auth.role() = 'service_role');
+
+-- Only allow the system to insert logs
+CREATE POLICY "Allow system to insert cleanup logs" 
+ON cleanup_logs
+FOR INSERT 
+WITH CHECK (auth.role() = 'service_role');
+
+-- No updates allowed
+CREATE POLICY "No updates allowed" 
+ON cleanup_logs
+FOR UPDATE 
+USING (false);
+
+-- No deletes allowed
+CREATE POLICY "No deletes allowed" 
+ON cleanup_logs
+FOR DELETE 
+USING (false);
 
 -- Create new publication
 CREATE PUBLICATION supabase_realtime FOR TABLE games, players, game_actions;
