@@ -7,14 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { toast } from 'sonner';
+import { supabase } from '@/lib/supabase/client';
 
 export default function JoinPage() {
   const router = useRouter();
   const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const supabase = createClientComponentClient();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
