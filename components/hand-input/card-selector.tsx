@@ -22,10 +22,10 @@ const RANKS = [
 ];
 const SUITS = ['♠', '♥', '♦', '♣'];
 const SUIT_COLORS = {
-  '♠': 'text-white',
+  '♠': 'text-foreground',
   '♥': 'text-red-500',
   '♦': 'text-red-500',
-  '♣': 'text-white',
+  '♣': 'text-foreground',
 };
 
 interface CardSelectorProps {
@@ -49,6 +49,8 @@ export function CardSelector({
     }
   };
 
+  console.log(selectedSuit);
+
   return (
     <Card className="p-4">
       <div className="space-y-4">
@@ -59,7 +61,9 @@ export function CardSelector({
               variant={selectedSuit === suit ? 'default' : 'outline'}
               className={cn(
                 'text-2xl font-normal h-12',
-                SUIT_COLORS[suit as keyof typeof SUIT_COLORS]
+                selectedSuit === suit
+                  ? SUIT_COLORS[suit as keyof typeof SUIT_COLORS] + '/90'
+                  : SUIT_COLORS[suit as keyof typeof SUIT_COLORS]
               )}
               onClick={() =>
                 setSelectedSuit(suit === selectedSuit ? null : suit)

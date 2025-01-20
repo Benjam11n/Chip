@@ -3,10 +3,10 @@
 import { Card } from '@/components/ui/card';
 
 const SUIT_COLORS = {
-  '♠': 'text-white',
+  '♠': 'text-foreground',
   '♥': 'text-red-500',
   '♦': 'text-red-500',
-  '♣': 'text-white',
+  '♣': 'text-foreground',
 };
 
 const POKER_HANDS = [

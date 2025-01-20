@@ -39,7 +39,7 @@ export function HandAnalyzer({ analysis }: HandAnalyzerProps) {
                 <span
                   className={cn(
                     'font-medium',
-                    hand.completed ? 'text-red-500 font-bold' : ''
+                    hand.completed ? 'text-primary font-bold' : ''
                   )}
                 >
                   {hand.name}
@@ -56,7 +56,7 @@ export function HandAnalyzer({ analysis }: HandAnalyzerProps) {
                       className={cn(
                         'inline-block px-1.5 py-0.5 text-sm font-mono rounded border',
                         card.includes('♥') || card.includes('♦')
-                          ? 'text-red-500'
+                          ? 'text-primary'
                           : ''
                       )}
                     >

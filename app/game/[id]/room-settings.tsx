@@ -210,7 +210,7 @@ export function RoomSettings({
       <SheetFooter className="absolute inset-x-0 bottom-0 mt-6 flex-col p-6">
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="destructive">End game</Button>
+            <Button>End game</Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>

@@ -36,7 +36,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
         .single();
 
       if (fetchError) {
-        throw new Error(fetchError.message);
+        throw new Error('An error occured when fetching the game');
       }
 
       if (!game) {
@@ -187,18 +187,16 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
 
   if (!game) {
     return (
-      <div className="min-h-screen bg-background p-4">
-        <div className="max-w-md mx-auto text-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="max-w-md mx-auto px-8 text-center">
           <h1 className="text-2xl font-bold mb-4">Game Not Found</h1>
           <p className="text-muted-foreground">
-            {"The game you're looking for doesn't exist or has expired."}
+            The game code you entered is either incorrect or the game has
+            expired. Games automatically expire after 24 hours of inactivity to
+            keep things fresh.
           </p>
-          <Button
-            variant="outline"
-            className="mt-4"
-            onClick={() => router.push('/join')}
-          >
-            Go Back
+          <Button className="mt-6" onClick={() => router.push('/join')}>
+            Try Again
           </Button>
         </div>
       </div>

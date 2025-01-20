@@ -94,7 +94,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
           setCurrentUsername(currentPlayer.name);
         }
       } catch (err) {
-        toast.error('Error fetching game data:' + err);
+        toast.error('Error fetching game data');
       } finally {
         setLoading(false);
       }
@@ -243,7 +243,17 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
   if (!gameState) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-foreground">Game not found</div>
+        <div className="max-w-md mx-auto px-8 text-center">
+          <h1 className="text-2xl font-bold mb-4">Game Not Found</h1>
+          <p className="text-muted-foreground">
+            The game url you entered is either incorrect or the game has
+            expired. Games automatically expire after 24 hours of inactivity to
+            keep things fresh.
+          </p>
+          <Button className="mt-6" onClick={() => router.push('/')}>
+            Try Again
+          </Button>
+        </div>
       </div>
     );
   }
