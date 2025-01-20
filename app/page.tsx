@@ -62,8 +62,8 @@ export default function Home() {
             </div>
             <h3 className="text-xl font-bold mb-2">Automatic Bank</h3>
             <p className="text-muted-foreground">
-              Keep track of everyone's stack with automatic pot calculations and
-              buy-in management.
+              Keep track of everyone&apos;s stack with automatic pot
+              calculations and buy-in management.
             </p>
           </Card>
           <Card className="p-6">

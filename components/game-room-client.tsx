@@ -101,7 +101,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
     } finally {
       setLoading(false);
     }
-  }, [gameId]);
+  }, [gameId, router]);
 
   useEffect(() => {
     fetchGameData();
