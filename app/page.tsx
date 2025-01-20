@@ -12,12 +12,12 @@ export default function Home() {
       {/* Hero Section */}
       <div className="relative h-auto mt-20">
         {/* Decorative cards */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 dark:opacity-20 opacity-10">
           <div className="absolute top-[10%] left-[10%] transform -rotate-12">
-            <div className="w-32 h-48 bg-card rounded-lg border-4 border-background shadow-xl" />
+            <div className="w-32 h-48 bg-gray-700 rounded-lg border-4 border-gray-950 shadow-xl" />
           </div>
           <div className="absolute top-[20%] right-[15%] transform rotate-12">
-            <div className="w-32 h-48 bg-primary rounded-lg border-4 border-background shadow-xl" />
+            <div className="w-32 h-48 bg-primary rounded-lg border-4 border-gray-700 shadow-xl" />
           </div>
         </div>
         {/* Main content */}
