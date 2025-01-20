@@ -36,7 +36,14 @@ export function HandAnalyzer({ analysis }: HandAnalyzerProps) {
           {analysis.possibleHands.map((hand, index) => (
             <div key={index} className="space-y-1">
               <div className="flex justify-between items-center">
-                <span className="font-medium">{hand.name}</span>
+                <span
+                  className={cn(
+                    'font-medium',
+                    hand.completed ? 'text-red-500 font-bold' : ''
+                  )}
+                >
+                  {hand.name}
+                </span>
               </div>
               <p className="text-sm text-muted-foreground">
                 {hand.description}
