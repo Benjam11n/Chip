@@ -104,10 +104,11 @@ export function RoomSettings({
       const { error } = await supabase.from('games').delete().eq('id', gameId);
 
       if (error) throw error;
+
+      router.push('/');
       toast.success('Success', { description: 'Game ended successfully' });
 
       localStorage.removeItem('currentPlayer');
-      router.push('/');
     } catch (error) {
       toast.error(
         'Error ending game: ' + (error instanceof Error ? error.message : error)
