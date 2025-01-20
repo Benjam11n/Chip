@@ -49,8 +49,6 @@ export function CardSelector({
     }
   };
 
-  console.log(selectedSuit);
-
   return (
     <Card className="p-4">
       <div className="space-y-4">

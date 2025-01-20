@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Settings2, ChevronDown, ChevronUp } from 'lucide-react';
@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/collapsible';
 import { MoveHistory } from '@/components/move-history';
 import { HandInput } from '@/components/hand-input/hand-input';
-import { GameState } from '@/app/types';
+import { GameState, GameView } from '@/app/types';
 import { supabase } from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import { RoomSettings } from '@/app/game/[id]/room-settings';
@@ -38,68 +38,72 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [showPokerHands, setShowPokerHands] = useState(false);
 
-  // Initialize game state and fetch data
-  useEffect(() => {
-    const fetchGameData = async () => {
-      try {
-        setLoading(true);
+  const fetchGameData = useCallback(async () => {
+    try {
+      setLoading(true);
 
-        // Fetch game data
-        const { data: game, error: gameError } = await supabase
-          .from('games')
-          .select(
-            `
+      const { data: game, error: gameError } = (await supabase
+        .from('games')
+        .select(
+          `
           *,
           players (*),
           game_actions (*)
         `
-          )
-          .eq('id', gameId)
-          .single();
+        )
+        .eq('id', gameId)
+        .single()) as { data: GameView | null; error: any };
 
-        if (gameError) throw gameError;
-
-        const gameHistory = game.game_actions.sort(
-          (a: any, b: any) =>
-            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-        );
-
-        // Transform the data into GameState format
-        setGameState({
-          id: game.id,
-          name: game.name,
-          pot: game.pot,
-          initialBuyIn: game.initial_buy_in,
-          code: game.code,
-          players: game.players.map((player: any) => ({
-            id: player.id,
-            name: player.name,
-            stack: player.stack,
-            totalBuyIn: player.total_buy_in,
-          })),
-          moves: gameHistory.map((history) => ({
-            ...history,
-            id: history.id,
-            playerId: history.player_id,
-            createdAt: history.created_at,
-            amount: history.amount,
-          })),
-        });
-
-        // Set a temporary user ID if not authenticated
-        const currentPlayerString = localStorage.getItem('currentPlayer');
-        if (currentPlayerString) {
-          const currentPlayer: { name: string; gameId: string } =
-            JSON.parse(currentPlayerString);
-          setCurrentUsername(currentPlayer.name);
-        }
-      } catch (err) {
-        toast.error('Error fetching game data');
-      } finally {
-        setLoading(false);
+      // If game doesn't exist, redirect without showing error
+      if (!game || (gameError && gameError.code === 'PGRST116')) {
+        router.push('/');
+        return;
       }
-    };
 
+      // For other errors, throw
+      if (gameError) throw gameError;
+
+      const gameHistory = game.game_actions.sort(
+        (a: any, b: any) =>
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      );
+
+      setGameState({
+        id: game.id,
+        name: game.name,
+        pot: game.pot,
+        initialBuyIn: game.initial_buy_in,
+        code: game.code,
+        players: game.players.map((player: any) => ({
+          id: player.id,
+          name: player.name,
+          stack: player.stack,
+          totalBuyIn: player.total_buy_in,
+        })),
+        moves: gameHistory.map((history) => ({
+          ...history,
+          id: history.id,
+          playerId: history.player_id,
+          createdAt: history.created_at,
+          amount: history.amount,
+        })),
+      });
+
+      const currentPlayerString = localStorage.getItem('currentPlayer');
+      if (currentPlayerString) {
+        const currentPlayer: { name: string; gameId: string } =
+          JSON.parse(currentPlayerString);
+        setCurrentUsername(currentPlayer.name);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Error fetching game data');
+    } finally {
+      setLoading(false);
+    }
+  }, [gameId]);
+
+  useEffect(() => {
     fetchGameData();
 
     const channel = supabase
@@ -133,16 +137,14 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
         },
         fetchGameData
       );
-    // Subscribe to the channel
+
     channel.subscribe();
 
-    // Cleanup
     return () => {
       channel.unsubscribe();
     };
-  }, [gameId]);
+  }, [fetchGameData, gameId]);
 
-  // Your existing handlers
   const handlePotAction = async (
     playerId: string,
     amount: number,
@@ -154,13 +156,11 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
       const player = gameState.players.find((p) => p.id === playerId);
       if (!player) return;
 
-      // Calculate new stack for player
       const newStack =
         action_type === 'add' ? player.stack - amount : player.stack + amount;
       const newPot =
         action_type === 'add' ? gameState.pot + amount : gameState.pot - amount;
 
-      // Update player's stack
       const { error: playerError } = await supabase
         .from('players')
         .update({ stack: newStack })
@@ -168,7 +168,6 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
 
       if (playerError) throw playerError;
 
-      // Update game's pot
       const { error: gameError } = await supabase
         .from('games')
         .update({
@@ -178,7 +177,6 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
 
       if (gameError) throw gameError;
 
-      // Record the action
       const { error: actionError } = await supabase
         .from('game_actions')
         .insert({
@@ -190,7 +188,6 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
 
       if (actionError) throw actionError;
 
-      // Update local state immediately for better UX
       setGameState((prevState) => {
         if (!prevState) return null;
 
@@ -206,15 +203,13 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
         };
       });
     } catch (err) {
+      console.error(err);
       toast.error('Error handling pot action');
     }
   };
 
   const handleKickPlayer = async (playerId: string) => {
     try {
-      // Before running the delete operation, set the current_game_id in
-      // the database session. This ensures that only players from the
-      // specified game can be deleted.
       await supabase.rpc('set_config', {
         key: 'app.current_game_id',
         value: gameId,
@@ -228,6 +223,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
       if (error) throw error;
       toast.success('Success', { description: 'Player removed from game' });
     } catch (err) {
+      console.error(err);
       toast.error('Error kicking player');
     }
   };
@@ -272,7 +268,6 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header Section */}
       <div className="border-b border-border">
         <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
           <div>
@@ -311,10 +306,8 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="max-w-7xl mx-auto p-4 space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Player Cards and Move History */}
           <div className="lg:col-span-2 space-y-6">
             <div className="lg:hidden">
               <MoveHistory
@@ -327,7 +320,6 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
             <div className="grid grid-cols-1 gap-6">
               {gameState.players
                 .sort((a, b) => {
-                  // Move the current user to the top
                   if (a.name === currentUsername) return -1;
                   if (b.name === currentUsername) return 1;
                   return 0;
@@ -345,7 +337,6 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
           </div>
 
           <div className="space-y-3">
-            {/* Collapsible Analysis Section */}
             <Collapsible
               open={showAnalysis}
               onOpenChange={setShowAnalysis}
@@ -368,7 +359,6 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
               </CollapsibleContent>
             </Collapsible>
 
-            {/* Collapsible Poker Hands Section */}
             <Collapsible
               open={showPokerHands}
               onOpenChange={setShowPokerHands}
@@ -392,9 +382,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
             </Collapsible>
           </div>
 
-          {/* Sidebar */}
           <div className="lg:col-span-1 space-y-6">
-            {/* Move History (Desktop) */}
             <div className="hidden lg:block">
               <MoveHistory
                 moves={gameState.moves}
@@ -403,7 +391,6 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
               />
             </div>
 
-            {/* Analysis Section (Desktop) */}
             <div className="hidden lg:block">
               <Card className="p-6">
                 <HandInput />

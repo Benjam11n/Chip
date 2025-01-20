@@ -2,10 +2,10 @@
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { formatDistanceToNow } from 'date-fns';
-import { MoveHistory as MoveHistoryType, Player } from '@/app/types';
+import { MoveHistoryView, Player } from '@/app/types';
 
 interface MoveHistoryProps {
-  moves: MoveHistoryType[];
+  moves: MoveHistoryView[];
   players: Player[];
   totalPot: number;
 }
@@ -23,7 +23,7 @@ export function MoveHistory({ moves, players, totalPot }: MoveHistoryProps) {
     }).format(amount);
   };
 
-  const formatMove = (move: MoveHistoryType) => {
+  const formatMove = (move: MoveHistoryView) => {
     const playerName = getPlayerName(move.playerId);
     const action = move.action_type === 'add' ? 'places' : 'takes';
     return `${playerName} ${action} ${formatAmount(move.amount || 0)} ${

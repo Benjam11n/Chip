@@ -7,7 +7,6 @@ CREATE TABLE IF NOT EXISTS games (
     code text NOT NULL UNIQUE,
     is_locked boolean NOT NULL DEFAULT false,
     max_players integer NOT NULL,
-    status text NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'completed', 'cancelled')),
     last_activity timestamptz DEFAULT now(),
     created_at timestamptz DEFAULT now(),
     updated_at timestamptz DEFAULT now()
@@ -117,7 +116,6 @@ BEGIN
     WITH deleted AS (
         DELETE FROM games 
         WHERE last_activity < NOW() - INTERVAL '24 hours'
-        AND status != 'completed'
         RETURNING id
     )
     SELECT count(*) INTO deleted_count FROM deleted;

@@ -1,30 +1,54 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { QrCode, Copy, Users, ArrowLeft } from 'lucide-react';
 import QRCode from 'qrcode';
+import { z } from 'zod';
 import { supabase } from '@/lib/supabase/client';
 import { Game } from '@/app/types';
 import { toast } from 'sonner';
 import Image from 'next/image';
+import { useForm } from 'react-hook-form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 
 interface JoinGameClientProps {
   code: string;
 }
 
+const JoinGameSchema = z.object({
+  name: z
+    .string()
+    .min(2, 'Name must be at least 2 characters long')
+    .max(30, 'Name must be less than 30 characters'),
+});
+
+type FormValues = z.infer<typeof JoinGameSchema>;
+
 export default function JoinGameClient({ code }: JoinGameClientProps) {
   const router = useRouter();
   const [game, setGame] = useState<Game | null>(null);
   const [loading, setLoading] = useState(true);
-  const [joining, setJoining] = useState(false);
-  const [playerName, setPlayerName] = useState('');
   const [qrCode, setQrCode] = useState('');
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(JoinGameSchema),
+    defaultValues: {
+      name: '',
+    },
+  });
 
   // Memoize loadGame function to prevent unnecessary recreations
   const loadGame = useCallback(async () => {
@@ -96,42 +120,24 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
     };
   }, [code, loadGame]);
 
-  const handleJoin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!game || !playerName.trim()) return;
-
-    setJoining(true);
+  const handleJoin = async (data: FormValues) => {
+    if (!game) return;
+    const name = data.name;
 
     try {
-      // Input validation
-      if (playerName.trim().length < 2) {
-        throw new Error('Name must be at least 2 characters long');
-      }
-
-      if (playerName.trim().length > 30) {
-        throw new Error('Name must be less than 30 characters');
-      }
-
-      // Game state validation
-      if (game.isLocked) {
-        throw new Error('Game is locked');
-      }
-
-      if (game.players.length >= game.max_players) {
+      if (game?.players?.length >= game.max_players) {
         throw new Error('Game is full');
       }
 
       if (
-        game.players.some(
-          (p) => p.name.toLowerCase() === playerName.toLowerCase()
-        )
+        game.players.some((p) => p.name.toLowerCase() === name.toLowerCase())
       ) {
         throw new Error('Name already taken. Please choose another name');
       }
 
       const { error: insertError } = await supabase.from('players').insert({
         game_id: game.id,
-        name: playerName.trim(),
+        name: name.trim(),
         stack: game.initial_buy_in,
       });
 
@@ -142,7 +148,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
       localStorage.setItem(
         'currentPlayer',
         JSON.stringify({
-          name: playerName,
+          name,
           gameId: game.id,
         })
       );
@@ -156,8 +162,6 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
       toast.error('Error', {
         description: error.message || 'Failed to join game',
       });
-    } finally {
-      setJoining(false);
     }
   };
 
@@ -226,29 +230,37 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
               </div>
             </div>
 
-            <form onSubmit={handleJoin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="playerName">Your Name</Label>
-                <Input
-                  id="playerName"
-                  value={playerName}
-                  onChange={(e) => setPlayerName(e.target.value)}
-                  placeholder="Enter your name (2-30 characters)"
-                  disabled={joining || game.isLocked}
-                  maxLength={30}
-                  minLength={2}
-                  required
-                />
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={!playerName.trim() || joining || game.isLocked}
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(handleJoin)}
+                className="space-y-4"
               >
-                {joining ? 'Joining...' : 'Join Game'}
-              </Button>
-            </form>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Your Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter your name (2-30 characters)"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={form.formState.isSubmitting}
+                >
+                  {form.formState.isSubmitting ? 'Joining...' : 'Join Game'}
+                </Button>
+              </form>
+            </Form>
 
             <div className="space-y-4">
               {qrCode ? (
@@ -286,12 +298,6 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
                 </Button>
               </div>
             </div>
-
-            {game.isLocked && (
-              <div className="text-center text-muted-foreground">
-                This game is currently locked by the host.
-              </div>
-            )}
           </div>
         </Card>
 

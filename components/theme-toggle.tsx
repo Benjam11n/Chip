@@ -12,7 +12,6 @@ export function ThemeToggle() {
       variant="outline"
       size="icon"
       onClick={() => {
-        console.log('Current theme:', theme);
         setTheme(theme === 'light' ? 'dark' : 'light');
       }}
     >

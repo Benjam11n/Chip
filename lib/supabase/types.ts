@@ -14,7 +14,6 @@ export type Database = {
           id: string
           created_by: string
           name: string
-          status: 'active' | 'completed' | 'cancelled'
           created_at: string
           updated_at: string
           pot: number;
@@ -27,7 +26,6 @@ export type Database = {
           id?: string
           created_by: string
           name: string
-          status?: 'active' | 'completed' | 'cancelled'
           created_at?: string
           updated_at?: string
         }
@@ -35,7 +33,6 @@ export type Database = {
           id?: string
           created_by?: string
           name?: string
-          status?: 'active' | 'completed' | 'cancelled'
           created_at?: string
           updated_at?: string
         }
