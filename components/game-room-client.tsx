@@ -25,6 +25,7 @@ import { RoomSettings } from '@/app/game/[id]/room-settings';
 import { PlayerCard } from './player-card';
 import { PokerHandsChart } from './poker-hands-chart';
 import { useRouter } from 'next/navigation';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 
 interface GameRoomClientProps {
   gameId: string;
@@ -306,97 +307,127 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto p-4 space-y-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
-            <div className="lg:hidden">
+      <div className="max-w-7xl mx-auto p-4 space-y-3">
+        <div className="block lg:hidden">
+          <Tabs defaultValue="history" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="history">Game History</TabsTrigger>
+              <TabsTrigger value="players">Players</TabsTrigger>
+            </TabsList>
+            <TabsContent value="history" className="space-y-6">
               <MoveHistory
                 moves={gameState.moves}
                 players={gameState.players}
                 totalPot={gameState.pot}
               />
-            </div>
+              <div className="space-y-3">
+                {gameState.players
+                  .filter((player) => player.name === currentUsername)
+                  .map((player) => (
+                    <PlayerCard
+                      key={player.id}
+                      player={player}
+                      isCurrentUser={true}
+                      onPotAction={handlePotAction}
+                      pot={gameState.pot}
+                    />
+                  ))}
+              </div>
+              <Card className="p-6 hidden lg:block">
+                <HandInput />
+              </Card>
+            </TabsContent>
+            <TabsContent value="players">
+              <div className="grid grid-cols-1 gap-3 content-start">
+                {gameState.players
+                  .sort((a, b) => {
+                    if (a.name === currentUsername) return -1;
+                    if (b.name === currentUsername) return 1;
+                    return 0;
+                  })
+                  .map((player) => (
+                    <PlayerCard
+                      key={player.id}
+                      player={player}
+                      isCurrentUser={player.name === currentUsername}
+                      onPotAction={handlePotAction}
+                      pot={gameState.pot}
+                    />
+                  ))}
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
 
-            <div className="grid grid-cols-1 gap-6">
-              {gameState.players
-                .sort((a, b) => {
-                  if (a.name === currentUsername) return -1;
-                  if (b.name === currentUsername) return 1;
-                  return 0;
-                })
-                .map((player) => (
-                  <PlayerCard
-                    key={player.id}
-                    player={player}
-                    isCurrentUser={player.name === currentUsername}
-                    onPotAction={handlePotAction}
-                    pot={gameState.pot}
-                  />
-                ))}
-            </div>
+        <div className="hidden lg:grid lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-3">
+            <MoveHistory
+              moves={gameState.moves}
+              players={gameState.players}
+              totalPot={gameState.pot}
+            />
+            <Card className="p-6">
+              <HandInput />
+            </Card>
           </div>
 
-          <div className="space-y-3">
-            <Collapsible
-              open={showAnalysis}
-              onOpenChange={setShowAnalysis}
-              className="lg:hidden"
-            >
-              <CollapsibleTrigger asChild>
-                <Button variant="outline" className="w-full">
-                  {showAnalysis ? (
-                    <ChevronUp className="h-4 w-4 mr-2" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4 mr-2" />
-                  )}
-                  Hand Analysis
-                </Button>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="mt-4">
-                <Card className="p-6">
-                  <HandInput />
-                </Card>
-              </CollapsibleContent>
-            </Collapsible>
-
-            <Collapsible
-              open={showPokerHands}
-              onOpenChange={setShowPokerHands}
-              className="lg:hidden"
-            >
-              <CollapsibleTrigger asChild>
-                <Button variant="outline" className="w-full">
-                  {showPokerHands ? (
-                    <ChevronUp className="h-4 w-4 mr-2" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4 mr-2" />
-                  )}
-                  Poker Hands
-                </Button>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="mt-4">
-                <Card className="p-6">
-                  <PokerHandsChart />
-                </Card>
-              </CollapsibleContent>
-            </Collapsible>
-          </div>
-
-          <div className="lg:col-span-1 space-y-6">
-            <div className="hidden lg:block">
-              <MoveHistory
-                moves={gameState.moves}
-                players={gameState.players}
-                totalPot={gameState.pot}
+          <div className="grid grid-cols-1 gap-6 content-start">
+            {gameState.players.map((player) => (
+              <PlayerCard
+                key={player.id}
+                player={player}
+                isCurrentUser={player.name === currentUsername}
+                onPotAction={handlePotAction}
+                pot={gameState.pot}
               />
-            </div>
+            ))}
+          </div>
+        </div>
 
-            <div className="hidden lg:block">
+        <div className="space-y-3">
+          <Collapsible
+            open={showAnalysis}
+            onOpenChange={setShowAnalysis}
+            className="lg:hidden"
+          >
+            <CollapsibleTrigger asChild>
+              <Button variant="outline" className="w-full">
+                {showAnalysis ? (
+                  <ChevronUp className="h-4 w-4 mr-2" />
+                ) : (
+                  <ChevronDown className="h-4 w-4 mr-2" />
+                )}
+                Hand Analysis
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-4">
               <Card className="p-6">
                 <HandInput />
               </Card>
-            </div>
-          </div>
+            </CollapsibleContent>
+          </Collapsible>
+
+          <Collapsible
+            open={showPokerHands}
+            onOpenChange={setShowPokerHands}
+            className="lg:hidden"
+          >
+            <CollapsibleTrigger asChild>
+              <Button variant="outline" className="w-full">
+                {showPokerHands ? (
+                  <ChevronUp className="h-4 w-4 mr-2" />
+                ) : (
+                  <ChevronDown className="h-4 w-4 mr-2" />
+                )}
+                Poker Hands
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-4">
+              <Card className="p-6">
+                <PokerHandsChart />
+              </Card>
+            </CollapsibleContent>
+          </Collapsible>
         </div>
       </div>
     </div>

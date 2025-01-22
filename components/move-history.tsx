@@ -33,7 +33,7 @@ export function MoveHistory({ moves, players, totalPot }: MoveHistoryProps) {
 
   return (
     <Card className="p-4">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-4 mx-2">
         <h2 className="text-lg font-semibold text-foreground">Move History</h2>
         <div className="text-sm">
           <span className="text-muted-foreground">Total Pot: </span>
@@ -42,7 +42,7 @@ export function MoveHistory({ moves, players, totalPot }: MoveHistoryProps) {
           </span>
         </div>
       </div>
-      <ScrollArea className="h-[500px] pr-4">
+      <ScrollArea className="h-[380px] pr-4">
         <div className="space-y-2">
           {moves.map((move) => (
             <div

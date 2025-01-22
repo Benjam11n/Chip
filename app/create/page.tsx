@@ -110,7 +110,7 @@ export default function CreateGamePage() {
                 value={[maxPlayers]}
                 onValueChange={(value) => setMaxPlayers(value[0])}
                 min={2}
-                max={12}
+                max={20}
                 step={1}
                 disabled={loading}
               />
