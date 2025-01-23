@@ -1,15 +1,17 @@
 'use client';
-import { Card, CardHeader, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Plus, Minus } from 'lucide-react';
-import { Player } from '@/types';
-import { cn } from '@/lib/utils';
 import { useState } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import { PlayerView } from '@/types';
+
 import { Badge } from './ui/badge';
 
 interface PlayerCardProps {
-  player: Player;
+  player: PlayerView;
   isCurrentUser: boolean;
   onPotAction: (
     playerId: string,
@@ -38,10 +40,10 @@ export function PlayerCard({
     >
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex items-center gap-2">
-          <h3 className="font-semibold text-md text-foreground">
+          <h3 className="font-semibold text-foreground">
             {player.name}
             {isCurrentUser && (
-              <Badge className="text-xs bg-primary/20 text-primary px-2 rounded-full ml-2">
+              <Badge className="ml-2 rounded-full bg-primary/20 px-2 text-xs text-primary">
                 You
               </Badge>
             )}
@@ -63,7 +65,7 @@ export function PlayerCard({
                 onClick={() => handleAmountChange(amount - 5)}
                 disabled={amount <= 5}
               >
-                <Minus className="h-4 w-4" />
+                <Minus className="size-4" />
               </Button>
               <Input
                 type="number"
@@ -78,7 +80,7 @@ export function PlayerCard({
                 size="icon"
                 onClick={() => handleAmountChange(amount + 5)}
               >
-                <Plus className="h-4 w-4" />
+                <Plus className="size-4" />
               </Button>
             </div>
             <div className="grid grid-cols-2 gap-2">

@@ -1,12 +1,13 @@
 'use client';
+import { formatDistanceToNow } from 'date-fns';
+
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { formatDistanceToNow } from 'date-fns';
-import { MoveHistoryView, Player } from '@/types';
+import { MoveHistoryView, PlayerView } from '@/types';
 
 interface MoveHistoryProps {
   moves: MoveHistoryView[];
-  players: Player[];
+  players: PlayerView[];
   totalPot: number;
 }
 
@@ -33,7 +34,7 @@ export function MoveHistory({ moves, players, totalPot }: MoveHistoryProps) {
 
   return (
     <Card className="p-4">
-      <div className="flex justify-between items-center mb-4 mx-2">
+      <div className="mx-2 mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-foreground">Move History</h2>
         <div className="text-sm">
           <span className="text-muted-foreground">Total Pot: </span>
@@ -47,7 +48,7 @@ export function MoveHistory({ moves, players, totalPot }: MoveHistoryProps) {
           {moves.map((move) => (
             <div
               key={move.id}
-              className="flex items-center justify-between text-sm py-2 border-b border-border last:border-0"
+              className="flex items-center justify-between border-b border-border py-2 text-sm last:border-0"
             >
               <span className="text-foreground">{formatMove(move)}</span>
               <span className="text-muted-foreground">
@@ -56,7 +57,7 @@ export function MoveHistory({ moves, players, totalPot }: MoveHistoryProps) {
             </div>
           ))}
           {moves.length === 0 && (
-            <div className="text-center text-muted-foreground py-8">
+            <div className="py-8 text-center text-muted-foreground">
               No moves yet
             </div>
           )}

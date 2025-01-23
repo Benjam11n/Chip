@@ -1,15 +1,12 @@
 'use client';
 
+import { Share2, Copy, QrCode, UserMinus } from 'lucide-react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import QRCode from 'qrcode';
 import { useState } from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { toast } from 'sonner';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,20 +18,24 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Share2, Copy, QrCode, UserMinus } from 'lucide-react';
-import QRCode from 'qrcode';
-import { toast } from 'sonner';
-import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { SheetFooter } from '@/components/ui/sheet';
 import { supabase } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
-import { Player } from '@/types';
+import { PlayerView } from '@/types';
 
 interface RoomSettingsProps {
   gameId: string;
   gameCode: string;
-  players: Player[];
+  players: PlayerView[];
   currentUsername: string;
   onKickPlayer: (playerId: string) => void;
 }
@@ -120,11 +121,11 @@ export function RoomSettings({
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-2">
         <Button variant="outline" className="flex-1" onClick={handleShare}>
-          <Share2 className="h-4 w-4 mr-2" />
+          <Share2 className="mr-2 size-4" />
           Share Room
         </Button>
         <Button variant="outline" className="flex-1" onClick={handleCopyLink}>
-          <Copy className="h-4 w-4 mr-2" />
+          <Copy className="mr-2 size-4" />
           Copy Link
         </Button>
       </div>
@@ -132,7 +133,7 @@ export function RoomSettings({
         <Dialog open={showQR} onOpenChange={setShowQR}>
           <DialogTrigger asChild>
             <Button variant="default" className="flex-1" onClick={handleShowQR}>
-              <QrCode className="h-4 w-4 mr-2" />
+              <QrCode className="mr-2 size-4" />
               Show QR
             </Button>
           </DialogTrigger>
@@ -171,7 +172,7 @@ export function RoomSettings({
                 <div className="flex items-center gap-2">
                   <span className="font-medium">{player.name}</span>
                   {player.name === currentUsername && (
-                    <Badge className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                    <Badge className="rounded-full bg-primary/10 px-2 py-1 text-xs text-primary">
                       You
                     </Badge>
                   )}
@@ -180,7 +181,7 @@ export function RoomSettings({
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="ghost" size="icon">
-                        <UserMinus className="h-4 w-4 text-destructive" />
+                        <UserMinus className="size-4 text-destructive" />
                       </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>

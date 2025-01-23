@@ -83,19 +83,34 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
   const possibleHands: PossibleHand[] = [];
 
   // 1. Royal Flush
-  if (isSuited && ['A', 'K', 'Q', 'J', 'T'].includes(highRank) && ['A', 'K', 'Q', 'J', 'T'].includes(lowRank)) {
-    const royalCards = ['A', 'K', 'Q', 'J', 'T'];
+  // If we have any high card (A, K, Q, J, T)
+const royalCards = ['A', 'K', 'Q', 'J', 'T'];
+// First, check if we have any royal cards
+if (royalCards.includes(rank1) || royalCards.includes(rank2)) {
+  // Get unique suits that have royal cards
+  const suitMap = new Set<string>();
+  if (royalCards.includes(rank1)) suitMap.add(suit1);
+  if (royalCards.includes(rank2)) suitMap.add(suit2);
+  
+  // For each suit that has a royal card
+  suitMap.forEach(suit => {
+    // Get the ranks we have in this suit
+    const existingRanks = [] as typeof RANKS;
+    if (suit1 === suit) existingRanks.push(rank1);
+    if (suit2 === suit) existingRanks.push(rank2);
+    
     const neededCards = royalCards
-      .filter(rank => rank !== highRank && rank !== lowRank)
-      .map(rank => `${rank}${highSuit}`);
-
+      .filter(rank => !existingRanks.includes(rank))
+      .map(rank => `${rank}${suit}`);
+    
     possibleHands.push({
       name: 'Royal Flush',
-      description: `Need ${neededCards.join(', ')} of ${highSuit}`,
+      description: `Need ${neededCards.join(', ')} of ${suit}`,
       requiredCards: neededCards,
       completed: false
     });
-  }
+  });
+}
 
   // 2. Straight Flush
   if (isSuited) {

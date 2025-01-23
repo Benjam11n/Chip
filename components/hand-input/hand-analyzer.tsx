@@ -21,9 +21,9 @@ export function HandAnalyzer({ analysis }: HandAnalyzerProps) {
   }
 
   return (
-    <Card className="p-4 space-y-6">
+    <Card className="space-y-6 p-4">
       <div className="space-y-2">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <h3 className="font-semibold">Hand Strength</h3>
           <span className="text-sm font-medium">{analysis.strength.label}</span>
         </div>
@@ -35,7 +35,7 @@ export function HandAnalyzer({ analysis }: HandAnalyzerProps) {
         <div className="space-y-3">
           {analysis.possibleHands.map((hand, index) => (
             <div key={index} className="space-y-1">
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <span
                   className={cn(
                     'font-medium',
@@ -49,7 +49,7 @@ export function HandAnalyzer({ analysis }: HandAnalyzerProps) {
                 {hand.description}
               </p>
               {hand.requiredCards.length > 0 && (
-                <div className="flex gap-1 mt-1">
+                <div className="mt-1 flex gap-1">
                   {hand.requiredCards.map((card, i) => (
                     <span
                       key={i}

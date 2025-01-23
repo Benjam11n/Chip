@@ -90,11 +90,11 @@ function formatCardExample(example: string) {
 export function PokerHandsChart() {
   return (
     <div className="py-3">
-      <h2 className="text-2xl font-bold mb-6">Poker Hand Rankings</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <h2 className="mb-6 text-2xl font-bold">Poker Hand Rankings</h2>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {POKER_HANDS.map((hand) => (
-          <Card key={hand.name} className="p-4 space-y-2">
-            <h3 className="font-bold text-lg">{hand.name}</h3>
+          <Card key={hand.name} className="space-y-2 p-4">
+            <h3 className="text-lg font-bold">{hand.name}</h3>
             <p className="text-sm text-muted-foreground">{hand.description}</p>
             <div className="font-mono text-lg">
               {formatCardExample(hand.example)}

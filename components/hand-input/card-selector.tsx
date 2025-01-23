@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
+import { RANKS, SUIT_COLORS, SUITS } from '@/constants';
 import { cn } from '@/lib/utils';
-import { RANK_DISPLAY, RANKS, SUIT_COLORS, SUITS } from '@/constants';
 
 interface CardSelectorProps {
   selectedCards: string[];
@@ -53,7 +54,7 @@ export function CardSelector({
             className="h-12"
             onClick={() => setSelectedRank(rank === selectedRank ? null : rank)}
           >
-            {RANK_DISPLAY[rank as keyof typeof RANK_DISPLAY]}
+            {rank}
           </Button>
         ))}
       </div>
@@ -62,7 +63,7 @@ export function CardSelector({
           className="w-full"
           onClick={() => handleCardClick(selectedRank, selectedSuit)}
         >
-          Add {RANK_DISPLAY[selectedRank as keyof typeof RANK_DISPLAY]}
+          Add {selectedRank}
           {selectedSuit}
         </Button>
       )}
@@ -77,7 +78,7 @@ export function CardSelector({
             )}
             onClick={() => onSelectCard(card)}
           >
-            {RANK_DISPLAY[card[0] as keyof typeof RANK_DISPLAY]}
+            {card[0]}
             {card[1]}
           </Button>
         ))}

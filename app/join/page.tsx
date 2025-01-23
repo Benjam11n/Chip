@@ -1,13 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Card } from '@/components/ui/card';
+import { useState } from 'react';
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase/client';
 
 export default function JoinPage() {
@@ -40,6 +41,7 @@ export default function JoinPage() {
       // Game exists, proceed to join page
       router.push(`/join/${code.trim()}`);
     } catch (error) {
+      console.error(error);
       toast.error('Error', {
         description: 'Something went wrong. Please try again.',
       });
@@ -50,18 +52,18 @@ export default function JoinPage() {
 
   return (
     <div className="min-h-screen bg-background p-4">
-      <div className="max-w-md mx-auto space-y-6">
+      <div className="mx-auto max-w-md space-y-6">
         <Button
           variant="ghost"
           className="flex items-center gap-2"
           onClick={() => router.push('/')}
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="size-4" />
           Back
         </Button>
         <div className="text-center">
           <h1 className="text-3xl font-bold">Join Game</h1>
-          <p className="text-muted-foreground mt-2">
+          <p className="mt-2 text-muted-foreground">
             Enter the game code to join
           </p>
         </div>
@@ -85,7 +87,7 @@ export default function JoinPage() {
               disabled={!code.trim() || isLoading}
             >
               {isLoading ? 'Checking...' : 'Continue'}
-              {!isLoading && <ArrowRight className="ml-2 h-4 w-4" />}
+              {!isLoading && <ArrowRight className="ml-2 size-4" />}
             </Button>
           </form>
         </Card>

@@ -1,9 +1,21 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { PostgrestError } from '@supabase/supabase-js';
 import { Settings2, ChevronDown, ChevronUp } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect, useCallback } from 'react';
+import { toast } from 'sonner';
+
+import { RoomSettings } from '@/app/game/[id]/room-settings';
+import { HandInput } from '@/components/hand-input/hand-input';
+import { MoveHistory } from '@/components/move-history';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import {
   Sheet,
   SheetContent,
@@ -11,20 +23,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
-import { MoveHistory } from '@/components/move-history';
-import { HandInput } from '@/components/hand-input/hand-input';
-import { GameState, GameView } from '@/types';
 import { supabase } from '@/lib/supabase/client';
-import { toast } from 'sonner';
-import { RoomSettings } from '@/app/game/[id]/room-settings';
+import { GameState, GameView } from '@/types';
+
 import { PlayerCard } from './player-card';
 import { PokerHandsChart } from './poker-hands-chart';
-import { useRouter } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 
 interface GameRoomClientProps {
@@ -53,7 +56,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
         `
         )
         .eq('id', gameId)
-        .single()) as { data: GameView | null; error: any };
+        .single()) as { data: GameView | null; error: PostgrestError | null };
 
       // If game doesn't exist, redirect without showing error
       if (!game || (gameError && gameError.code === 'PGRST116')) {
@@ -65,7 +68,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
       if (gameError) throw gameError;
 
       const gameHistory = game.game_actions.sort(
-        (a: any, b: any) =>
+        (a, b) =>
           new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
       );
 
@@ -75,7 +78,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
         pot: game.pot,
         initialBuyIn: game.initial_buy_in,
         code: game.code,
-        players: game.players.map((player: any) => ({
+        players: game.players.map((player) => ({
           id: player.id,
           name: player.name,
           stack: player.stack,
@@ -231,7 +234,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-foreground">Loading...</div>
       </div>
     );
@@ -239,9 +242,9 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
 
   if (!gameState) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="max-w-md mx-auto px-8 text-center">
-          <h1 className="text-2xl font-bold mb-4">Game Not Found</h1>
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="mx-auto max-w-md px-8 text-center">
+          <h1 className="mb-4 text-2xl font-bold">Game Not Found</h1>
           <p className="text-muted-foreground">
             The game url you entered is either incorrect or the game has
             expired. Games automatically expire after 24 hours of inactivity to
@@ -270,13 +273,13 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
   return (
     <div className="min-h-screen bg-background">
       <div className="border-b border-border">
-        <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
+        <div className="mx-auto flex max-w-7xl items-center justify-between p-4">
           <div>
-            <h1 className="text-2xl font-bold text-foreground mt-3">
+            <h1 className="mt-3 text-2xl font-bold text-foreground">
               {gameState.name}
             </h1>
             <div className="flex gap-4 text-sm text-muted-foreground">
-              <span className="font-medium text-primary mt-1">
+              <span className="mt-1 font-medium text-primary">
                 Game ID: {gameState.code}
               </span>
             </div>
@@ -285,7 +288,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline">
-                <Settings2 className="h-4 w-4 lg:mr-2" />
+                <Settings2 className="size-4 lg:mr-2" />
                 <div className="hidden lg:block">Room Settings</div>
               </Button>
             </SheetTrigger>
@@ -307,7 +310,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto p-4 space-y-3">
+      <div className="mx-auto max-w-7xl space-y-3 p-4">
         <div className="block lg:hidden">
           <Tabs defaultValue="history" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
@@ -333,12 +336,12 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
                     />
                   ))}
               </div>
-              <Card className="p-6 hidden lg:block">
+              <Card className="hidden p-6 lg:block">
                 <HandInput />
               </Card>
             </TabsContent>
             <TabsContent value="players">
-              <div className="grid grid-cols-1 gap-3 content-start">
+              <div className="grid grid-cols-1 content-start gap-3">
                 {gameState.players
                   .sort((a, b) => {
                     if (a.name === currentUsername) return -1;
@@ -359,8 +362,8 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
           </Tabs>
         </div>
 
-        <div className="hidden lg:grid lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-3">
+        <div className="hidden gap-6 lg:grid lg:grid-cols-3">
+          <div className="space-y-3 lg:col-span-2">
             <MoveHistory
               moves={gameState.moves}
               players={gameState.players}
@@ -371,7 +374,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
             </Card>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 content-start">
+          <div className="grid grid-cols-1 content-start gap-6">
             {gameState.players.map((player) => (
               <PlayerCard
                 key={player.id}
@@ -393,9 +396,9 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
             <CollapsibleTrigger asChild>
               <Button variant="outline" className="w-full">
                 {showAnalysis ? (
-                  <ChevronUp className="h-4 w-4 mr-2" />
+                  <ChevronUp className="mr-2 size-4" />
                 ) : (
-                  <ChevronDown className="h-4 w-4 mr-2" />
+                  <ChevronDown className="mr-2 size-4" />
                 )}
                 Hand Analysis
               </Button>
@@ -415,9 +418,9 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
             <CollapsibleTrigger asChild>
               <Button variant="outline" className="w-full">
                 {showPokerHands ? (
-                  <ChevronUp className="h-4 w-4 mr-2" />
+                  <ChevronUp className="mr-2 size-4" />
                 ) : (
-                  <ChevronDown className="h-4 w-4 mr-2" />
+                  <ChevronDown className="mr-2 size-4" />
                 )}
                 Poker Hands
               </Button>

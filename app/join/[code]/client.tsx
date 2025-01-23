@@ -1,20 +1,17 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Skeleton } from '@/components/ui/skeleton';
 import { QrCode, Copy, Users, ArrowLeft } from 'lucide-react';
-import QRCode from 'qrcode';
-import { z } from 'zod';
-import { supabase } from '@/lib/supabase/client';
-import { Game } from '@/types';
-import { toast } from 'sonner';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import QRCode from 'qrcode';
+import { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -23,6 +20,10 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import { supabase } from '@/lib/supabase/client';
+import { Game } from '@/types';
 
 interface JoinGameClientProps {
   code: string;
@@ -82,9 +83,10 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
         console.error('Failed to generate QR code:', qrError);
         // Don't throw - QR code is non-critical
       }
-    } catch (error: any) {
+    } catch (error) {
+      console.error(error);
       toast.error('Error', {
-        description: error.message || 'Game not found or invalid code',
+        description: 'Game not found or invalid code',
       });
     } finally {
       setLoading(false);
@@ -158,9 +160,10 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
       });
 
       router.push(`/game/${game.id}`);
-    } catch (error: any) {
+    } catch (error) {
+      console.error(error);
       toast.error('Error', {
-        description: error.message || 'Failed to join game',
+        description: 'Failed to join game',
       });
     }
   };
@@ -172,6 +175,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
         description: 'Join link copied to clipboard',
       });
     } catch (error) {
+      console.error(error);
       toast.error('Error', {
         description: 'Failed to copy link to clipboard',
       });
@@ -181,7 +185,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
   if (loading) {
     return (
       <div className="min-h-screen bg-background p-4">
-        <div className="max-w-md mx-auto space-y-4">
+        <div className="mx-auto max-w-md space-y-4">
           <Skeleton className="h-8 w-3/4" />
           <Skeleton className="h-[400px] w-full" />
         </div>
@@ -191,9 +195,9 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
 
   if (!game) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="max-w-md mx-auto px-8 text-center">
-          <h1 className="text-2xl font-bold mb-4">Game Not Found</h1>
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="mx-auto max-w-md px-8 text-center">
+          <h1 className="mb-4 text-2xl font-bold">Game Not Found</h1>
           <p className="text-muted-foreground">
             The game code you entered is either incorrect or the game has
             expired. Games automatically expire after 24 hours of inactivity to
@@ -209,13 +213,13 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
 
   return (
     <div className="min-h-screen bg-background p-4">
-      <div className="max-w-md mx-auto space-y-6">
+      <div className="mx-auto max-w-md space-y-6">
         <Button
           variant="ghost"
           className="flex items-center gap-2"
           onClick={() => router.push('/')}
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="size-4" />
           Home
         </Button>
         <Card className="p-6">
@@ -223,7 +227,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
             <div className="space-y-2 text-center">
               <h1 className="text-2xl font-bold">{game.name}</h1>
               <div className="flex items-center justify-center gap-2 text-muted-foreground">
-                <Users className="h-4 w-4" />
+                <Users className="size-4" />
                 <span>
                   {game?.players?.length} / {game.max_players} players
                 </span>
@@ -275,7 +279,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
                 </div>
               ) : (
                 <div className="flex justify-center">
-                  <Skeleton className="w-48 h-48" />
+                  <Skeleton className="size-48" />
                 </div>
               )}
 
@@ -285,7 +289,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
                   className="flex-1"
                   onClick={copyJoinLink}
                 >
-                  <Copy className="h-4 w-4 mr-2" />
+                  <Copy className="mr-2 size-4" />
                   Copy Link
                 </Button>
                 <Button
@@ -293,7 +297,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
                   className="flex-1"
                   onClick={() => window.print()}
                 >
-                  <QrCode className="h-4 w-4 mr-2" />
+                  <QrCode className="mr-2 size-4" />
                   Save QR
                 </Button>
               </div>
@@ -303,16 +307,16 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
 
         {game?.players?.length > 0 && (
           <Card className="p-6">
-            <h2 className="font-semibold mb-4">Current Players</h2>
+            <h2 className="mb-4 font-semibold">Current Players</h2>
             <div className="space-y-2">
               {game.players.map((player) => (
                 <div
                   key={player.id}
-                  className="flex items-center justify-between py-2 border-b last:border-0"
+                  className="flex items-center justify-between border-b py-2 last:border-0"
                 >
                   <span>{player.name}</span>
                   {player.id === game.createdBy && (
-                    <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                    <span className="rounded-full bg-primary/10 px-2 py-1 text-xs text-primary">
                       Host
                     </span>
                   )}

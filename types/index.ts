@@ -2,6 +2,14 @@ export interface Player {
   id: string;
   name: string;
   stack: number;
+  total_buy_in: number;
+}
+
+export interface PlayerView {
+  id: string;
+  name: string;
+  stack: number;
+  totalBuyIn: number;
 }
 
 export interface MoveHistory {
@@ -37,7 +45,7 @@ export interface GameState {
   id: string;
   name: string;
   code: string;
-  players: Player[];
+  players: PlayerView[];
   pot: number;
   moves: MoveHistoryView[];
   initialBuyIn: number;
