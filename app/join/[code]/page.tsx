@@ -1,4 +1,3 @@
-import { RouteParams } from '@/app/types';
 import JoinGameClient from './client';
 
 export default async function JoinGame({ params }: RouteParams) {

@@ -1,4 +1,3 @@
-import { RouteParams } from '@/app/types';
 import { GameRoomClient } from '@/components/game-room-client';
 
 export default async function GameRoom({ params }: RouteParams) {

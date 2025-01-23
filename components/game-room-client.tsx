@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/collapsible';
 import { MoveHistory } from '@/components/move-history';
 import { HandInput } from '@/components/hand-input/hand-input';
-import { GameState, GameView } from '@/app/types';
+import { GameState, GameView } from '@/types';
 import { supabase } from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import { RoomSettings } from '@/app/game/[id]/room-settings';

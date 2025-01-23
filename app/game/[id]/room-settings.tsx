@@ -23,13 +23,13 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Share2, Copy, QrCode, UserMinus } from 'lucide-react';
 import QRCode from 'qrcode';
-import { Player } from '@/app/types';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { SheetFooter } from '@/components/ui/sheet';
 import { supabase } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
+import { Player } from '@/types';
 
 interface RoomSettingsProps {
   gameId: string;

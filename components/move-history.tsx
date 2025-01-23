@@ -2,7 +2,7 @@
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { formatDistanceToNow } from 'date-fns';
-import { MoveHistoryView, Player } from '@/app/types';
+import { MoveHistoryView, Player } from '@/types';
 
 interface MoveHistoryProps {
   moves: MoveHistoryView[];

@@ -10,7 +10,6 @@ import { Slider } from '@/components/ui/slider';
 import { ArrowLeft, Dices } from 'lucide-react';
 import { toast } from 'sonner';
 
-// Type for the game data
 interface GameData {
   name: string;
   maxPlayers: number;

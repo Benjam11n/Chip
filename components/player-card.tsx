@@ -3,7 +3,7 @@ import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Plus, Minus } from 'lucide-react';
-import { Player } from '@/app/types';
+import { Player } from '@/types';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { Badge } from './ui/badge';

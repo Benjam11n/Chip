@@ -11,7 +11,7 @@ import { QrCode, Copy, Users, ArrowLeft } from 'lucide-react';
 import QRCode from 'qrcode';
 import { z } from 'zod';
 import { supabase } from '@/lib/supabase/client';
-import { Game } from '@/app/types';
+import { Game } from '@/types';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';

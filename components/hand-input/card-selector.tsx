@@ -3,29 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-
-const RANKS = [
-  'A',
-  'K',
-  'Q',
-  'J',
-  '10',
-  '9',
-  '8',
-  '7',
-  '6',
-  '5',
-  '4',
-  '3',
-  '2',
-];
-const SUITS = ['♠', '♥', '♦', '♣'];
-const SUIT_COLORS = {
-  '♠': 'text-foreground',
-  '♥': 'text-red-500',
-  '♦': 'text-red-500',
-  '♣': 'text-foreground',
-};
+import { RANK_DISPLAY, RANKS, SUIT_COLORS, SUITS } from '@/constants';
 
 interface CardSelectorProps {
   selectedCards: string[];
@@ -67,7 +45,6 @@ export function CardSelector({
           </Button>
         ))}
       </div>
-
       <div className="grid grid-cols-7 gap-2">
         {RANKS.map((rank) => (
           <Button
@@ -76,21 +53,19 @@ export function CardSelector({
             className="h-12"
             onClick={() => setSelectedRank(rank === selectedRank ? null : rank)}
           >
-            {rank}
+            {RANK_DISPLAY[rank as keyof typeof RANK_DISPLAY]}
           </Button>
         ))}
       </div>
-
       {selectedRank && selectedSuit && (
         <Button
           className="w-full"
           onClick={() => handleCardClick(selectedRank, selectedSuit)}
         >
-          Add {selectedRank}
+          Add {RANK_DISPLAY[selectedRank as keyof typeof RANK_DISPLAY]}
           {selectedSuit}
         </Button>
       )}
-
       <div className="flex justify-center gap-4">
         {selectedCards.map((card) => (
           <Button
@@ -102,7 +77,8 @@ export function CardSelector({
             )}
             onClick={() => onSelectCard(card)}
           >
-            {card}
+            {RANK_DISPLAY[card[0] as keyof typeof RANK_DISPLAY]}
+            {card[1]}
           </Button>
         ))}
       </div>

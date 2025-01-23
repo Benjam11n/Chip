@@ -2,30 +2,10 @@
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { FEATURES } from '@/constants';
 import { Dices, Plus, Users } from 'lucide-react';
 import { motion, useTime, useTransform } from 'motion/react';
 import { useRouter } from 'next/navigation';
-
-const features = [
-  {
-    icon: Users,
-    title: 'Automatic Bank',
-    description:
-      "Keep track of everyone's stack with automatic pot calculations and buy-in management.",
-  },
-  {
-    icon: Dices,
-    title: 'Hand Guide',
-    description:
-      'Quick reference for poker hand rankings and starting hand strengths.',
-  },
-  {
-    icon: Plus,
-    title: 'Quick Setup',
-    description:
-      'Start your game in seconds - just create a room and share the code.',
-  },
-];
 
 export default function Home() {
   const router = useRouter();
@@ -105,7 +85,7 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {features.map((feature, index) => (
+          {FEATURES.map((feature, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
