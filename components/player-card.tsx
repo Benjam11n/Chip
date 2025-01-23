@@ -9,9 +9,25 @@ import { cn } from '@/lib/utils';
 import { PlayerView } from '@/types';
 
 import { Badge } from './ui/badge';
+import { Skeleton } from './ui/skeleton';
+
+export function PlayerCardSkeleton() {
+  return (
+    <Card className="p-4">
+      <div className="animate-pulse space-y-3">
+        <Skeleton className="h-4 w-1/3 rounded bg-muted" />
+        <Skeleton className="h-6 w-1/2 rounded bg-muted" />
+        <div className="flex gap-2">
+          <Skeleton className="h-8 w-20 rounded bg-muted" />
+          <Skeleton className="h-8 w-20 rounded bg-muted" />
+        </div>
+      </div>
+    </Card>
+  );
+}
 
 interface PlayerCardProps {
-  player: PlayerView;
+  player: PlayerView | null;
   isCurrentUser: boolean;
   onPotAction: (
     playerId: string,
@@ -19,6 +35,8 @@ interface PlayerCardProps {
     action: 'add' | 'remove'
   ) => void;
   pot: number;
+  isLoading?: boolean;
+  actionLoading?: boolean;
 }
 
 export function PlayerCard({
@@ -26,6 +44,8 @@ export function PlayerCard({
   isCurrentUser,
   onPotAction,
   pot,
+  isLoading = false,
+  actionLoading = false,
 }: PlayerCardProps) {
   const [amount, setAmount] = useState(5);
 
@@ -33,6 +53,12 @@ export function PlayerCard({
     const roundedAmount = Math.max(5, Math.round(newAmount / 5) * 5);
     setAmount(roundedAmount);
   };
+
+  if (isLoading) {
+    return <PlayerCardSkeleton />;
+  }
+
+  if (!player) return null;
 
   return (
     <Card
@@ -63,7 +89,7 @@ export function PlayerCard({
                 variant="outline"
                 size="icon"
                 onClick={() => handleAmountChange(amount - 5)}
-                disabled={amount <= 5}
+                disabled={amount <= 5 || actionLoading}
               >
                 <Minus className="size-4" />
               </Button>
@@ -74,11 +100,13 @@ export function PlayerCard({
                 className="text-center"
                 step={5}
                 min={0}
+                disabled={actionLoading}
               />
               <Button
                 variant="outline"
                 size="icon"
                 onClick={() => handleAmountChange(amount + 5)}
+                disabled={actionLoading}
               >
                 <Plus className="size-4" />
               </Button>
@@ -86,27 +114,27 @@ export function PlayerCard({
             <div className="grid grid-cols-2 gap-2">
               <Button
                 onClick={() => onPotAction(player.id, amount, 'add')}
-                disabled={player.stack < amount}
+                disabled={player.stack < amount || actionLoading}
               >
                 Add to Pot
               </Button>
               <Button
                 onClick={() => onPotAction(player.id, player.stack, 'add')}
-                disabled={player.stack < amount}
+                disabled={player.stack < amount || actionLoading}
               >
                 All in
               </Button>
               <Button
                 variant="outline"
                 onClick={() => onPotAction(player.id, amount, 'remove')}
-                disabled={pot < amount}
+                disabled={pot < amount || actionLoading}
               >
                 Take from Pot
               </Button>
               <Button
                 variant="outline"
                 onClick={() => onPotAction(player.id, pot, 'remove')}
-                disabled={pot < amount}
+                disabled={pot < amount || actionLoading}
               >
                 Take all from Pot
               </Button>

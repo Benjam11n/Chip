@@ -47,7 +47,6 @@ export interface GameState {
   code: string;
   players: PlayerView[];
   pot: number;
-  moves: MoveHistoryView[];
   initialBuyIn: number;
 }
 
@@ -57,7 +56,6 @@ export type GameView = {
   code: string;
   pot: number;
   initial_buy_in: number;
-  game_actions: MoveHistory[];
   max_players: number;
   createdAt?: string;
   updatedAt?: string;

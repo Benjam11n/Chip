@@ -163,7 +163,8 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
     } catch (error) {
       console.error(error);
       toast.error('Error', {
-        description: 'Failed to join game',
+        description:
+          error instanceof Error ? error.message : 'Failed to join game',
       });
     }
   };
@@ -177,7 +178,10 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
     } catch (error) {
       console.error(error);
       toast.error('Error', {
-        description: 'Failed to copy link to clipboard',
+        description:
+          error instanceof Error
+            ? error.message
+            : 'Failed to copy link to clipboard',
       });
     }
   };

@@ -97,18 +97,18 @@ export function RoomSettings({
 
   const handleEndGame = async (gameId: string) => {
     try {
-      await supabase.rpc('set_config', {
-        key: 'app.current_game_id',
-        value: gameId,
-      });
+      // Check if current player exists in localStorage first
+      const currentPlayer = localStorage.getItem('currentPlayer');
+      if (!currentPlayer) {
+        toast.error('Error: You must be a player to end the game');
+        return;
+      }
 
       const { error } = await supabase.from('games').delete().eq('id', gameId);
-
       if (error) throw error;
 
       router.push('/');
       toast.success('Success', { description: 'Game ended successfully' });
-
       localStorage.removeItem('currentPlayer');
     } catch (error) {
       toast.error(
