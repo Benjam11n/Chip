@@ -26,7 +26,7 @@ import {
 import { supabase } from '@/lib/supabase/client';
 import { GameState, GameView } from '@/types';
 
-import { PlayerCard } from './player-card';
+import { PlayerCard, PlayerCardSkeleton } from './player-card';
 import { PokerHandsChart } from './poker-hands-chart';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 
@@ -187,10 +187,32 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
       if (!gameData) return;
       setActionLoading(true);
 
-      const player = players.find((p) => p.id === playerId);
-      if (!player) return;
+      // Capture current state for potential rollback
+      const originalPlayers = [...players];
+      const originalPot = gameData.pot;
 
-      // Make the API calls
+      // Optimistic update
+      const updatedPlayers = players.map((player) => {
+        if (player.id === playerId) {
+          return {
+            ...player,
+            stack:
+              action_type === 'add'
+                ? player.stack - amount
+                : player.stack + amount,
+          };
+        }
+        return player;
+      });
+
+      const updatedPot =
+        action_type === 'add' ? gameData.pot + amount : gameData.pot - amount;
+
+      // Immediately update UI
+      setPlayers(updatedPlayers);
+      setGameData((prev) => (prev ? { ...prev, pot: updatedPot } : null));
+
+      // Make API call
       const { error } = await supabase.rpc('handle_pot_action', {
         p_player_id: playerId,
         p_game_id: gameData.id,
@@ -198,10 +220,17 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
         p_action_type: action_type,
       });
 
-      if (error) throw error;
+      if (error) {
+        // Rollback on error
+        setPlayers(originalPlayers);
+        setGameData((prev) => (prev ? { ...prev, pot: originalPot } : null));
+        throw error;
+      }
     } catch (err) {
       console.error(err);
-      toast.error('Error handling pot action');
+      toast.error('Error handling pot action', {
+        description: 'Changes have been reverted',
+      });
     } finally {
       setActionLoading(false);
     }
@@ -347,19 +376,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
             <TabsContent value="players">
               <div className="grid grid-cols-1 content-start gap-3">
                 {playersLoading
-                  ? // Show loading skeleton cards
-                    Array(3)
-                      .fill(0)
-                      .map((_, i) => (
-                        <PlayerCard
-                          key={i}
-                          player={null}
-                          isCurrentUser={false}
-                          onPotAction={handlePotAction}
-                          pot={gameData?.pot}
-                          isLoading={true}
-                        />
-                      ))
+                  ? [...Array(3)].map((_, i) => <PlayerCardSkeleton key={i} />)
                   : players
                       .sort((a, b) => {
                         if (a.name === currentUsername) return -1;
@@ -372,7 +389,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
                           player={player}
                           isCurrentUser={player.name === currentUsername}
                           onPotAction={handlePotAction}
-                          pot={gameData?.pot || 0}
+                          pot={gameData?.pot}
                         />
                       ))}
               </div>
