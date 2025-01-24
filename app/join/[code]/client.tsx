@@ -123,6 +123,21 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
     };
   }, [code, loadGame]);
 
+  // Load current user from localStorage
+  useEffect(() => {
+    if (!game) return;
+    const currentPlayer = localStorage.getItem('currentPlayer');
+    if (currentPlayer) {
+      const { name } = JSON.parse(currentPlayer);
+      const inGame = game?.players.map((player) => player.name).includes(name);
+
+      if (inGame) {
+        router.push(`/game/${game?.id}`);
+        return;
+      }
+    }
+  }, [game, router]);
+
   const handleJoin = async (data: FormValues) => {
     if (!game) return;
     const name = data.name;
