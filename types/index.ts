@@ -22,8 +22,8 @@ export interface MoveHistory {
 
 export interface MoveHistoryView {
   id: string;
-  playerId: string;
-  createdAt: number;
+  player_id: string;
+  created_at: number;
   action_type: 'add' | 'remove';
   amount: number;
 }

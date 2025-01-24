@@ -56,7 +56,7 @@ export function MoveHistory({
   };
 
   const formatMove = (move: MoveHistoryView) => {
-    const playerName = getPlayerName(move.playerId);
+    const playerName = getPlayerName(move.player_id);
     const action = move.action_type === 'add' ? 'places' : 'takes';
     return `${playerName} ${action} ${formatAmount(move.amount || 0)} ${
       move.action_type === 'add' ? 'in the pot' : 'from the pot'
@@ -83,7 +83,7 @@ export function MoveHistory({
             >
               <span className="text-foreground">{formatMove(move)}</span>
               <span className="text-muted-foreground">
-                {formatDistanceToNow(move.createdAt, { addSuffix: true })}
+                {formatDistanceToNow(move.created_at, { addSuffix: true })}
               </span>
             </div>
           ))}
