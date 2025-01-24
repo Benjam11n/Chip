@@ -7,37 +7,13 @@ import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { MoveHistoryView, PlayerView } from '@/types';
 
-import { Skeleton } from './ui/skeleton';
+import { MoveHistorySkeleton } from './skeletons';
 
 interface MoveHistoryProps {
   players: PlayerView[];
   totalPot: number;
   moves: MoveHistoryView[];
   isLoading: boolean;
-}
-
-function MoveHistorySkeleton() {
-  return (
-    <Card className="p-4">
-      <div className="mx-2 mb-4 flex items-center justify-between">
-        <Skeleton className="h-7 w-32" />
-        <Skeleton className="h-5 w-24" />
-      </div>
-      <ScrollArea className="h-[380px] pr-4">
-        <div className="space-y-4">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div
-              key={i}
-              className="flex items-center justify-between border-b border-border py-2 last:border-0"
-            >
-              <Skeleton className="h-5 w-48" />
-              <Skeleton className="h-4 w-24" />
-            </div>
-          ))}
-        </div>
-      </ScrollArea>
-    </Card>
-  );
 }
 
 export function MoveHistory({

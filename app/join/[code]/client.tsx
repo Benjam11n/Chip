@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import { JoinSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {
@@ -187,14 +188,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-background p-4">
-        <div className="mx-auto max-w-md space-y-4">
-          <Skeleton className="h-8 w-3/4" />
-          <Skeleton className="h-[400px] w-full" />
-        </div>
-      </div>
-    );
+    return <JoinSkeleton />;
   }
 
   if (!game) {

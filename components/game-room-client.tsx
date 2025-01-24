@@ -26,8 +26,9 @@ import {
 import { supabase } from '@/lib/supabase/client';
 import { GameState, GameView, MoveHistoryView } from '@/types';
 
-import { PlayerCard, PlayerCardSkeleton } from './player-card';
+import { PlayerCard } from './player-card';
 import { PokerHandsChart } from './poker-hands-chart';
+import { GameRoomSkeleton, PlayerCardSkeleton } from './skeletons';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 
 interface GameRoomClientProps {
@@ -299,11 +300,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
   };
 
   if (gameLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <div className="text-foreground">Loading...</div>
-      </div>
-    );
+    return <GameRoomSkeleton />;
   }
 
   if (!gameData) {

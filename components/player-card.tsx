@@ -8,23 +8,8 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { PlayerView } from '@/types';
 
+import { PlayerCardSkeleton } from './skeletons';
 import { Badge } from './ui/badge';
-import { Skeleton } from './ui/skeleton';
-
-export function PlayerCardSkeleton() {
-  return (
-    <Card className="p-4">
-      <div className="animate-pulse space-y-3">
-        <Skeleton className="h-4 w-1/3 rounded bg-muted" />
-        <Skeleton className="h-6 w-1/2 rounded bg-muted" />
-        <div className="flex gap-2">
-          <Skeleton className="h-8 w-20 rounded bg-muted" />
-          <Skeleton className="h-8 w-20 rounded bg-muted" />
-        </div>
-      </div>
-    </Card>
-  );
-}
 
 interface PlayerCardProps {
   player: PlayerView | null;
