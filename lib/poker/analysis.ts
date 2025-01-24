@@ -36,7 +36,6 @@ export function analyzeHand(cards: string[]): HandAnalysis {
     ? `${highRank}${highRank}`
     : `${highRank}${lowRank}${isSuited ? 's' : 'o'}`;
 
-    console.log(handKey);
   // Lookup the hand information
   const handInfo = HAND_STRENGTHS[handKey as keyof typeof HAND_STRENGTHS] || {
     category: 'Weak',

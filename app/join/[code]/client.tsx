@@ -133,7 +133,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
       }
 
       if (
-        game.players.some((p) => p.name.toLowerCase() === name.toLowerCase())
+        game?.players?.some((p) => p.name.toLowerCase() === name.toLowerCase())
       ) {
         throw new Error('Name already taken. Please choose another name');
       }
@@ -268,8 +268,8 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
               {qrCode ? (
                 <div className="flex justify-center">
                   <Image
-                    width={252}
-                    height={252}
+                    width={256}
+                    height={256}
                     src={qrCode}
                     alt="Join QR Code"
                     className="rounded-md"
@@ -277,7 +277,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
                 </div>
               ) : (
                 <div className="flex justify-center">
-                  <Skeleton className="size-48" />
+                  <Skeleton className="size-64" />
                 </div>
               )}
 

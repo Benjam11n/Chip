@@ -60,5 +60,4 @@ export type GameView = {
   createdAt?: string;
   updatedAt?: string;
   createdBy?: string;
-  players: Player[];
 };
