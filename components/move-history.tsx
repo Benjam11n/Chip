@@ -1,20 +1,19 @@
 'use client';
 
 import { formatDistanceToNow } from 'date-fns';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { toast } from 'sonner';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { supabase } from '@/lib/supabase/client';
 import { MoveHistoryView, PlayerView } from '@/types';
 
 import { Skeleton } from './ui/skeleton';
 
 interface MoveHistoryProps {
-  gameId: string | undefined;
   players: PlayerView[];
   totalPot: number;
+  moves: MoveHistoryView[];
+  isLoading: boolean;
 }
 
 function MoveHistorySkeleton() {
@@ -41,9 +40,12 @@ function MoveHistorySkeleton() {
   );
 }
 
-export function MoveHistory({ gameId, players, totalPot }: MoveHistoryProps) {
-  const [moves, setMoves] = useState<MoveHistoryView[]>([]);
-  const [loading, setLoading] = useState(true);
+export function MoveHistory({
+  players,
+  totalPot,
+  moves,
+  isLoading,
+}: MoveHistoryProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   // Auto scroll to bottom when moves update
@@ -61,58 +63,7 @@ export function MoveHistory({ gameId, players, totalPot }: MoveHistoryProps) {
     scrollToBottom();
   }, [moves, scrollToBottom]);
 
-  const fetchMoves = useCallback(async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('game_actions')
-        .select('*')
-        .eq('game_id', gameId)
-        .order('created_at', { ascending: true });
-
-      if (error) throw error;
-
-      setMoves(
-        data.map((move) => ({
-          ...move,
-          id: move.id,
-          playerId: move.player_id,
-          createdAt: move.created_at,
-          amount: move.amount,
-        }))
-      );
-    } catch (err) {
-      console.error(err);
-      toast.error('Error fetching game history');
-    } finally {
-      setLoading(false);
-    }
-  }, [gameId]);
-
-  // Listen for realtime updates
-  useEffect(() => {
-    fetchMoves();
-
-    const channel = supabase
-      .channel(`moves:${gameId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'game_actions',
-          filter: `game_id=eq.${gameId}`,
-        },
-        fetchMoves
-      )
-      .subscribe();
-
-    return () => {
-      channel.unsubscribe();
-    };
-  }, [fetchMoves, gameId]);
-
-  if (loading) {
+  if (isLoading) {
     return <MoveHistorySkeleton />;
   }
 

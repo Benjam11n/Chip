@@ -24,7 +24,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { supabase } from '@/lib/supabase/client';
-import { GameState, GameView } from '@/types';
+import { GameState, GameView, MoveHistoryView } from '@/types';
 
 import { PlayerCard, PlayerCardSkeleton } from './player-card';
 import { PokerHandsChart } from './poker-hands-chart';
@@ -40,9 +40,12 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
     null
   );
   const [players, setPlayers] = useState<GameState['players']>([]);
+  const [moves, setMoves] = useState<MoveHistoryView[]>([]);
+
   const [gameLoading, setGameLoading] = useState(true);
   const [playersLoading, setPlayersLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [movesLoading, setMovesLoading] = useState(false);
 
   const [currentUsername, setCurrentUsername] = useState<string | null>(null);
   const [showAnalysis, setShowAnalysis] = useState(false);
@@ -115,9 +118,38 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
     }
   }, [gameId, router]);
 
+  const fetchMoves = useCallback(async () => {
+    try {
+      setMovesLoading(true);
+      const { data, error } = await supabase
+        .from('game_actions')
+        .select('*')
+        .eq('game_id', gameId)
+        .order('created_at', { ascending: true });
+
+      if (error) throw error;
+
+      setMoves(
+        data.map((move) => ({
+          ...move,
+          id: move.id,
+          playerId: move.player_id,
+          createdAt: move.created_at,
+          amount: move.amount,
+        }))
+      );
+    } catch (err) {
+      console.error(err);
+      toast.error('Error fetching game history');
+    } finally {
+      setMovesLoading(false);
+    }
+  }, [gameId]);
+
   useEffect(() => {
     fetchGameData();
     fetchPlayers();
+    fetchMoves();
 
     const channel = supabase
       .channel(`room:${gameId}`)
@@ -169,6 +201,16 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
             fetchGameData();
           }
         }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'game_actions',
+          filter: `game_id=eq.${gameId}`,
+        },
+        fetchMoves
       );
 
     channel.subscribe();
@@ -176,7 +218,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
     return () => {
       channel.unsubscribe();
     };
-  }, [fetchGameData, fetchPlayers, gameId]);
+  }, [fetchGameData, fetchPlayers, fetchMoves, gameId]);
 
   const handlePotAction = async (
     playerId: string,
@@ -348,12 +390,13 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
             <TabsContent
               value="history"
               className="space-y-6"
-              key={gameData.pot}
+              // key={gameData.pot}
             >
               <MoveHistory
-                gameId={gameData.id}
                 players={players}
                 totalPot={gameData.pot}
+                moves={moves}
+                isLoading={movesLoading}
               />
               <div className="space-y-3">
                 {players
@@ -400,10 +443,10 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
         <div className="hidden gap-6 lg:grid lg:grid-cols-3">
           <div className="space-y-3 lg:col-span-2">
             <MoveHistory
-              key={gameData.pot}
-              gameId={gameData.id}
               players={players}
               totalPot={gameData.pot}
+              moves={moves}
+              isLoading={movesLoading}
             />
             <Card className="p-6">
               <HandInput />
