@@ -69,7 +69,10 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
         throw new Error('Game not found');
       }
 
-      setGame(game);
+      setGame({
+        ...game,
+        players: game.players || [],
+      });
 
       try {
         // Generate QR code in parallel
@@ -322,7 +325,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
           <Card className="p-6">
             <h2 className="mb-4 font-semibold">Current Players</h2>
             <div className="space-y-2">
-              {game.players.map((player) => (
+              {game?.players?.map((player) => (
                 <div
                   key={player.id}
                   className="flex items-center justify-between border-b py-2 last:border-0"
