@@ -21,7 +21,7 @@ export function MoveHistory({
   totalPot,
   moves,
   isLoading,
-}: MoveHistoryProps) {
+}: Readonly<MoveHistoryProps>) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   // Auto scroll to bottom when moves update
@@ -44,7 +44,7 @@ export function MoveHistory({
   }
 
   const getPlayerName = (playerId: string) => {
-    return players.find((p) => p.id === playerId)?.name || 'Unknown Player';
+    return players.find((p) => p.id === playerId)?.name ?? 'Unknown Player';
   };
 
   const formatAmount = (amount: number) => {

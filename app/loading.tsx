@@ -2,7 +2,11 @@
 
 import { cn } from '@/lib/utils';
 
-export default function Loading({ className }: { className?: string }) {
+interface LoadingProps {
+  className?: string;
+}
+
+export default function Loading({ className }: Readonly<LoadingProps>) {
   return (
     <div
       className={cn(

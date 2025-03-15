@@ -9,7 +9,7 @@ interface HandAnalyzerProps {
   analysis: HandAnalysis | null;
 }
 
-export function HandAnalyzer({ analysis }: HandAnalyzerProps) {
+export function HandAnalyzer({ analysis }: Readonly<HandAnalyzerProps>) {
   if (!analysis) {
     return (
       <Card className="p-4">
@@ -33,8 +33,8 @@ export function HandAnalyzer({ analysis }: HandAnalyzerProps) {
       <div className="space-y-2">
         <h3 className="font-semibold">Possible Hands</h3>
         <div className="space-y-3">
-          {analysis.possibleHands.map((hand, index) => (
-            <div key={index} className="space-y-1">
+          {analysis.possibleHands.map((hand) => (
+            <div key={hand.name} className="space-y-1">
               <div className="flex items-center justify-between">
                 <span
                   className={cn(
@@ -50,9 +50,9 @@ export function HandAnalyzer({ analysis }: HandAnalyzerProps) {
               </p>
               {hand.requiredCards.length > 0 && (
                 <div className="mt-1 flex gap-1">
-                  {hand.requiredCards.map((card, i) => (
+                  {hand.requiredCards.map((card) => (
                     <span
-                      key={i}
+                      key={card}
                       className={cn(
                         'inline-block px-1.5 py-0.5 text-sm font-mono rounded border',
                         card.includes('♥') || card.includes('♦')

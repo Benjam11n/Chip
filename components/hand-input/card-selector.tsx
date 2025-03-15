@@ -14,16 +14,19 @@ interface CardSelectorProps {
 export function CardSelector({
   selectedCards,
   onSelectCard,
-}: CardSelectorProps) {
+}: Readonly<CardSelectorProps>) {
   const [selectedRank, setSelectedRank] = useState<string | null>(null);
   const [selectedSuit, setSelectedSuit] = useState<string | null>(null);
 
   const handleCardClick = (rank: string, suit: string) => {
     const card = `${rank}${suit}`;
     if (selectedCards.includes(card)) {
-      onSelectCard(card); // Will remove the card
+      onSelectCard(card);
     } else if (selectedCards.length < 2) {
-      onSelectCard(card); // Will add the card
+      onSelectCard(card);
+
+      setSelectedRank(null);
+      setSelectedSuit(null);
     }
   };
 

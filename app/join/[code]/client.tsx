@@ -39,7 +39,9 @@ const JoinGameSchema = z.object({
 
 type FormValues = z.infer<typeof JoinGameSchema>;
 
-export default function JoinGameClient({ code }: JoinGameClientProps) {
+export default function JoinGameClient({
+  code,
+}: Readonly<JoinGameClientProps>) {
   const router = useRouter();
   const [game, setGame] = useState<Game | null>(null);
   const [loading, setLoading] = useState(true);
@@ -132,7 +134,7 @@ export default function JoinGameClient({ code }: JoinGameClientProps) {
     const currentPlayer = localStorage.getItem('currentPlayer');
     if (currentPlayer) {
       const { name } = JSON.parse(currentPlayer);
-      const inGame = game?.players.map((player) => player.name).includes(name);
+      const inGame = game?.players?.map((player) => player.name).includes(name);
 
       if (inGame) {
         router.push(`/game/${game?.id}`);

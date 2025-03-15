@@ -46,7 +46,7 @@ export function RoomSettings({
   players,
   currentUsername,
   onKickPlayer,
-}: RoomSettingsProps) {
+}: Readonly<RoomSettingsProps>) {
   const router = useRouter();
   const [qrCode, setQrCode] = useState<string>('');
   const [showQR, setShowQR] = useState(false);

@@ -1,6 +1,6 @@
 import { GameRoomClient } from '@/components/game-room-client';
 
-export default async function GameRoom({ params }: RouteParams) {
+export default async function GameRoom({ params }: Readonly<RouteParams>) {
   const { id } = await params;
 
   return (

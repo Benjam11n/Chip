@@ -33,7 +33,7 @@ interface GameRoomClientProps {
   gameId: string;
 }
 
-export function GameRoomClient({ gameId }: GameRoomClientProps) {
+export function GameRoomClient({ gameId }: Readonly<GameRoomClientProps>) {
   const router = useRouter();
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [showPokerHands, setShowPokerHands] = useState(false);
@@ -176,7 +176,7 @@ export function GameRoomClient({ gameId }: GameRoomClientProps) {
                   gameId={game.id}
                   gameCode={game.code}
                   players={players}
-                  currentUsername={currentUsername!}
+                  currentUsername={currentUsername}
                   onKickPlayer={executeKickPlayer}
                 />
               </div>

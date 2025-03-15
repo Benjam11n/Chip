@@ -4,7 +4,11 @@ import { ThemeProvider } from 'next-themes';
 
 import { Toaster } from '@/components/ui/sonner';
 
-export function Providers({ children }: { children: React.ReactNode }) {
+interface ProvidersProps {
+  children: React.ReactNode;
+}
+
+export function Providers({ children }: Readonly<ProvidersProps>) {
   return (
     <ThemeProvider
       attribute="class"

@@ -31,7 +31,7 @@ export function PlayerCard({
   pot,
   isLoading = false,
   actionLoading = false,
-}: PlayerCardProps) {
+}: Readonly<PlayerCardProps>) {
   const [amount, setAmount] = useState(5);
 
   const handleAmountChange = (newAmount: number) => {
