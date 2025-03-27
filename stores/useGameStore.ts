@@ -3,18 +3,18 @@ import { create } from 'zustand';
 import { supabase } from '@/lib/supabase/client';
 import { GameView, MoveHistoryView, PlayerView } from '@/types';
 
-
+export type LoadingState = {
+  game: boolean;
+  players: boolean;
+  moves: boolean;
+};
 
 type GameStore = {
   gameId: string | null;
   players: PlayerView[];
   game: GameView | null;
   moves: MoveHistoryView[];
-  loading: {
-    game: boolean;
-    players: boolean;
-    moves: boolean;
-  };
+  loading: LoadingState;
   currentUsername: string;
   actionLoading: boolean;
   setGameId: (id: string) => void;
