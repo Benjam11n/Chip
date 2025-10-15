@@ -39,9 +39,7 @@ const JoinGameSchema = z.object({
 
 type FormValues = z.infer<typeof JoinGameSchema>;
 
-export default function JoinGameClient({
-  code,
-}: Readonly<JoinGameClientProps>) {
+export default function JoinGameClient({ code }: Readonly<JoinGameClientProps>) {
   const router = useRouter();
   const [game, setGame] = useState<Game | null>(null);
   const [loading, setLoading] = useState(true);
@@ -119,7 +117,7 @@ export default function JoinGameClient({
           } catch (error) {
             console.error('Error processing game update:', error);
           }
-        }
+        },
       )
       .subscribe();
 
@@ -152,9 +150,7 @@ export default function JoinGameClient({
         throw new Error('Game is full');
       }
 
-      if (
-        game?.players?.some((p) => p.name.toLowerCase() === name.toLowerCase())
-      ) {
+      if (game?.players?.some((p) => p.name.toLowerCase() === name.toLowerCase())) {
         throw new Error('Name already taken. Please choose another name');
       }
 
@@ -173,7 +169,7 @@ export default function JoinGameClient({
         JSON.stringify({
           name,
           gameId: game.id,
-        })
+        }),
       );
 
       toast.success('Success', {
@@ -184,8 +180,7 @@ export default function JoinGameClient({
     } catch (error) {
       console.error(error);
       toast.error('Error', {
-        description:
-          error instanceof Error ? error.message : 'Failed to join game',
+        description: error instanceof Error ? error.message : 'Failed to join game',
       });
     }
   };
@@ -199,10 +194,7 @@ export default function JoinGameClient({
     } catch (error) {
       console.error(error);
       toast.error('Error', {
-        description:
-          error instanceof Error
-            ? error.message
-            : 'Failed to copy link to clipboard',
+        description: error instanceof Error ? error.message : 'Failed to copy link to clipboard',
       });
     }
   };
@@ -217,9 +209,8 @@ export default function JoinGameClient({
         <div className="mx-auto max-w-md px-8 text-center">
           <h1 className="mb-4 text-2xl font-bold">Game Not Found</h1>
           <p className="text-muted-foreground">
-            The game code you entered is either incorrect or the game has
-            expired. Games automatically expire after 24 hours of inactivity to
-            keep things fresh.
+            The game code you entered is either incorrect or the game has expired. Games
+            automatically expire after 24 hours of inactivity to keep things fresh.
           </p>
           <Button className="mt-6" onClick={() => router.push('/join')}>
             Try Again
@@ -253,10 +244,7 @@ export default function JoinGameClient({
             </div>
 
             <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(handleJoin)}
-                className="space-y-4"
-              >
+              <form onSubmit={form.handleSubmit(handleJoin)} className="space-y-4">
                 <FormField
                   control={form.control}
                   name="name"
@@ -264,21 +252,14 @@ export default function JoinGameClient({
                     <FormItem>
                       <FormLabel>Your Name</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Enter your name (2-30 characters)"
-                          {...field}
-                        />
+                        <Input placeholder="Enter your name (2-30 characters)" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={form.formState.isSubmitting}
-                >
+                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                   {form.formState.isSubmitting ? 'Joining...' : 'Join Game'}
                 </Button>
               </form>
@@ -302,19 +283,11 @@ export default function JoinGameClient({
               )}
 
               <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={copyJoinLink}
-                >
+                <Button variant="outline" className="flex-1" onClick={copyJoinLink}>
                   <Copy className="mr-2 size-4" />
                   Copy Link
                 </Button>
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={() => window.print()}
-                >
+                <Button variant="outline" className="flex-1" onClick={() => window.print()}>
                   <QrCode className="mr-2 size-4" />
                   Save QR
                 </Button>

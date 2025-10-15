@@ -86,10 +86,7 @@ export function GameRoomSkeleton() {
               </div>
               <div className="space-y-4">
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <div
-                    key={i}
-                    className="flex items-center justify-between py-2"
-                  >
+                  <div key={i} className="flex items-center justify-between py-2">
                     <Skeleton className="h-4 w-48" />
                     <Skeleton className="h-4 w-24" />
                   </div>
@@ -119,10 +116,7 @@ export function GameRoomSkeleton() {
               </div>
               <div className="space-y-4">
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <div
-                    key={i}
-                    className="flex items-center justify-between py-2"
-                  >
+                  <div key={i} className="flex items-center justify-between py-2">
                     <Skeleton className="h-4 w-48" />
                     <Skeleton className="h-4 w-24" />
                   </div>

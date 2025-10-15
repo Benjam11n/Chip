@@ -8,18 +8,9 @@ interface LoadingProps {
 
 export default function Loading({ className }: Readonly<LoadingProps>) {
   return (
-    <div
-      className={cn(
-        'flex min-h-screen items-center justify-center bg-background',
-        className
-      )}
-    >
+    <div className={cn('flex min-h-screen items-center justify-center bg-background', className)}>
       <div className="relative size-20 animate-spin">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 100 100"
-          className="size-full"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="size-full">
           {/* Outer ring of the poker chip */}
           <circle
             cx="50"

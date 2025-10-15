@@ -51,10 +51,7 @@ export function RoomSettings({
   const [qrCode, setQrCode] = useState<string>('');
   const [showQR, setShowQR] = useState(false);
 
-  const roomUrl =
-    typeof window !== 'undefined'
-      ? `${window.location.origin}/join/${gameCode}`
-      : '';
+  const roomUrl = typeof window !== 'undefined' ? `${window.location.origin}/join/${gameCode}` : '';
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -111,9 +108,7 @@ export function RoomSettings({
       toast.success('Success', { description: 'Game ended successfully' });
       localStorage.removeItem('currentPlayer');
     } catch (error) {
-      toast.error(
-        'Error ending game: ' + (error instanceof Error ? error.message : error)
-      );
+      toast.error('Error ending game: ' + (error instanceof Error ? error.message : error));
     }
   };
 
@@ -143,12 +138,7 @@ export function RoomSettings({
             </DialogHeader>
             {qrCode && (
               <div className="flex justify-center p-4">
-                <Image
-                  width={256}
-                  height={256}
-                  src={qrCode}
-                  alt="Room QR Code"
-                />
+                <Image width={256} height={256} src={qrCode} alt="Room QR Code" />
               </div>
             )}
           </DialogContent>
@@ -159,16 +149,11 @@ export function RoomSettings({
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold">Players</h3>
-            <span className="text-sm text-muted-foreground">
-              {players.length} players
-            </span>
+            <span className="text-sm text-muted-foreground">{players.length} players</span>
           </div>
           <div className="divide-y">
             {players.map((player) => (
-              <div
-                key={player.id}
-                className="flex items-center justify-between py-2"
-              >
+              <div key={player.id} className="flex items-center justify-between py-2">
                 <div className="flex items-center gap-2">
                   <span className="font-medium">{player.name}</span>
                   {player.name === currentUsername && (
@@ -188,15 +173,13 @@ export function RoomSettings({
                       <AlertDialogHeader>
                         <AlertDialogTitle>Kick Player</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Are you sure you want to kick {player.name} from the
-                          game? This action cannot be undone.
+                          Are you sure you want to kick {player.name} from the game? This action
+                          cannot be undone.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => onKickPlayer(player.id)}
-                        >
+                        <AlertDialogAction onClick={() => onKickPlayer(player.id)}>
                           Kick Player
                         </AlertDialogAction>
                       </AlertDialogFooter>
@@ -218,15 +201,12 @@ export function RoomSettings({
             <AlertDialogHeader>
               <AlertDialogTitle>End Game</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to end the game for all players? This
-                action cannot be undone.
+                Are you sure you want to end the game for all players? This action cannot be undone.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={() => handleEndGame(gameId)}>
-                End
-              </AlertDialogAction>
+              <AlertDialogAction onClick={() => handleEndGame(gameId)}>End</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

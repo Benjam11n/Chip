@@ -14,11 +14,7 @@ import { Badge } from './ui/badge';
 interface PlayerCardProps {
   player: PlayerView | null;
   isCurrentUser: boolean;
-  onPotAction: (
-    playerId: string,
-    amount: number,
-    action: 'add' | 'remove'
-  ) => void;
+  onPotAction: (playerId: string, amount: number, action: 'add' | 'remove') => void;
   pot: number;
   isLoading?: boolean;
   actionLoading?: boolean;
@@ -46,9 +42,7 @@ export function PlayerCard({
   if (!player) return null;
 
   return (
-    <Card
-      className={cn('h-fit', isCurrentUser && 'bg-primary/5 border-primary/20')}
-    >
+    <Card className={cn('h-fit', isCurrentUser && 'border-primary/20 bg-primary/5')}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex items-center gap-2">
           <h3 className="font-semibold text-foreground">
@@ -63,9 +57,7 @@ export function PlayerCard({
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="text-left">
-          <span className="text-lg font-bold text-foreground">
-            ${player.stack}
-          </span>
+          <span className="text-lg font-bold text-foreground">${player.stack}</span>
         </div>
         {isCurrentUser && (
           <div className="space-y-2">

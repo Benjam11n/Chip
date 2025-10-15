@@ -10,11 +10,7 @@ import { PokerHandsChart } from '../poker-hands-chart';
 import { PlayerCardSkeleton } from '../skeletons';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '../ui/collapsible';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 
 interface MobileGameViewProps {
@@ -26,7 +22,7 @@ interface MobileGameViewProps {
   executePotAction: (
     playerId: string,
     amount: number,
-    action_type: 'add' | 'remove'
+    action_type: 'add' | 'remove',
   ) => Promise<void>;
   showAnalysis: boolean;
   setShowAnalysis: (show: boolean) => void;
@@ -46,9 +42,7 @@ export default function MobileGameView({
   showPokerHands,
   setShowPokerHands,
 }: MobileGameViewProps) {
-  const currentPlayer = players.find(
-    (player) => player.name === currentUsername
-  );
+  const currentPlayer = players.find((player) => player.name === currentUsername);
 
   return (
     <>
@@ -106,11 +100,7 @@ export default function MobileGameView({
       </div>
 
       <div className="space-y-3">
-        <Collapsible
-          open={showAnalysis}
-          onOpenChange={setShowAnalysis}
-          className="lg:hidden"
-        >
+        <Collapsible open={showAnalysis} onOpenChange={setShowAnalysis} className="lg:hidden">
           <CollapsibleTrigger asChild>
             <Button variant="outline" className="w-full">
               {showAnalysis ? (
@@ -128,11 +118,7 @@ export default function MobileGameView({
           </CollapsibleContent>
         </Collapsible>
 
-        <Collapsible
-          open={showPokerHands}
-          onOpenChange={setShowPokerHands}
-          className="lg:hidden"
-        >
+        <Collapsible open={showPokerHands} onOpenChange={setShowPokerHands} className="lg:hidden">
           <CollapsibleTrigger asChild>
             <Button variant="outline" className="w-full">
               {showPokerHands ? (

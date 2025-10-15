@@ -15,7 +15,7 @@ interface DesktopGameViewProps {
   executePotAction: (
     playerId: string,
     amount: number,
-    action_type: 'add' | 'remove'
+    action_type: 'add' | 'remove',
   ) => Promise<void>;
 }
 

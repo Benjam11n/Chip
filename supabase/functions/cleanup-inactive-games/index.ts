@@ -22,7 +22,7 @@
 //     const databaseUrl: string = (Deno.env.toObject() as Env).POSTGRES_URL;
 //     const pool = new postgres.Pool(databaseUrl, 3, true);
 //     const connection = await pool.connect();
-    
+
 //     try {
 //       const result = await connection.queryObject`
 //         SELECT cleanup_inactive_games();
@@ -35,7 +35,7 @@
 //       await pool.end();
 //     }
 //   } catch (error) {
-//     return new Response(JSON.stringify({ error: (error as Error).message }), { 
+//     return new Response(JSON.stringify({ error: (error as Error).message }), {
 //       status: 500,
 //       headers: { 'Content-Type': 'application/json' }
 //     });

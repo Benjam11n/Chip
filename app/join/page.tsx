@@ -63,9 +63,7 @@ export default function JoinPage() {
         </Button>
         <div className="text-center">
           <h1 className="text-3xl font-bold">Join Game</h1>
-          <p className="mt-2 text-muted-foreground">
-            Enter the game code to join
-          </p>
+          <p className="mt-2 text-muted-foreground">Enter the game code to join</p>
         </div>
         <Card className="p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -81,11 +79,7 @@ export default function JoinPage() {
                 disabled={isLoading}
               />
             </div>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={!code.trim() || isLoading}
-            >
+            <Button type="submit" className="w-full" disabled={!code.trim() || isLoading}>
               {isLoading ? 'Checking...' : 'Continue'}
               {!isLoading && <ArrowRight className="ml-2 size-4" />}
             </Button>

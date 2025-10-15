@@ -13,9 +13,7 @@ export function HandAnalyzer({ analysis }: Readonly<HandAnalyzerProps>) {
   if (!analysis) {
     return (
       <Card className="p-4">
-        <div className="text-center text-muted-foreground">
-          Select two cards to see analysis
-        </div>
+        <div className="text-center text-muted-foreground">Select two cards to see analysis</div>
       </Card>
     );
   }
@@ -36,28 +34,19 @@ export function HandAnalyzer({ analysis }: Readonly<HandAnalyzerProps>) {
           {analysis.possibleHands.map((hand) => (
             <div key={hand.name} className="space-y-1">
               <div className="flex items-center justify-between">
-                <span
-                  className={cn(
-                    'font-medium',
-                    hand.completed ? 'text-primary font-bold' : ''
-                  )}
-                >
+                <span className={cn('font-medium', hand.completed ? 'font-bold text-primary' : '')}>
                   {hand.name}
                 </span>
               </div>
-              <p className="text-sm text-muted-foreground">
-                {hand.description}
-              </p>
+              <p className="text-sm text-muted-foreground">{hand.description}</p>
               {hand.requiredCards.length > 0 && (
                 <div className="mt-1 flex gap-1">
                   {hand.requiredCards.map((card) => (
                     <span
                       key={card}
                       className={cn(
-                        'inline-block px-1.5 py-0.5 text-sm font-mono rounded border',
-                        card.includes('♥') || card.includes('♦')
-                          ? 'text-primary'
-                          : ''
+                        'inline-block rounded border px-1.5 py-0.5 font-mono text-sm',
+                        card.includes('♥') || card.includes('♦') ? 'text-primary' : '',
                       )}
                     >
                       {card}

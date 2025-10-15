@@ -104,9 +104,7 @@ export default function Home() {
                   <feature.icon className="size-6 text-primary" />
                 </motion.div>
                 <h3 className="mb-2 text-xl font-bold">{feature.title}</h3>
-                <p className="grow text-muted-foreground">
-                  {feature.description}
-                </p>
+                <p className="grow text-muted-foreground">{feature.description}</p>
               </Card>
             </motion.div>
           ))}

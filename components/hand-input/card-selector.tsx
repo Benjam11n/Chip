@@ -11,10 +11,7 @@ interface CardSelectorProps {
   onSelectCard: (card: string) => void;
 }
 
-export function CardSelector({
-  selectedCards,
-  onSelectCard,
-}: Readonly<CardSelectorProps>) {
+export function CardSelector({ selectedCards, onSelectCard }: Readonly<CardSelectorProps>) {
   const [selectedRank, setSelectedRank] = useState<string | null>(null);
   const [selectedSuit, setSelectedSuit] = useState<string | null>(null);
 
@@ -38,10 +35,10 @@ export function CardSelector({
             key={suit}
             variant={selectedSuit === suit ? 'default' : 'outline'}
             className={cn(
-              'text-2xl font-normal h-12',
+              'h-12 text-2xl font-normal',
               selectedSuit === suit
                 ? SUIT_COLORS[suit as keyof typeof SUIT_COLORS] + '/90'
-                : SUIT_COLORS[suit as keyof typeof SUIT_COLORS]
+                : SUIT_COLORS[suit as keyof typeof SUIT_COLORS],
             )}
             onClick={() => setSelectedSuit(suit === selectedSuit ? null : suit)}
           >
@@ -62,10 +59,7 @@ export function CardSelector({
         ))}
       </div>
       {selectedRank && selectedSuit && (
-        <Button
-          className="w-full"
-          onClick={() => handleCardClick(selectedRank, selectedSuit)}
-        >
+        <Button className="w-full" onClick={() => handleCardClick(selectedRank, selectedSuit)}>
           Add {selectedRank}
           {selectedSuit}
         </Button>
@@ -76,8 +70,8 @@ export function CardSelector({
             key={card}
             variant="outline"
             className={cn(
-              'text-xl font-normal h-16 w-12',
-              SUIT_COLORS[card[1] as keyof typeof SUIT_COLORS]
+              'h-16 w-12 text-xl font-normal',
+              SUIT_COLORS[card[1] as keyof typeof SUIT_COLORS],
             )}
             onClick={() => onSelectCard(card)}
           >

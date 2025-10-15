@@ -11,7 +11,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 
-
 interface GameData {
   name: string;
   maxPlayers: number;
@@ -60,8 +59,7 @@ export default function CreateGamePage() {
       router.push(`/join/${data.code}`);
     } catch (error) {
       toast.error('Error', {
-        description:
-          error instanceof Error ? error.message : 'Failed to create game',
+        description: error instanceof Error ? error.message : 'Failed to create game',
       });
     } finally {
       setLoading(false);
@@ -134,16 +132,11 @@ export default function CreateGamePage() {
                 disabled={loading}
               />
               <p className="text-sm text-muted-foreground">
-                Set the initial amount each player starts with. Minimum $100, in
-                increments of $5.
+                Set the initial amount each player starts with. Minimum $100, in increments of $5.
               </p>
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={!name.trim() || loading}
-            >
+            <Button type="submit" className="w-full" disabled={!name.trim() || loading}>
               {loading ? 'Creating...' : 'Create Game'}
             </Button>
           </form>

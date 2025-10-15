@@ -26,7 +26,7 @@ type GameStore = {
   handlePotAction: (
     playerId: string,
     amount: number,
-    action_type: 'add' | 'remove'
+    action_type: 'add' | 'remove',
   ) => Promise<void>;
   handleKickPlayer: (playerId: string) => Promise<void>;
 };
@@ -48,13 +48,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({ loading: { ...get().loading, players: true } });
     try {
-      const { data, error } = await supabase
-        .from('players')
-        .select('*')
-        .eq('game_id', gameId);
+      const { data, error } = await supabase.from('players').select('*').eq('game_id', gameId);
 
       if (error) throw error;
-      set({ players: data.map(p => ({ ...p, totalBuyIn: p.total_buy_in })) });
+      set({ players: data.map((p) => ({ ...p, totalBuyIn: p.total_buy_in })) });
     } catch (err) {
       console.error(err);
     } finally {
@@ -74,10 +71,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
         .eq('id', gameId)
         .single();
 
-      if (error?.code === 'PGRST116') { // Game not found
+      if (error?.code === 'PGRST116') {
+        // Game not found
         // Handle redirect (e.g., via router in component)
         return;
-    }
+      }
       if (error) throw error;
 
       set({ game });
@@ -102,7 +100,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         .order('created_at', { ascending: true });
 
       if (error) throw error;
-      set({ moves: data.map(m => ({ ...m, createdAt: m.created_at })) });
+      set({ moves: data.map((m) => ({ ...m, createdAt: m.created_at })) });
     } catch (err) {
       console.error(err);
     } finally {
@@ -116,15 +114,27 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const channel = supabase
       .channel(`room:${gameId}`)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'players', filter: `game_id=eq.${gameId}` }, fetchPlayers)
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'games', filter: `id=eq.${gameId}` }, (payload) => {
-        if (payload.new?.pot !== undefined) {
-          set({ game: { ...get().game!, pot: payload.new.pot } });
-        } else {
-          fetchGame();
-        }
-      })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'game_actions', filter: `game_id=eq.${gameId}` }, fetchMoves);
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'players', filter: `game_id=eq.${gameId}` },
+        fetchPlayers,
+      )
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'games', filter: `id=eq.${gameId}` },
+        (payload) => {
+          if (payload.new?.pot !== undefined) {
+            set({ game: { ...get().game!, pot: payload.new.pot } });
+          } else {
+            fetchGame();
+          }
+        },
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'game_actions', filter: `game_id=eq.${gameId}` },
+        fetchMoves,
+      );
 
     channel.subscribe();
     return () => channel.unsubscribe();
@@ -143,18 +153,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const originalPlayers = [...players];
       const originalPot = game.pot;
 
-      const updatedPlayers = players.map((player) => 
-        player.id === playerId ? {
-          ...player,
-          stack: action_type === 'add' ? player.stack - amount : player.stack + amount
-        } : player
+      const updatedPlayers = players.map((player) =>
+        player.id === playerId
+          ? {
+              ...player,
+              stack: action_type === 'add' ? player.stack - amount : player.stack + amount,
+            }
+          : player,
       );
 
       const updatedPot = action_type === 'add' ? game.pot + amount : game.pot - amount;
 
       set({
         players: updatedPlayers,
-        game: { ...game, pot: updatedPot }
+        game: { ...game, pot: updatedPot },
       });
 
       // Database update
@@ -169,7 +181,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         // Rollback on error
         set({
           players: originalPlayers,
-          game: { ...game, pot: originalPot }
+          game: { ...game, pot: originalPot },
         });
         throw error;
       }
@@ -191,13 +203,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
         value: gameId,
       });
 
-      const { error } = await supabase
-        .from('players')
-        .delete()
-        .eq('id', playerId);
+      const { error } = await supabase.from('players').delete().eq('id', playerId);
 
       if (error) throw error;
-      
+
       // Refresh players list
       await get().fetchPlayers();
     } catch (err) {

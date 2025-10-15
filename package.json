@@ -6,7 +6,12 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write .",
+    "type-check": "tsc --noEmit",
+    "bump-deps": "pnpm dlx npm-check-updates --deep -u -x react-day-picker",
+    "bump-ui": "pnpm dlx shadcn@latest add --all",
+    "clean": "git clean -xdf node_modules"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -59,6 +64,8 @@
     "next-themes": "^0.4.4",
     "node-cron": "^3.0.3",
     "postcss": "8.5.1",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.7.0",
     "qrcode": "^1.5.4",
     "react": "18.3.1",
     "react-day-picker": "^8.10.1",

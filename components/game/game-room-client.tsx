@@ -48,7 +48,7 @@ export function GameRoomClient({ gameId }: Readonly<GameRoomClientProps>) {
         });
       }
     },
-    [handlePotAction]
+    [handlePotAction],
   );
 
   // Wrapper for kick player with error handling
@@ -61,7 +61,7 @@ export function GameRoomClient({ gameId }: Readonly<GameRoomClientProps>) {
         toast.error('Error kicking player');
       }
     },
-    [handleKickPlayer]
+    [handleKickPlayer],
   );
 
   // Initialize game ID and fetch data
@@ -79,15 +79,7 @@ export function GameRoomClient({ gameId }: Readonly<GameRoomClientProps>) {
 
     const unsubscribe = subscribeToChanges();
     return unsubscribe;
-  }, [
-    gameId,
-    setGameId,
-    fetchGame,
-    fetchPlayers,
-    fetchMoves,
-    subscribeToChanges,
-    router,
-  ]);
+  }, [gameId, setGameId, fetchGame, fetchPlayers, fetchMoves, subscribeToChanges, router]);
 
   // Load current user from localStorage
   useEffect(() => {
@@ -113,9 +105,7 @@ export function GameRoomClient({ gameId }: Readonly<GameRoomClientProps>) {
       return null;
     }
 
-    const inGame = players
-      .map((player) => player.name)
-      .includes(currentUsername);
+    const inGame = players.map((player) => player.name).includes(currentUsername);
 
     if (!inGame) {
       router.push(`/join/${game.code}`);

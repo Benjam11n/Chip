@@ -78,10 +78,7 @@ function formatCardExample(example: string) {
     const rank = card.slice(0, -1); // The rest is the rank
     return (
       <span key={card}>
-        <span className={SUIT_COLORS[suit as keyof typeof SUIT_COLORS]}>
-          {suit}
-        </span>{' '}
-        {rank}{' '}
+        <span className={SUIT_COLORS[suit as keyof typeof SUIT_COLORS]}>{suit}</span> {rank}{' '}
       </span>
     );
   });
@@ -96,12 +93,8 @@ export function PokerHandsChart() {
           <Card key={hand.name} className="space-y-2 p-4">
             <h3 className="text-lg font-bold">{hand.name}</h3>
             <p className="text-sm text-muted-foreground">{hand.description}</p>
-            <div className="font-mono text-lg">
-              {formatCardExample(hand.example)}
-            </div>
-            <p className="text-sm font-medium text-muted-foreground">
-              {hand.strength}
-            </p>
+            <div className="font-mono text-lg">{formatCardExample(hand.example)}</div>
+            <p className="text-sm font-medium text-muted-foreground">{hand.strength}</p>
           </Card>
         ))}
       </div>

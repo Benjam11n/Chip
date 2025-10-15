@@ -22,17 +22,13 @@ export function HandInput() {
     });
   };
 
-  const analysis =
-    selectedCards.length === 2 ? analyzeHand(selectedCards) : null;
+  const analysis = selectedCards.length === 2 ? analyzeHand(selectedCards) : null;
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-6">
-          <CardSelector
-            selectedCards={selectedCards}
-            onSelectCard={handleCardSelect}
-          />
+          <CardSelector selectedCards={selectedCards} onSelectCard={handleCardSelect} />
         </div>
 
         <HandAnalyzer analysis={analysis} />

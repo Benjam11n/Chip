@@ -23,19 +23,13 @@ export async function POST(request: Request) {
       .single();
 
     if (error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
     return NextResponse.json(game);
   } catch (error) {
     console.error('Game creation error:', error);
-    
-    return NextResponse.json(
-      { error: 'Failed to create game' },
-      { status: 500 }
-    );
+
+    return NextResponse.json({ error: 'Failed to create game' }, { status: 500 });
   }
 }

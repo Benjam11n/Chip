@@ -16,20 +16,13 @@ interface MoveHistoryProps {
   isLoading: boolean;
 }
 
-export function MoveHistory({
-  players,
-  totalPot,
-  moves,
-  isLoading,
-}: Readonly<MoveHistoryProps>) {
+export function MoveHistory({ players, totalPot, moves, isLoading }: Readonly<MoveHistoryProps>) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   // Auto scroll to bottom when moves update
   const scrollToBottom = useCallback(() => {
     // Find the viewport element within ScrollArea
-    const viewport = document.querySelector(
-      '[data-radix-scroll-area-viewport]'
-    );
+    const viewport = document.querySelector('[data-radix-scroll-area-viewport]');
     if (viewport) {
       viewport.scrollTop = viewport.scrollHeight;
     }
@@ -69,9 +62,7 @@ export function MoveHistory({
         <h2 className="text-lg font-semibold text-foreground">Move History</h2>
         <div className="text-sm">
           <span className="text-muted-foreground">Total Pot: </span>
-          <span className="font-bold text-foreground">
-            {formatAmount(totalPot)}
-          </span>
+          <span className="font-bold text-foreground">{formatAmount(totalPot)}</span>
         </div>
       </div>
       <ScrollArea className="h-[380px] pr-4" ref={scrollAreaRef}>
@@ -88,9 +79,7 @@ export function MoveHistory({
             </div>
           ))}
           {moves.length === 0 && (
-            <div className="py-8 text-center text-muted-foreground">
-              No moves yet
-            </div>
+            <div className="py-8 text-center text-muted-foreground">No moves yet</div>
           )}
         </div>
       </ScrollArea>
