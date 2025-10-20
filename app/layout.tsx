@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
-import { ThemeToggle } from '@/components/theme-toggle';
+import { Navbar } from '@/components/navbar';
 
 import { Providers } from './providers';
-import { Navbar } from '@/components/navbar';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -24,15 +23,15 @@ export default function RootLayout({ children }: { children: Readonly<React.Reac
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className={inter.className}>
-        <div className="flex min-h-screen flex-col">
-          <Navbar />
+        <Providers>
+          <div className="flex min-h-screen flex-col">
+            <Navbar />
 
-          <main className="w-full flex-1">
-            <div className="container mx-auto py-3 sm:px-6 lg:px-8">
-              <Providers>{children}</Providers>
-            </div>
-          </main>
-        </div>
+            <main className="w-full flex-1">
+              <div className="container mx-auto py-3 sm:px-6 lg:px-8">{children}</div>
+            </main>
+          </div>
+        </Providers>
       </body>
     </html>
   );

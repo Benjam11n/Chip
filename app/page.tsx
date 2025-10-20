@@ -25,13 +25,12 @@ export default function Home() {
       {/* Hero Section */}
       <div className="relative flex min-h-[400px] flex-1 items-center justify-center py-16">
         {/* Decorative cards */}
-        {/* todo: use shadcn ui cards here */}
         <div className="absolute inset-0 opacity-10 dark:opacity-20">
           <div className="absolute top-1/4 left-[10%] -rotate-12">
-            <div className="border-muted-foreground bg-muted h-48 w-32 rounded-lg border-4 shadow-xl lg:h-72 lg:w-48" />
+            <Card className="border-muted-foreground bg-muted h-48 w-32 rounded-lg border-4 shadow-xl lg:h-72 lg:w-48" />
           </div>
           <div className="absolute top-1/3 right-[15%] rotate-12">
-            <div className="border-muted-foreground bg-primary h-48 w-32 rounded-lg border-4 shadow-xl lg:h-72 lg:w-48" />
+            <Card className="border-muted-foreground bg-primary h-48 w-32 rounded-lg border-4 shadow-xl lg:h-72 lg:w-48" />
           </div>
         </div>
         {/* Main content */}
