@@ -25,12 +25,12 @@ export default function Home() {
       {/* Hero Section */}
       <div className="relative flex min-h-[400px] flex-1 items-center justify-center py-16">
         {/* Decorative cards */}
-        <div className="absolute inset-0 opacity-10 dark:opacity-30">
+        <div className="absolute inset-0 opacity-10 dark:opacity-20">
           <div className="absolute left-[10%] top-1/4 -rotate-12">
-            <div className="h-48 w-32 rounded-lg border-4 border-gray-950 bg-gray-600 shadow-xl lg:h-72 lg:w-48" />
+            <div className="h-48 w-32 rounded-lg border-4 border-muted-foreground bg-muted shadow-xl lg:h-72 lg:w-48" />
           </div>
           <div className="absolute right-[15%] top-1/3 rotate-12">
-            <div className="h-48 w-32 rounded-lg border-4 border-gray-700 bg-primary shadow-xl lg:h-72 lg:w-48" />
+            <div className="h-48 w-32 rounded-lg border-4 border-muted-foreground bg-primary shadow-xl lg:h-72 lg:w-48" />
           </div>
         </div>
 
