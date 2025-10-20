@@ -92,9 +92,9 @@ export function PokerHandsChart() {
         {POKER_HANDS.map((hand) => (
           <Card key={hand.name} className="space-y-2 p-4">
             <h3 className="text-lg font-bold">{hand.name}</h3>
-            <p className="text-sm text-muted-foreground">{hand.description}</p>
+            <p className="text-muted-foreground text-sm">{hand.description}</p>
             <div className="font-mono text-lg">{formatCardExample(hand.example)}</div>
-            <p className="text-sm font-medium text-muted-foreground">{hand.strength}</p>
+            <p className="text-muted-foreground text-sm font-medium">{hand.strength}</p>
           </Card>
         ))}
       </div>

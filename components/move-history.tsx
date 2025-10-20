@@ -59,10 +59,10 @@ export function MoveHistory({ players, totalPot, moves, isLoading }: Readonly<Mo
   return (
     <Card className="p-4">
       <div className="mx-2 mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-foreground">Move History</h2>
+        <h2 className="text-foreground text-lg font-semibold">Move History</h2>
         <div className="text-sm">
           <span className="text-muted-foreground">Total Pot: </span>
-          <span className="font-bold text-foreground">{formatAmount(totalPot)}</span>
+          <span className="text-foreground font-bold">{formatAmount(totalPot)}</span>
         </div>
       </div>
       <ScrollArea className="h-[380px] pr-4" ref={scrollAreaRef}>
@@ -70,7 +70,7 @@ export function MoveHistory({ players, totalPot, moves, isLoading }: Readonly<Mo
           {moves.map((move) => (
             <div
               key={move.id}
-              className="flex items-center justify-between border-b border-border py-2 text-sm last:border-0"
+              className="border-border flex items-center justify-between border-b py-2 text-sm last:border-0"
             >
               <span className="text-foreground">{formatMove(move)}</span>
               <span className="text-muted-foreground">
@@ -79,7 +79,7 @@ export function MoveHistory({ players, totalPot, moves, isLoading }: Readonly<Mo
             </div>
           ))}
           {moves.length === 0 && (
-            <div className="py-8 text-center text-muted-foreground">No moves yet</div>
+            <div className="text-muted-foreground py-8 text-center">No moves yet</div>
           )}
         </div>
       </ScrollArea>

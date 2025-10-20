@@ -51,7 +51,7 @@ export default function JoinPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4">
+    <div className="bg-background min-h-screen p-4">
       <div className="mx-auto max-w-md space-y-6">
         <Button
           variant="ghost"
@@ -63,7 +63,7 @@ export default function JoinPage() {
         </Button>
         <div className="text-center">
           <h1 className="text-3xl font-bold">Join Game</h1>
-          <p className="mt-2 text-muted-foreground">Enter the game code to join</p>
+          <p className="text-muted-foreground mt-2">Enter the game code to join</p>
         </div>
         <Card className="p-6">
           <form onSubmit={handleSubmit} className="space-y-4">

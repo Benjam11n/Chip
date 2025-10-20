@@ -4,7 +4,7 @@ export default async function GameRoom({ params }: Readonly<RouteParams>) {
   const { id } = await params;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <GameRoomClient gameId={id} />
     </div>
   );

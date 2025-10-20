@@ -24,12 +24,12 @@ export default function GameHeader({
   onKickPlayer,
 }: GameHeaderProps) {
   return (
-    <div className="border-b border-border">
+    <div className="border-border border-b">
       <div className="mx-auto flex max-w-7xl items-center justify-between p-4">
         <div>
-          <h1 className="mt-3 text-2xl font-bold text-foreground">{gameName}</h1>
-          <div className="flex gap-4 text-sm text-muted-foreground">
-            <span className="mt-1 font-medium text-primary">Game ID: {gameCode}</span>
+          <h1 className="text-foreground mt-3 text-2xl font-bold">{gameName}</h1>
+          <div className="text-muted-foreground flex gap-4 text-sm">
+            <span className="text-primary mt-1 font-medium">Game ID: {gameCode}</span>
           </div>
         </div>
 

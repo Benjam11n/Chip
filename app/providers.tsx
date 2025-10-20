@@ -10,12 +10,7 @@ interface ProvidersProps {
 
 export function Providers({ children }: Readonly<ProvidersProps>) {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
       {children}
       <Toaster closeButton position="bottom-left" />
     </ThemeProvider>

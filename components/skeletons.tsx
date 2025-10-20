@@ -6,11 +6,11 @@ export function PlayerCardSkeleton() {
   return (
     <Card className="p-4">
       <div className="animate-pulse space-y-3">
-        <Skeleton className="h-4 w-1/3 rounded bg-muted" />
-        <Skeleton className="h-6 w-1/2 rounded bg-muted" />
+        <Skeleton className="bg-muted h-4 w-1/3 rounded" />
+        <Skeleton className="bg-muted h-6 w-1/2 rounded" />
         <div className="flex gap-2">
-          <Skeleton className="h-8 w-20 rounded bg-muted" />
-          <Skeleton className="h-8 w-20 rounded bg-muted" />
+          <Skeleton className="bg-muted h-8 w-20 rounded" />
+          <Skeleton className="bg-muted h-8 w-20 rounded" />
         </div>
       </div>
     </Card>
@@ -29,7 +29,7 @@ export function MoveHistorySkeleton() {
           {Array.from({ length: 5 }).map((_, i) => (
             <div
               key={i}
-              className="flex items-center justify-between border-b border-border py-2 last:border-0"
+              className="border-border flex items-center justify-between border-b py-2 last:border-0"
             >
               <Skeleton className="h-5 w-48" />
               <Skeleton className="h-4 w-24" />
@@ -43,7 +43,7 @@ export function MoveHistorySkeleton() {
 
 export function JoinSkeleton() {
   return (
-    <div className="min-h-screen bg-background p-4">
+    <div className="bg-background min-h-screen p-4">
       <div className="mx-auto max-w-md space-y-4">
         <Skeleton className="mb-8 h-8 w-1/4" />
         <Skeleton className="h-[580px] w-full" />
@@ -54,9 +54,9 @@ export function JoinSkeleton() {
 
 export function GameRoomSkeleton() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       {/* Header Section */}
-      <div className="border-b border-border">
+      <div className="border-border border-b">
         <div className="mx-auto flex max-w-7xl items-center justify-between p-4">
           <div>
             <Skeleton className="mt-3 h-8 w-48" /> {/* Game name */}

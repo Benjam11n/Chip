@@ -149,7 +149,7 @@ export function RoomSettings({
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold">Players</h3>
-            <span className="text-sm text-muted-foreground">{players.length} players</span>
+            <span className="text-muted-foreground text-sm">{players.length} players</span>
           </div>
           <div className="divide-y">
             {players.map((player) => (
@@ -157,7 +157,7 @@ export function RoomSettings({
                 <div className="flex items-center gap-2">
                   <span className="font-medium">{player.name}</span>
                   {player.name === currentUsername && (
-                    <Badge className="rounded-full bg-primary/10 px-2 py-1 text-xs text-primary">
+                    <Badge className="bg-primary/10 text-primary rounded-full px-2 py-1 text-xs">
                       You
                     </Badge>
                   )}
@@ -166,7 +166,7 @@ export function RoomSettings({
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="ghost" size="icon">
-                        <UserMinus className="size-4 text-destructive" />
+                        <UserMinus className="text-destructive size-4" />
                       </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>

@@ -205,7 +205,7 @@ export default function JoinGameClient({ code }: Readonly<JoinGameClientProps>) 
 
   if (!game) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="bg-background flex min-h-screen items-center justify-center">
         <div className="mx-auto max-w-md px-8 text-center">
           <h1 className="mb-4 text-2xl font-bold">Game Not Found</h1>
           <p className="text-muted-foreground">
@@ -221,7 +221,7 @@ export default function JoinGameClient({ code }: Readonly<JoinGameClientProps>) 
   }
 
   return (
-    <div className="min-h-screen bg-background p-4">
+    <div className="bg-background min-h-screen p-4">
       <div className="mx-auto max-w-md space-y-6">
         <Button
           variant="ghost"
@@ -235,7 +235,7 @@ export default function JoinGameClient({ code }: Readonly<JoinGameClientProps>) 
           <div className="space-y-6">
             <div className="space-y-2 text-center">
               <h1 className="text-2xl font-bold">{game.name}</h1>
-              <div className="flex items-center justify-center gap-2 text-muted-foreground">
+              <div className="text-muted-foreground flex items-center justify-center gap-2">
                 <Users className="size-4" />
                 <span>
                   {game?.players?.length} / {game.max_players} players
@@ -307,7 +307,7 @@ export default function JoinGameClient({ code }: Readonly<JoinGameClientProps>) 
                 >
                   <span>{player.name}</span>
                   {player.id === game.createdBy && (
-                    <span className="rounded-full bg-primary/10 px-2 py-1 text-xs text-primary">
+                    <span className="bg-primary/10 text-primary rounded-full px-2 py-1 text-xs">
                       Host
                     </span>
                   )}

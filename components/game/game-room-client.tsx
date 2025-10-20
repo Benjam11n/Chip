@@ -114,7 +114,7 @@ export function GameRoomClient({ gameId }: Readonly<GameRoomClientProps>) {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <GameHeader
         gameName={game.name}
         gameCode={game.code}

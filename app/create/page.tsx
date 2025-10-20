@@ -74,7 +74,7 @@ export default function CreateGamePage() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4">
+    <div className="bg-background min-h-screen p-4">
       <div className="mx-auto max-w-md space-y-6">
         <Button
           variant="ghost"
@@ -113,7 +113,7 @@ export default function CreateGamePage() {
                 step={1}
                 disabled={loading}
               />
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Set the maximum number of players that can join your game.
               </p>
             </div>
@@ -131,7 +131,7 @@ export default function CreateGamePage() {
                 placeholder="Enter initial buy-in amount"
                 disabled={loading}
               />
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Set the initial amount each player starts with. Minimum $100, in increments of $5.
               </p>
             </div>
