@@ -25,22 +25,22 @@ export default function Home() {
       {/* Hero Section */}
       <div className="relative flex min-h-[400px] flex-1 items-center justify-center py-16">
         {/* Decorative cards */}
+        {/* todo: use shadcn ui cards here */}
         <div className="absolute inset-0 opacity-10 dark:opacity-20">
-          <div className="absolute left-[10%] top-1/4 -rotate-12">
-            <div className="h-48 w-32 rounded-lg border-4 border-muted-foreground bg-muted shadow-xl lg:h-72 lg:w-48" />
+          <div className="absolute top-1/4 left-[10%] -rotate-12">
+            <div className="border-muted-foreground bg-muted h-48 w-32 rounded-lg border-4 shadow-xl lg:h-72 lg:w-48" />
           </div>
-          <div className="absolute right-[15%] top-1/3 rotate-12">
-            <div className="h-48 w-32 rounded-lg border-4 border-muted-foreground bg-primary shadow-xl lg:h-72 lg:w-48" />
+          <div className="absolute top-1/3 right-[15%] rotate-12">
+            <div className="border-muted-foreground bg-primary h-48 w-32 rounded-lg border-4 shadow-xl lg:h-72 lg:w-48" />
           </div>
         </div>
-
         {/* Main content */}
-        <div className="relative flex flex-col items-center px-4 text-foreground">
+        <div className="text-foreground relative flex flex-col items-center px-4">
           <div className="mb-8 flex items-center gap-4">
-            <Dices className="size-16 text-primary" />
+            <Dices className="text-primary size-16" />
             <h1 className="text-5xl font-bold md:text-6xl">Chip</h1>
           </div>
-          <p className="mb-12 max-w-2xl px-6 text-center text-xl text-muted-foreground md:text-2xl">
+          <p className="text-muted-foreground mb-12 max-w-2xl px-6 text-center text-xl md:text-2xl">
             Play poker anywhere - leave the chips at home
           </p>
 
@@ -97,14 +97,14 @@ export default function Home() {
             >
               <Card className="flex h-full flex-col p-6">
                 <motion.div
-                  className="mb-4 flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10"
+                  className="bg-primary/10 mb-4 flex size-12 shrink-0 items-center justify-center rounded-full"
                   whileHover={{ scale: 1.1, rotate: 360 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <feature.icon className="size-6 text-primary" />
+                  <feature.icon className="text-primary size-6" />
                 </motion.div>
                 <h3 className="mb-2 text-xl font-bold">{feature.title}</h3>
-                <p className="grow text-muted-foreground">{feature.description}</p>
+                <p className="text-muted-foreground grow">{feature.description}</p>
               </Card>
             </motion.div>
           ))}

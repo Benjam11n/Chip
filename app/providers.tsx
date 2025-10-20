@@ -1,6 +1,6 @@
 'use client';
 
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider } from '@/components/theme-provider';
 
 import { Toaster } from '@/components/ui/sonner';
 
@@ -10,9 +10,14 @@ interface ProvidersProps {
 
 export function Providers({ children }: Readonly<ProvidersProps>) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
       {children}
-      <Toaster richColors closeButton position="bottom-left" />
+      <Toaster closeButton position="bottom-left" />
     </ThemeProvider>
   );
 }
