@@ -1,7 +1,10 @@
-import { nanoid } from 'nanoid';
-import { NextResponse } from 'next/server';
+import { nanoid } from "nanoid";
+import { NextResponse } from "next/server";
 
-import { supabase } from '@/lib/supabase/client';
+import { supabase } from "@/lib/supabase/client";
+import { Database } from "@/lib/supabase/types";
+
+type GameInsert = Database["public"]["Tables"]["games"]["Insert"];
 
 export async function POST(request: Request) {
   try {
@@ -10,16 +13,20 @@ export async function POST(request: Request) {
     // Generate a unique 6-character game code
     const code = nanoid(6);
 
+    // 2. Define the insert object explicitly using the generated type
+    const insertData: GameInsert = {
+      name,
+      code: code,
+      max_players: maxPlayers,
+      initial_buy_in: initialBuyIn,
+      is_locked: false,
+    };
+
+    // 3. The .insert() call now correctly matches an expected overload
     const { data: game, error } = await supabase
-      .from('games')
-      .insert({
-        name,
-        code,
-        max_players: maxPlayers,
-        initial_buy_in: initialBuyIn,
-        is_locked: false,
-      })
-      .select('*')
+      .from("games")
+      .insert(insertData) // <--- ERROR IS FIXED HERE
+      .select("*")
       .single();
 
     if (error) {
@@ -28,10 +35,10 @@ export async function POST(request: Request) {
 
     return NextResponse.json(game);
   } catch (error) {
-    console.error('Game creation error:', error);
+    console.error("Game creation error:", error);
 
     return NextResponse.json(
-      { error: 'Failed to create game' },
+      { error: "Failed to create game" },
       {
         status: 500,
       },

@@ -15,9 +15,9 @@ export interface PlayerView {
 export interface MoveHistoryView {
   id: string;
   player_id: string;
-  created_at: number;
-  action_type: 'add' | 'remove';
-  amount: number;
+  created_at: string | null;
+  action_type: string;
+  amount: number | null;
 }
 
 export type Game = {

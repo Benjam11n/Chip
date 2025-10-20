@@ -74,7 +74,9 @@ export function MoveHistory({ players, totalPot, moves, isLoading }: Readonly<Mo
             >
               <span className="text-foreground">{formatMove(move)}</span>
               <span className="text-muted-foreground">
-                {formatDistanceToNow(move.created_at, { addSuffix: true })}
+                {move.created_at
+                  ? formatDistanceToNow(new Date(move.created_at), { addSuffix: true })
+                  : 'N/A'}
               </span>
             </div>
           ))}

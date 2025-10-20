@@ -1,7 +1,7 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
-import { supabase } from '@/lib/supabase/client';
-import { GameView, MoveHistoryView, PlayerView } from '@/types';
+import { supabase } from "@/lib/supabase/client";
+import { GameView, MoveHistoryView, PlayerView } from "@/types";
 
 export type LoadingState = {
   game: boolean;
@@ -26,7 +26,7 @@ type GameStore = {
   handlePotAction: (
     playerId: string,
     amount: number,
-    action_type: 'add' | 'remove',
+    action_type: "add" | "remove",
   ) => Promise<void>;
   handleKickPlayer: (playerId: string) => Promise<void>;
 };
@@ -37,7 +37,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   game: null,
   moves: [],
   loading: { game: false, players: false, moves: false },
-  currentUsername: '',
+  currentUsername: "",
   actionLoading: false,
 
   setGameId: (id) => set({ gameId: id }),
@@ -48,7 +48,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({ loading: { ...get().loading, players: true } });
     try {
-      const { data, error } = await supabase.from('players').select('*').eq('game_id', gameId);
+      const { data, error } = await supabase.from("players").select("*").eq(
+        "game_id",
+        gameId,
+      );
 
       if (error) throw error;
       set({ players: data.map((p) => ({ ...p, totalBuyIn: p.total_buy_in })) });
@@ -66,12 +69,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ loading: { ...get().loading, game: true } });
     try {
       const { data: game, error } = await supabase
-        .from('games')
-        .select('id, name, pot, initial_buy_in, max_players, code')
-        .eq('id', gameId)
+        .from("games")
+        .select("id, name, pot, initial_buy_in, max_players, code")
+        .eq("id", gameId)
         .single();
 
-      if (error?.code === 'PGRST116') {
+      if (error?.code === "PGRST116") {
         // Game not found
         // Handle redirect (e.g., via router in component)
         return;
@@ -94,13 +97,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ loading: { ...get().loading, moves: true } });
     try {
       const { data, error } = await supabase
-        .from('game_actions')
-        .select('*')
-        .eq('game_id', gameId)
-        .order('created_at', { ascending: true });
+        .from("game_actions")
+        .select("*")
+        .eq("game_id", gameId)
+        .order("created_at", { ascending: true });
 
       if (error) throw error;
-      set({ moves: data.map((m) => ({ ...m, createdAt: m.created_at })) });
+      set({ moves: data.map((m) => ({ ...m, created_at: m.created_at })) });
     } catch (err) {
       console.error(err);
     } finally {
@@ -115,13 +118,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const channel = supabase
       .channel(`room:${gameId}`)
       .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'players', filter: `game_id=eq.${gameId}` },
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "players",
+          filter: `game_id=eq.${gameId}`,
+        },
         fetchPlayers,
       )
       .on(
-        'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'games', filter: `id=eq.${gameId}` },
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "games",
+          filter: `id=eq.${gameId}`,
+        },
         (payload) => {
           if (payload.new?.pot !== undefined) {
             set({ game: { ...get().game!, pot: payload.new.pot } });
@@ -131,8 +144,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
         },
       )
       .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'game_actions', filter: `game_id=eq.${gameId}` },
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "game_actions",
+          filter: `game_id=eq.${gameId}`,
+        },
         fetchMoves,
       );
 
@@ -156,13 +174,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const updatedPlayers = players.map((player) =>
         player.id === playerId
           ? {
-              ...player,
-              stack: action_type === 'add' ? player.stack - amount : player.stack + amount,
-            }
-          : player,
+            ...player,
+            stack: action_type === "add"
+              ? player.stack - amount
+              : player.stack + amount,
+          }
+          : player
       );
 
-      const updatedPot = action_type === 'add' ? game.pot + amount : game.pot - amount;
+      const updatedPot = action_type === "add"
+        ? game.pot + amount
+        : game.pot - amount;
 
       set({
         players: updatedPlayers,
@@ -170,7 +192,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       });
 
       // Database update
-      const { error } = await supabase.rpc('handle_pot_action', {
+      const { error } = await supabase.rpc("handle_pot_action", {
         p_player_id: playerId,
         p_game_id: game.id,
         p_amount: amount,
@@ -198,12 +220,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const { gameId } = get();
       if (!gameId) return;
 
-      await supabase.rpc('set_config', {
-        key: 'app.current_game_id',
+      await supabase.rpc("set_config", {
+        key: "app.current_game_id",
         value: gameId,
       });
 
-      const { error } = await supabase.from('players').delete().eq('id', playerId);
+      const { error } = await supabase.from("players").delete().eq(
+        "id",
+        playerId,
+      );
 
       if (error) throw error;
 
