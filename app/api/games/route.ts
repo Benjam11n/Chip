@@ -1,7 +1,7 @@
-import { nanoid } from 'nanoid';
-import { NextResponse } from 'next/server';
+import { nanoid } from "nanoid";
+import { NextResponse } from "next/server";
 
-import { supabase } from '@/lib/supabase/client';
+import { supabase } from "@/lib/supabase/client";
 
 export async function POST(request: Request) {
   try {
@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     const code = nanoid(6);
 
     const { data: game, error } = await supabase
-      .from('games')
+      .from("games")
       .insert({
         name,
         code,
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
         initial_buy_in: initialBuyIn,
         is_locked: false,
       })
-      .select('*')
+      .select("*")
       .single();
 
     if (error) {
@@ -28,8 +28,10 @@ export async function POST(request: Request) {
 
     return NextResponse.json(game);
   } catch (error) {
-    console.error('Game creation error:', error);
+    console.error("Game creation error:", error);
 
-    return NextResponse.json({ error: 'Failed to create game' }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create game" }, {
+      status: 500,
+    });
   }
 }

@@ -11,5 +11,5 @@ export default {
     'components/ui/**/*.{ts,tsx}',
     'supabase/**/*.{ts,tsx}',
   ],
-  ignoreDependencies: [],
+  ignoreDependencies: ['tailwindcss', 'tailwindcss-animate', 'postcss'],
 };
