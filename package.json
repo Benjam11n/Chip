@@ -12,7 +12,7 @@
     "generate-types": "npx supabase gen types typescript --local > lib/supabase/types.ts",
     "bump-deps": "pnpm dlx npm-check-updates --deep -u -x react-day-picker",
     "bump-ui": "pnpm dlx shadcn@latest add --all",
-    "clean": "git clean -xdf node_modules"
+    "clean": "git clean -xdf node_modules && pnpm install"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
