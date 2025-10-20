@@ -1,4 +1,4 @@
-export interface Player {
+interface Player {
   id: string;
   name: string;
   stack: number;
@@ -12,19 +12,11 @@ export interface PlayerView {
   totalBuyIn: number;
 }
 
-export interface MoveHistory {
-  id: string;
-  player_id: string;
-  created_at: number;
-  action_type: 'add' | 'remove';
-  amount: number;
-}
-
 export interface MoveHistoryView {
   id: string;
   player_id: string;
   created_at: number;
-  action_type: 'add' | 'remove';
+  action_type: "add" | "remove";
   amount: number;
 }
 
@@ -40,15 +32,6 @@ export type Game = {
   createdBy?: string;
   players: Player[];
 };
-
-export interface GameState {
-  id: string;
-  name: string;
-  code: string;
-  players: PlayerView[];
-  pot: number;
-  initialBuyIn: number;
-}
 
 export type GameView = {
   id: string;
