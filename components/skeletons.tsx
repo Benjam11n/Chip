@@ -2,7 +2,7 @@ import { Card } from './ui/card';
 import { ScrollArea } from './ui/scroll-area';
 import { Skeleton } from './ui/skeleton';
 
-export function PlayerCardSkeleton() {
+export const PlayerCardSkeleton = () => {
   return (
     <Card className="p-4">
       <div className="animate-pulse space-y-3">
@@ -17,7 +17,7 @@ export function PlayerCardSkeleton() {
   );
 }
 
-export function MoveHistorySkeleton() {
+export const MoveHistorySkeleton = () => {
   return (
     <Card className="p-4">
       <div className="mx-2 mb-4 flex items-center justify-between">
@@ -41,7 +41,7 @@ export function MoveHistorySkeleton() {
   );
 }
 
-export function JoinSkeleton() {
+export const JoinSkeleton = () => {
   return (
     <div className="bg-background min-h-screen p-4">
       <div className="mx-auto max-w-md space-y-4">
@@ -52,7 +52,7 @@ export function JoinSkeleton() {
   );
 }
 
-export function GameRoomSkeleton() {
+export const GameRoomSkeleton = () => {
   return (
     <div className="bg-background min-h-screen">
       {/* Header Section */}

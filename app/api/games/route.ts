@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 import { NextResponse } from "next/server";
 
 import { supabase } from "@/lib/supabase/client";
-import { Database } from "@/lib/supabase/types";
+import type { Database } from "@/lib/supabase/types";
 
 type GameInsert = Database["public"]["Tables"]["games"]["Insert"];
 

@@ -3,11 +3,12 @@
 import { formatDistanceToNow } from 'date-fns';
 import { useCallback, useEffect, useRef } from 'react';
 
+import { MoveHistorySkeleton } from './skeletons';
+
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { MoveHistoryView, PlayerView } from '@/types';
+import type { MoveHistoryView, PlayerView } from '@/types';
 
-import { MoveHistorySkeleton } from './skeletons';
 
 interface MoveHistoryProps {
   players: PlayerView[];
@@ -16,7 +17,7 @@ interface MoveHistoryProps {
   isLoading: boolean;
 }
 
-export function MoveHistory({ players, totalPot, moves, isLoading }: Readonly<MoveHistoryProps>) {
+export const MoveHistory = ({ players, totalPot, moves, isLoading }: Readonly<MoveHistoryProps>) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   // Auto scroll to bottom when moves update
@@ -51,7 +52,7 @@ export function MoveHistory({ players, totalPot, moves, isLoading }: Readonly<Mo
   const formatMove = (move: MoveHistoryView) => {
     const playerName = getPlayerName(move.player_id);
     const action = move.action_type === 'add' ? 'places' : 'takes';
-    return `${playerName} ${action} ${formatAmount(move.amount || 0)} ${
+    return `${playerName} ${action} ${formatAmount(move.amount ?? 0)} ${
       move.action_type === 'add' ? 'in the pot' : 'from the pot'
     }`;
   };

@@ -1,10 +1,11 @@
 import { Settings2 } from 'lucide-react';
 
-import { RoomSettings } from '@/app/game/[id]/room-settings';
-import { PlayerView } from '@/types';
-
 import { Button } from '../ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
+
+import { RoomSettings } from '@/app/game/[id]/room-settings';
+import type { PlayerView } from '@/types';
+
 
 interface GameHeaderProps {
   gameName: string;
@@ -15,14 +16,14 @@ interface GameHeaderProps {
   onKickPlayer: (playerId: string) => Promise<void>;
 }
 
-export default function GameHeader({
+export const GameHeader = ({
   gameName,
   gameCode,
   gameId,
   players,
   currentUsername,
   onKickPlayer,
-}: GameHeaderProps) {
+}: GameHeaderProps) => {
   return (
     <div className="border-border border-b">
       <div className="mx-auto flex max-w-7xl items-center justify-between p-4">

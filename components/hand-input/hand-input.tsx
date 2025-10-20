@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 
-import { analyzeHand } from '@/lib/poker/analysis';
 
 import { CardSelector } from './card-selector';
 import { HandAnalyzer } from './hand-analyzer';
 
-export function HandInput() {
+import { analyzeHand } from '@/lib/poker/analysis';
+
+export const HandInput = () => {
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
 
   const handleCardSelect = (card: string) => {

@@ -4,19 +4,20 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 
-import { useGameStore } from '@/stores/useGameStore';
 
 import { GameRoomSkeleton } from '../skeletons';
-import DesktopGameView from './desktop-game-view';
-import GameHeader from './game-header';
-import GameNotFound from './game-not-found';
-import MobileGameView from './mobile-game-view';
+import { DesktopGameView } from './desktop-game-view';
+import { GameHeader } from './game-header';
+import { GameNotFound } from './game-not-found';
+import { MobileGameView } from './mobile-game-view';
+
+import { useGameStore } from '@/stores/useGameStore';
 
 interface GameRoomClientProps {
   gameId: string;
 }
 
-export function GameRoomClient({ gameId }: Readonly<GameRoomClientProps>) {
+export const GameRoomClient = ({ gameId }: Readonly<GameRoomClientProps>) => {
   const router = useRouter();
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [showPokerHands, setShowPokerHands] = useState(false);

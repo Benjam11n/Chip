@@ -30,7 +30,7 @@ import {
 } from '@/components/ui/dialog';
 import { SheetFooter } from '@/components/ui/sheet';
 import { supabase } from '@/lib/supabase/client';
-import { PlayerView } from '@/types';
+import type { PlayerView } from '@/types';
 
 interface RoomSettingsProps {
   gameId: string;
@@ -40,13 +40,13 @@ interface RoomSettingsProps {
   onKickPlayer: (playerId: string) => void;
 }
 
-export function RoomSettings({
+export const RoomSettings = ({
   gameId,
   gameCode,
   players,
   currentUsername,
   onKickPlayer,
-}: Readonly<RoomSettingsProps>) {
+}: Readonly<RoomSettingsProps>) => {
   const router = useRouter();
   const [qrCode, setQrCode] = useState<string>('');
   const [showQR, setShowQR] = useState(false);
@@ -136,11 +136,9 @@ export function RoomSettings({
             <DialogHeader>
               <DialogTitle>Room QR Code</DialogTitle>
             </DialogHeader>
-            {qrCode && (
-              <div className="flex justify-center p-4">
+            {qrCode ? <div className="flex justify-center p-4">
                 <Image width={256} height={256} src={qrCode} alt="Room QR Code" />
-              </div>
-            )}
+              </div> : null}
           </DialogContent>
         </Dialog>
       </div>

@@ -47,7 +47,7 @@ export default function CreateGamePage() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || 'Failed to create game');
+        throw new Error(error.message ?? 'Failed to create game');
       }
 
       const data = await response.json();
@@ -107,7 +107,7 @@ export default function CreateGamePage() {
               <Label>Maximum Players: {maxPlayers}</Label>
               <Slider
                 value={[maxPlayers]}
-                onValueChange={(value) => setMaxPlayers(value[0])}
+                onValueChange={(value) => setMaxPlayers(value[0] as number)}
                 min={2}
                 max={20}
                 step={1}

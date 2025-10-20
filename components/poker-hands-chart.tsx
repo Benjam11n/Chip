@@ -84,7 +84,7 @@ function formatCardExample(example: string) {
   });
 }
 
-export function PokerHandsChart() {
+export const PokerHandsChart = () => {
   return (
     <div className="py-3">
       <h2 className="mb-6 text-2xl font-bold">Poker Hand Rankings</h2>

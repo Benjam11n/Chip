@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/static-components */
 'use client';
 
 import { Dices, Plus, Users } from 'lucide-react';
@@ -8,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { FEATURES } from '@/constants';
 
-export default function Home() {
+ const Home = () => {
   const router = useRouter();
   const time = useTime();
   const MotionButton = motion.create(Button);
@@ -112,3 +113,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default Home;

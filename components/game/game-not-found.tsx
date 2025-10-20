@@ -1,10 +1,10 @@
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 
 interface GameNotFoundProps {
   onRetry: () => void;
 }
 
-export default function GameNotFound({ onRetry }: GameNotFoundProps) {
+export const GameNotFound = ({ onRetry }: GameNotFoundProps) => {
   return (
     <div className="bg-background flex min-h-screen items-center justify-center">
       <div className="mx-auto max-w-md px-8 text-center">

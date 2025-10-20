@@ -1,7 +1,5 @@
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
-import { LoadingState } from '@/stores/useGameStore';
-import { GameView, MoveHistoryView, PlayerView } from '@/types';
 
 import { HandInput } from '../hand-input/hand-input';
 import { MoveHistory } from '../move-history';
@@ -12,6 +10,9 @@ import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+
+import type { LoadingState } from '@/stores/useGameStore';
+import type { GameView, MoveHistoryView, PlayerView } from '@/types';
 
 interface MobileGameViewProps {
   players: PlayerView[];
@@ -30,7 +31,7 @@ interface MobileGameViewProps {
   setShowPokerHands: (show: boolean) => void;
 }
 
-export default function MobileGameView({
+export const MobileGameView = ({
   players,
   currentUsername,
   game,
@@ -41,7 +42,7 @@ export default function MobileGameView({
   setShowAnalysis,
   showPokerHands,
   setShowPokerHands,
-}: MobileGameViewProps) {
+}: MobileGameViewProps) => {
   const currentPlayer = players.find((player) => player.name === currentUsername);
 
   return (
@@ -59,8 +60,7 @@ export default function MobileGameView({
               moves={moves}
               isLoading={loading.moves}
             />
-            {currentPlayer && (
-              <div className="space-y-3">
+            {currentPlayer ? <div className="space-y-3">
                 <PlayerCard
                   key={currentPlayer.id}
                   player={currentPlayer}
@@ -69,8 +69,7 @@ export default function MobileGameView({
                   actionLoading={loading.moves}
                   pot={game.pot}
                 />
-              </div>
-            )}
+              </div> : null}
             <Card className="hidden p-6 lg:block">
               <HandInput />
             </Card>

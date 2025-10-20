@@ -24,7 +24,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { supabase } from '@/lib/supabase/client';
-import { Game } from '@/types';
+import type { Game } from '@/types';
 
 interface JoinGameClientProps {
   code: string;
@@ -39,7 +39,7 @@ const JoinGameSchema = z.object({
 
 type FormValues = z.infer<typeof JoinGameSchema>;
 
-export default function JoinGameClient({ code }: Readonly<JoinGameClientProps>) {
+export const JoinGameClient = ({ code }: Readonly<JoinGameClientProps>) => {
   const router = useRouter();
   const [game, setGame] = useState<Game | null>(null);
   const [loading, setLoading] = useState(true);
@@ -143,7 +143,7 @@ export default function JoinGameClient({ code }: Readonly<JoinGameClientProps>) 
 
   const handleJoin = async (data: FormValues) => {
     if (!game) return;
-    const name = data.name;
+    const {name} = data;
 
     try {
       if (game?.players?.length >= game.max_players) {

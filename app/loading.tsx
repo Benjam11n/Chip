@@ -6,6 +6,7 @@ interface LoadingProps {
   className?: string;
 }
 
+
 export default function Loading({ className }: Readonly<LoadingProps>) {
   return (
     <div className={cn('bg-background flex min-h-screen items-center justify-center', className)}>

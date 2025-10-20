@@ -1,10 +1,10 @@
-import { LoadingState } from '@/stores/useGameStore';
-import { GameView, MoveHistoryView, PlayerView } from '@/types';
 
-import { HandInput } from '../hand-input/hand-input';
-import { MoveHistory } from '../move-history';
-import { PlayerCard } from '../player-card';
-import { Card } from '../ui/card';
+import { HandInput } from '@/components/hand-input/hand-input';
+import { MoveHistory } from '@/components/move-history';
+import { PlayerCard } from '@/components/player-card';
+import { Card } from '@/components/ui/card';
+import type { LoadingState } from '@/stores/useGameStore';
+import type { GameView, MoveHistoryView, PlayerView } from '@/types';
 
 interface DesktopGameViewProps {
   players: PlayerView[];
@@ -19,14 +19,14 @@ interface DesktopGameViewProps {
   ) => Promise<void>;
 }
 
-export default function DesktopGameView({
+export const DesktopGameView = ({
   players,
   currentUsername,
   game,
   moves,
   loading,
   executePotAction,
-}: DesktopGameViewProps) {
+}: DesktopGameViewProps) => {
   return (
     <div className="hidden gap-6 lg:grid lg:grid-cols-3">
       <div className="space-y-3 lg:col-span-2">

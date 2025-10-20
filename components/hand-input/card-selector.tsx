@@ -11,7 +11,7 @@ interface CardSelectorProps {
   onSelectCard: (card: string) => void;
 }
 
-export function CardSelector({ selectedCards, onSelectCard }: Readonly<CardSelectorProps>) {
+export const CardSelector = ({ selectedCards, onSelectCard }: Readonly<CardSelectorProps>) => {
   const [selectedRank, setSelectedRank] = useState<string | null>(null);
   const [selectedSuit, setSelectedSuit] = useState<string | null>(null);
 
@@ -58,12 +58,10 @@ export function CardSelector({ selectedCards, onSelectCard }: Readonly<CardSelec
           </Button>
         ))}
       </div>
-      {selectedRank && selectedSuit && (
-        <Button className="w-full" onClick={() => handleCardClick(selectedRank, selectedSuit)}>
+      {selectedRank && selectedSuit ? <Button className="w-full" onClick={() => handleCardClick(selectedRank, selectedSuit)}>
           Add {selectedRank}
           {selectedSuit}
-        </Button>
-      )}
+        </Button> : null}
       <div className="flex justify-center gap-4">
         {selectedCards.map((card) => (
           <Button

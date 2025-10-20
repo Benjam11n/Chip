@@ -85,6 +85,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return game;
     } catch (err) {
       console.error(err);
+      return undefined;
     } finally {
       set({ loading: { ...get().loading, game: false } });
     }

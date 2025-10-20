@@ -9,7 +9,7 @@ export default {
     'app/**/loading.tsx',
     'app/**/error.tsx',
     'components/ui/**/*.{ts,tsx}',
-    'supabase/**/*.{ts,tsx}',
+    'lib/supabase/**/*.{ts,tsx}',
   ],
   ignoreDependencies: ['tailwindcss', 'tailwindcss-animate', 'postcss'],
 };

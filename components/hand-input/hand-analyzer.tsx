@@ -2,14 +2,14 @@
 
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { HandAnalysis } from '@/lib/poker/analysis';
+import type { HandAnalysis } from '@/lib/poker/analysis';
 import { cn } from '@/lib/utils';
 
 interface HandAnalyzerProps {
   analysis: HandAnalysis | null;
 }
 
-export function HandAnalyzer({ analysis }: Readonly<HandAnalyzerProps>) {
+export const HandAnalyzer = ({ analysis }: Readonly<HandAnalyzerProps>) => {
   if (!analysis) {
     return (
       <Card className="p-4">
