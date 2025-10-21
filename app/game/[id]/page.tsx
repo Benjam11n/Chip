@@ -1,5 +1,6 @@
-import { GameRoomClient } from '@/components/game/game-room-client';
 import { notFound } from 'next/navigation';
+
+import { GameRoomClient } from '@/components/game/game-room-client';
 
 export default async function GameRoom({ params }: Readonly<RouteParams>) {
   const { id } = await params;
@@ -9,7 +10,7 @@ export default async function GameRoom({ params }: Readonly<RouteParams>) {
   }
 
   return (
-    <div className="bg-background min-h-screen">
+    <div className="min-h-screen">
       <GameRoomClient gameId={id} />
     </div>
   );

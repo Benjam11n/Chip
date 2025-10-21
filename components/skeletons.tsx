@@ -15,7 +15,7 @@ export const PlayerCardSkeleton = () => {
       </div>
     </Card>
   );
-}
+};
 
 export const MoveHistorySkeleton = () => {
   return (
@@ -39,22 +39,22 @@ export const MoveHistorySkeleton = () => {
       </ScrollArea>
     </Card>
   );
-}
+};
 
 export const JoinSkeleton = () => {
   return (
-    <div className="bg-background min-h-screen p-4">
+    <div className="min-h-screen p-4">
       <div className="mx-auto max-w-md space-y-4">
         <Skeleton className="mb-8 h-8 w-1/4" />
         <Skeleton className="h-[580px] w-full" />
       </div>
     </div>
   );
-}
+};
 
 export const GameRoomSkeleton = () => {
   return (
-    <div className="bg-background min-h-screen">
+    <div className="min-h-screen">
       {/* Header Section */}
       <div className="border-border border-b">
         <div className="mx-auto flex max-w-7xl items-center justify-between p-4">
@@ -155,4 +155,4 @@ export const GameRoomSkeleton = () => {
       </div>
     </div>
   );
-}
+};

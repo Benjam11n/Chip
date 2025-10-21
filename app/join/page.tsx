@@ -51,7 +51,7 @@ export default function JoinPage() {
   };
 
   return (
-    <div className="bg-background min-h-screen p-4">
+    <div className="min-h-screen p-4">
       <div className="mx-auto max-w-md space-y-6">
         <Button
           variant="ghost"

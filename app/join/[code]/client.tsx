@@ -143,7 +143,7 @@ export const JoinGameClient = ({ code }: Readonly<JoinGameClientProps>) => {
 
   const handleJoin = async (data: FormValues) => {
     if (!game) return;
-    const {name} = data;
+    const { name } = data;
 
     try {
       if (game?.players?.length >= game.max_players) {
@@ -205,7 +205,7 @@ export const JoinGameClient = ({ code }: Readonly<JoinGameClientProps>) => {
 
   if (!game) {
     return (
-      <div className="bg-background flex min-h-screen items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <div className="mx-auto max-w-md px-8 text-center">
           <h1 className="mb-4 text-2xl font-bold">Game Not Found</h1>
           <p className="text-muted-foreground">
@@ -221,7 +221,7 @@ export const JoinGameClient = ({ code }: Readonly<JoinGameClientProps>) => {
   }
 
   return (
-    <div className="bg-background min-h-screen p-4">
+    <div className="min-h-screen p-4">
       <div className="mx-auto max-w-md space-y-6">
         <Button
           variant="ghost"
@@ -319,4 +319,4 @@ export const JoinGameClient = ({ code }: Readonly<JoinGameClientProps>) => {
       </div>
     </div>
   );
-}
+};

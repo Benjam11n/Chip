@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { FEATURES } from '@/constants';
 
- const Home = () => {
+const Home = () => {
   const router = useRouter();
   const time = useTime();
   const MotionButton = motion.create(Button);
@@ -34,6 +34,7 @@ import { FEATURES } from '@/constants';
             <Card className="border-muted-foreground bg-primary h-48 w-32 rounded-lg border-4 shadow-xl lg:h-72 lg:w-48" />
           </div>
         </div>
+
         {/* Main content */}
         <div className="text-foreground relative flex flex-col items-center px-4">
           <div className="mb-8 flex items-center gap-4">
@@ -112,6 +113,6 @@ import { FEATURES } from '@/constants';
       </div>
     </div>
   );
-}
+};
 
 export default Home;

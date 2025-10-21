@@ -6,7 +6,7 @@ interface GameNotFoundProps {
 
 export const GameNotFound = ({ onRetry }: GameNotFoundProps) => {
   return (
-    <div className="bg-background flex min-h-screen items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center">
       <div className="mx-auto max-w-md px-8 text-center">
         <h1 className="mb-4 text-2xl font-bold">Game Not Found</h1>
         <p className="text-muted-foreground">
@@ -19,4 +19,4 @@ export const GameNotFound = ({ onRetry }: GameNotFoundProps) => {
       </div>
     </div>
   );
-}
+};

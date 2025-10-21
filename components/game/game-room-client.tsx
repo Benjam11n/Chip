@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 
-
 import { GameRoomSkeleton } from '../skeletons';
 import { DesktopGameView } from './desktop-game-view';
 import { GameHeader } from './game-header';
@@ -115,7 +114,7 @@ export const GameRoomClient = ({ gameId }: Readonly<GameRoomClientProps>) => {
   }
 
   return (
-    <div className="bg-background min-h-screen">
+    <div className="min-h-screen">
       <GameHeader
         gameName={game.name}
         gameCode={game.code}
@@ -152,4 +151,4 @@ export const GameRoomClient = ({ gameId }: Readonly<GameRoomClientProps>) => {
       </div>
     </div>
   );
-}
+};
