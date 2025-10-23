@@ -1,6 +1,9 @@
 {
   "permissions": {
-    "allow": ["Bash(npm run build)"],
+    "allow": [
+      "Bash(npm run build)",
+      "Read(//Users/benjaminwang/Desktop/Random/**)"
+    ],
     "deny": [],
     "ask": []
   }
