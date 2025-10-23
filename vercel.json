@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron/supabase-weekly",
+      "schedule": "0 0 * * 0"
+    }
+  ],
+  "functions": {
+    "app/api/cron/supabase-weekly/route.ts": {
+      "maxDuration": 60
+    }
+  }
+}
