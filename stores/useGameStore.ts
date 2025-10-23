@@ -1,7 +1,8 @@
 import { create } from "zustand";
 
+import { logger } from "@/lib/logger";
 import { supabase } from "@/lib/supabase/client";
-import { GameView, MoveHistoryView, PlayerView } from "@/types";
+import type { GameView, MoveHistoryView, PlayerView } from "@/types";
 
 export type LoadingState = {
   game: boolean;
@@ -56,7 +57,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       if (error) throw error;
       set({ players: data.map((p) => ({ ...p, totalBuyIn: p.total_buy_in })) });
     } catch (err) {
-      console.error(err);
+      logger.error(err, "Failed to fetch players");
     } finally {
       set({ loading: { ...get().loading, players: false } });
     }
@@ -84,7 +85,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({ game });
       return game;
     } catch (err) {
-      console.error(err);
+      logger.error(err, "Failed to fetch game");
       return undefined;
     } finally {
       set({ loading: { ...get().loading, game: false } });
@@ -106,7 +107,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       if (error) throw error;
       set({ moves: data.map((m) => ({ ...m, created_at: m.created_at })) });
     } catch (err) {
-      console.error(err);
+      logger.error(err, "Failed to fetch moves");
     } finally {
       set({ loading: { ...get().loading, moves: false } });
     }
@@ -209,7 +210,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         throw error;
       }
     } catch (err) {
-      console.error(err);
+      logger.error(err, "Failed to handle pot action");
       throw err; // Throw to handle in component
     } finally {
       set({ actionLoading: false });
@@ -236,7 +237,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       // Refresh players list
       await get().fetchPlayers();
     } catch (err) {
-      console.error(err);
+      logger.error(err, "Failed to kick player");
       throw err;
     }
   },

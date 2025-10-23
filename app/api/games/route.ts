@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import { NextResponse } from "next/server";
 
+import { logger } from "@/lib/logger";
 import { supabase } from "@/lib/supabase/client";
 import type { Database } from "@/lib/supabase/types";
 
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(game);
   } catch (error) {
-    console.error("Game creation error:", error);
+    logger.error(error, "Game creation error");
 
     return NextResponse.json(
       { error: "Failed to create game" },

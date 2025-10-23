@@ -4,6 +4,7 @@ import QRCode from "qrcode";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
+import { logger } from "@/lib/logger";
 import { supabase } from "@/lib/supabase/client";
 import type { Game } from "@/types";
 
@@ -48,11 +49,11 @@ export function useGameLoader({ code }: UseGameLoaderOptions) {
         });
         setQrCode(qr);
       } catch (qrError) {
-        console.error("Failed to generate QR code:", qrError);
+        logger.error(qrError, "Failed to generate QR code");
         // Don't throw - QR code is non-critical
       }
     } catch (error) {
-      console.error(error);
+      logger.error(error, "Failed to load game");
       toast.error("Error", {
         description: "Game not found or invalid code",
       });
@@ -79,7 +80,7 @@ export function useGameLoader({ code }: UseGameLoaderOptions) {
           try {
             setGame(payload.new as Game);
           } catch (error) {
-            console.error("Error processing game update:", error);
+            logger.error(error, "Error processing game update");
           }
         },
       )
