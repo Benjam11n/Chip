@@ -29,6 +29,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { SheetFooter } from '@/components/ui/sheet';
+import { logger } from '@/lib/logger';
+import { ROUTES } from '@/lib/routes';
 import { supabase } from '@/lib/supabase/client';
 import type { PlayerView } from '@/types';
 
@@ -51,7 +53,10 @@ export const RoomSettings = ({
   const [qrCode, setQrCode] = useState<string>('');
   const [showQR, setShowQR] = useState(false);
 
-  const roomUrl = typeof window !== 'undefined' ? `${window.location.origin}/join/${gameCode}` : '';
+  const roomUrl =
+    typeof window !== 'undefined'
+      ? `${window.location.origin}${ROUTES.JOIN_WITH_CODE(gameCode)}`
+      : '';
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -62,7 +67,7 @@ export const RoomSettings = ({
           url: roomUrl,
         });
       } catch (err) {
-        console.error('Error sharing:', err);
+        logger.error(err, 'Error sharing');
       }
     } else {
       handleCopyLink();
@@ -86,7 +91,7 @@ export const RoomSettings = ({
         });
         setQrCode(code);
       } catch (err) {
-        console.error('QR generation error:', err);
+        logger.error(err, 'QR generation error');
       }
     }
     setShowQR(true);
@@ -104,7 +109,7 @@ export const RoomSettings = ({
       const { error } = await supabase.from('games').delete().eq('id', gameId);
       if (error) throw error;
 
-      router.push('/');
+      router.push(ROUTES.HOME);
       toast.success('Success', { description: 'Game ended successfully' });
       localStorage.removeItem('currentPlayer');
     } catch (error) {
@@ -136,9 +141,11 @@ export const RoomSettings = ({
             <DialogHeader>
               <DialogTitle>Room QR Code</DialogTitle>
             </DialogHeader>
-            {qrCode ? <div className="flex justify-center p-4">
+            {qrCode ? (
+              <div className="flex justify-center p-4">
                 <Image width={256} height={256} src={qrCode} alt="Room QR Code" />
-              </div> : null}
+              </div>
+            ) : null}
           </DialogContent>
         </Dialog>
       </div>
@@ -211,4 +218,4 @@ export const RoomSettings = ({
       </SheetFooter>
     </div>
   );
-}
+};

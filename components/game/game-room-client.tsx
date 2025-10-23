@@ -10,6 +10,7 @@ import { GameHeader } from './game-header';
 import { GameNotFound } from './game-not-found';
 import { MobileGameView } from './mobile-game-view';
 
+import { ROUTES } from '@/lib/routes';
 import { useGameStore } from '@/stores/useGameStore';
 
 interface GameRoomClientProps {
@@ -69,7 +70,7 @@ export const GameRoomClient = ({ gameId }: Readonly<GameRoomClientProps>) => {
     const initializeGame = async () => {
       setGameId(gameId);
       const gameData = await fetchGame();
-      if (!gameData) router.push('/'); // Redirect if game not found
+      if (!gameData) router.push(ROUTES.HOME); // Redirect if game not found
 
       fetchPlayers();
       fetchMoves();
@@ -95,20 +96,20 @@ export const GameRoomClient = ({ gameId }: Readonly<GameRoomClientProps>) => {
   }
 
   if (!game) {
-    return <GameNotFound onRetry={() => router.push('/')} />;
+    return <GameNotFound onRetry={() => router.push(ROUTES.HOME)} />;
   }
 
   // Redirect if user is not in game or not authenticated
   if (!loading.players) {
     if (!currentUsername) {
-      router.push(`/join/${game.code}`);
+      router.push(ROUTES.JOIN_WITH_CODE(game.code));
       return null;
     }
 
     const inGame = players.map((player) => player.name).includes(currentUsername);
 
     if (!inGame) {
-      router.push(`/join/${game.code}`);
+      router.push(ROUTES.JOIN_WITH_CODE(game.code));
       return null;
     }
   }

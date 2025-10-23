@@ -10,6 +10,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
+import { ROUTES } from '@/lib/routes';
 
 interface GameData {
   name: string;
@@ -37,7 +38,7 @@ export default function CreateGamePage() {
     };
 
     try {
-      const response = await fetch('/api/games', {
+      const response = await fetch(ROUTES.API.GAMES, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +57,7 @@ export default function CreateGamePage() {
         description: 'Game created successfully',
       });
 
-      router.push(`/join/${data.code}`);
+      router.push(ROUTES.JOIN_WITH_CODE(data.code));
     } catch (error) {
       toast.error('Error', {
         description: error instanceof Error ? error.message : 'Failed to create game',
@@ -79,7 +80,7 @@ export default function CreateGamePage() {
         <Button
           variant="ghost"
           className="flex items-center gap-2"
-          onClick={() => router.push('/')}
+          onClick={() => router.push(ROUTES.HOME)}
         >
           <ArrowLeft className="size-4" />
           Back

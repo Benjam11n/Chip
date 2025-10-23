@@ -4,6 +4,7 @@ import { Home } from 'lucide-react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
+import { ROUTES } from '@/lib/routes';
 
 const NotFoundPage = () => {
   return (
@@ -16,7 +17,7 @@ const NotFoundPage = () => {
         </p>
       </div>
       <Button asChild className="mt-8">
-        <Link href="/">
+        <Link href={ROUTES.HOME}>
           <Home className="mr-2 size-4" />
           Go to Homepage
         </Link>

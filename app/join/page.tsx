@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { logger } from '@/lib/logger';
+import { ROUTES } from '@/lib/routes';
 import { supabase } from '@/lib/supabase/client';
 
 export default function JoinPage() {
@@ -39,9 +41,9 @@ export default function JoinPage() {
       }
 
       // Game exists, proceed to join page
-      router.push(`/join/${code.trim()}`);
+      router.push(ROUTES.JOIN_WITH_CODE(code.trim()));
     } catch (error) {
-      console.error(error);
+      logger.error(error, 'Failed to join game');
       toast.error('Error', {
         description: 'Something went wrong. Please try again.',
       });
@@ -56,7 +58,7 @@ export default function JoinPage() {
         <Button
           variant="ghost"
           className="flex items-center gap-2"
-          onClick={() => router.push('/')}
+          onClick={() => router.push(ROUTES.HOME)}
         >
           <ArrowLeft className="size-4" />
           Back

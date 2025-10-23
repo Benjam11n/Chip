@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { FEATURES } from '@/constants';
+import { ROUTES } from '@/lib/routes';
 
 const Home = () => {
   const router = useRouter();
@@ -49,7 +50,7 @@ const Home = () => {
             <div className="relative flex-1 sm:w-48">
               <MotionButton
                 size="lg"
-                onClick={() => router.push('/create')}
+                onClick={() => router.push(ROUTES.CREATE)}
                 className="relative w-full px-8"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -68,7 +69,7 @@ const Home = () => {
               <MotionButton
                 variant="outline"
                 size="lg"
-                onClick={() => router.push('/join')}
+                onClick={() => router.push(ROUTES.JOIN)}
                 className="relative z-10 w-full px-8"
               >
                 <Users className="mr-2 size-5" />

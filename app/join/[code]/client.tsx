@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useGameLoader } from '@/hooks/useGameLoader';
 import { useJoinForm } from '@/hooks/useJoinForm';
+import { ROUTES } from '@/lib/routes';
 
 interface JoinGameClientProps {
   code: string;
@@ -46,7 +47,7 @@ export const JoinGameClient = ({ code }: Readonly<JoinGameClientProps>) => {
       const inGame = game?.players?.map((player) => player.name).includes(name);
 
       if (inGame) {
-        router.push(`/game/${game?.id}`);
+        router.push(ROUTES.GAME_ROOM(game?.id));
         return;
       }
     }
@@ -65,7 +66,7 @@ export const JoinGameClient = ({ code }: Readonly<JoinGameClientProps>) => {
             The game code you entered is either incorrect or the game has expired. Games
             automatically expire after 24 hours of inactivity to keep things fresh.
           </p>
-          <Button className="mt-6" onClick={() => router.push('/join')}>
+          <Button className="mt-6" onClick={() => router.push(ROUTES.JOIN)}>
             Try Again
           </Button>
         </div>
@@ -79,7 +80,7 @@ export const JoinGameClient = ({ code }: Readonly<JoinGameClientProps>) => {
         <Button
           variant="ghost"
           className="flex items-center gap-2"
-          onClick={() => router.push('/')}
+          onClick={() => router.push(ROUTES.HOME)}
         >
           <ArrowLeft className="size-4" />
           Home

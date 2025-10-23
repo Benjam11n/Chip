@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { logger } from "@/lib/logger";
+import { ROUTES } from "@/lib/routes";
 import { supabase } from "@/lib/supabase/client";
 import type { Game } from "@/types";
 
@@ -69,9 +71,9 @@ export function useJoinForm({ game }: UseJoinFormOptions) {
         description: "Successfully joined the game",
       });
 
-      router.push(`/game/${game.id}`);
+      router.push(ROUTES.GAME_ROOM(game.id));
     } catch (error) {
-      console.error(error);
+      logger.error(error, "Failed to join game");
       toast.error("Error", {
         description: error instanceof Error
           ? error.message
