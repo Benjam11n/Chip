@@ -23,6 +23,10 @@ type PlayerCardProps = {
   actionLoading?: boolean;
 };
 
+// todo: move to constants file
+const DEFAULT_CHANGE_AMOUNT = 5;
+const AMOUNT_ROUND_TO = 5;
+
 export const PlayerCard = ({
   player,
   isCurrentUser,
@@ -31,10 +35,13 @@ export const PlayerCard = ({
   isLoading = false,
   actionLoading = false,
 }: Readonly<PlayerCardProps>) => {
-  const [amount, setAmount] = useState(5);
+  const [amount, setAmount] = useState(DEFAULT_CHANGE_AMOUNT);
 
   const handleAmountChange = (newAmount: number) => {
-    const roundedAmount = Math.max(5, Math.round(newAmount / 5) * 5);
+    const roundedAmount = Math.max(
+      AMOUNT_ROUND_TO,
+      Math.round(newAmount / AMOUNT_ROUND_TO) * AMOUNT_ROUND_TO
+    );
     setAmount(roundedAmount);
   };
 
@@ -72,8 +79,8 @@ export const PlayerCard = ({
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Button
-                disabled={amount <= 5 || actionLoading}
-                onClick={() => handleAmountChange(amount - 5)}
+                disabled={amount <= AMOUNT_ROUND_TO || actionLoading}
+                onClick={() => handleAmountChange(amount - AMOUNT_ROUND_TO)}
                 size="icon"
                 variant="outline"
               >
@@ -90,7 +97,7 @@ export const PlayerCard = ({
               />
               <Button
                 disabled={actionLoading}
-                onClick={() => handleAmountChange(amount + 5)}
+                onClick={() => handleAmountChange(amount + AMOUNT_ROUND_TO)}
                 size="icon"
                 variant="outline"
               >

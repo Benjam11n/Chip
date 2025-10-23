@@ -20,7 +20,7 @@ export function useGameLoader({ code }: UseGameLoaderOptions) {
   // Memoize loadGame function to prevent unnecessary recreations
   const loadGame = useCallback(async () => {
     try {
-      const { data: game, error: fetchError } = await supabase
+      const { data: gameData, error: fetchError } = await supabase
         .from("games")
         .select("*, players(*)")
         .eq("code", code)
@@ -30,13 +30,13 @@ export function useGameLoader({ code }: UseGameLoaderOptions) {
         throw new Error("An error occurred when fetching the game");
       }
 
-      if (!game) {
+      if (!gameData) {
         throw new Error("Game not found");
       }
 
       setGame({
-        ...game,
-        players: game.players || [],
+        ...gameData,
+        players: gameData.players || [],
       });
 
       try {

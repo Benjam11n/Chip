@@ -128,7 +128,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
   subscribeToChanges: () => {
     const { gameId, fetchPlayers, fetchGame, fetchMoves } = get();
     if (!gameId) {
-      return () => undefined;
+      return () => {
+        // No-op unsubscribe when gameId is missing
+      };
     }
 
     const channel = supabase

@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
-import type { LoadingState } from "@/stores/useGameStore";
+import type { LoadingState } from "@/stores/use-game-store";
 import type { GameView, MoveHistoryView, PlayerView } from "@/types";
 import { HandInput } from "../hand-input/hand-input";
 import { MoveHistory } from "../move-history";
@@ -84,7 +84,9 @@ export const MobileGameView = ({
           <TabsContent value="players">
             <div className="grid grid-cols-1 content-start gap-3">
               {loading.players
-                ? PLAYER_SKELETON_KEYS.map((k) => <PlayerCardSkeleton key={k} />)
+                ? PLAYER_SKELETON_KEYS.map((k) => (
+                    <PlayerCardSkeleton key={k} />
+                  ))
                 : players
                     .sort((a, b) => {
                       if (a.name === currentUsername) {

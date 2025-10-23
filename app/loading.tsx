@@ -13,10 +13,12 @@ export default function Loading({ className }: Readonly<LoadingProps>) {
     >
       <div className="relative size-20 animate-spin">
         <svg
+          aria-labelledby="loading-title"
           className="size-full"
           viewBox="0 0 100 100"
           xmlns="http://www.w3.org/2000/svg"
         >
+          <title id="loading-title">Loading...</title>
           {/* Outer ring of the poker chip */}
           <circle
             className="text-primary"
@@ -41,6 +43,7 @@ export default function Loading({ className }: Readonly<LoadingProps>) {
           />
 
           {/* Decorative patterns */}
+          {/** biome-ignore lint/style/noMagicNumbers: The rotation angles are in degrees. */}
           {[0, 60, 120, 180, 240, 300].map((rotation) => (
             <rect
               className="text-primary"

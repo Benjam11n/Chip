@@ -7,11 +7,12 @@ import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { FEATURES } from "@/constants";
+import { FEATURES } from "@/constants/ui";
 import { ROUTES } from "@/lib/routes";
 
 const MotionButton = motion.create(Button);
 
+// todo: move to constants
 const ROTATION_MS = 3000;
 const ROTATION_DEGREES = 360;
 const FEATURE_STAGGER_SECONDS = 0.2;

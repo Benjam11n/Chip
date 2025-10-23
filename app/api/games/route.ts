@@ -7,12 +7,21 @@ import type { Database } from "@/lib/supabase/types";
 
 type GameInsert = Database["public"]["Tables"]["games"]["Insert"];
 
+// todo: move to a constants file
+const DEFAULT_MAX_PLAYERS = 10;
+const DEFAULT_INITIAL_BUY_IN = 500;
+const GAME_CODE_LENGTH = 6;
+
 export async function POST(request: Request) {
   try {
-    const { name, maxPlayers = 10, initialBuyIn = 500 } = await request.json();
+    const {
+      name,
+      maxPlayers = DEFAULT_MAX_PLAYERS,
+      initialBuyIn = DEFAULT_INITIAL_BUY_IN,
+    } = await request.json();
 
     // Generate a unique 6-character game code
-    const code = nanoid(6);
+    const code = nanoid(GAME_CODE_LENGTH);
 
     // 2. Define the insert object explicitly using the generated type
     const insertData: GameInsert = {

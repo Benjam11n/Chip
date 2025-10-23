@@ -11,11 +11,15 @@ import { ROUTES } from "@/lib/routes";
 import { supabase } from "@/lib/supabase/client";
 import type { Game } from "@/types";
 
+// todo: move to constants file
+const MAX_PLAYER_NAME_LENGTH = 30;
+const MIN_PLAYER_NAME_LENGTH = 2;
+
 const JoinGameSchema = z.object({
   name: z
     .string()
-    .min(2, "Name must be at least 2 characters long")
-    .max(30, "Name must be less than 30 characters"),
+    .min(MIN_PLAYER_NAME_LENGTH, "Name must be at least 2 characters long")
+    .max(MAX_PLAYER_NAME_LENGTH, "Name must be less than 30 characters"),
 });
 
 type FormValues = z.infer<typeof JoinGameSchema>;

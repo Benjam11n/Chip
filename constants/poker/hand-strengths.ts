@@ -16,6 +16,7 @@ const HAND_CATEGORIES = {
   EXTREMELY_STRONG: { category: "Extremely Strong", value: 4 },
 } as const;
 
+const NUMBER_OF_RANKS = 13;
 /**
  * Generate hand strengths for all possible starting hands
  */
@@ -23,7 +24,7 @@ export function generateHandStrengths(): Record<string, HandStrengthData> {
   const strengths: Record<string, HandStrengthData> = {};
 
   // Pocket pairs
-  for (let i = 0; i < 13; i++) {
+  for (let i = 0; i < NUMBER_OF_RANKS; i++) {
     const rank = RANKS[i];
     const hand = `${rank}${rank}`;
 

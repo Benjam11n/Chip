@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ROUTES } from "@/lib/routes";
-import { useGameStore } from "@/stores/useGameStore";
+import { useGameStore } from "@/stores/use-game-store";
 import { GameRoomSkeleton } from "../skeletons";
 import { DesktopGameView } from "./desktop-game-view";
 import { GameHeader } from "./game-header";

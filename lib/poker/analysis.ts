@@ -1,4 +1,5 @@
-import { HAND_STRENGTHS, RANKS } from "@/constants";
+import { HAND_STRENGTHS } from "@/constants/poker";
+import { RANKS } from "@/constants/poker/ranks-suits";
 
 type HandStrength = {
   value: number;
@@ -100,7 +101,7 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
     }
 
     // For each suit that has a royal card
-    suitMap.forEach((suit) => {
+    for (const suit of suitMap) {
       // Get the ranks we have in this suit
       const existingRanks: string[] = [];
       if (suit1 === suit) {
@@ -120,7 +121,7 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
         requiredCards: neededCards,
         completed: false,
       });
-    });
+    }
   }
 
   // 2. Straight Flush

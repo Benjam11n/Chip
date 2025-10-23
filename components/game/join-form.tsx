@@ -65,6 +65,7 @@ export function JoinForm({
                   <Input
                     placeholder="Enter your name (2-30 characters)"
                     {...field}
+                    ref={undefined}
                   />
                 </FormControl>
                 <FormMessage />

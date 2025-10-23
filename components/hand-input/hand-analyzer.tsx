@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { HAND_STRENGTH_PROGRESS_MULTIPLIER } from "@/constants";
+import { HAND_STRENGTH_PROGRESS_MULTIPLIER } from "@/constants/ui";
 import type { HandAnalysis } from "@/lib/poker/analysis";
 import { cn } from "@/lib/utils";
 
@@ -28,7 +28,10 @@ export const HandAnalyzer = ({ analysis }: Readonly<HandAnalyzerProps>) => {
           <h3 className="font-semibold">Hand Strength</h3>
           <span className="font-medium text-sm">{analysis.strength.label}</span>
         </div>
-        <Progress className="h-2" value={analysis.strength.value * HAND_STRENGTH_PROGRESS_MULTIPLIER} />
+        <Progress
+          className="h-2"
+          value={analysis.strength.value * HAND_STRENGTH_PROGRESS_MULTIPLIER}
+        />
       </div>
 
       <div className="space-y-2">

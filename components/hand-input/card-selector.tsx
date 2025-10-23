@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { RANKS, SUIT_COLORS, SUITS } from "@/constants";
+import { RANKS, SUIT_COLORS, SUITS } from "@/constants/poker/ranks-suits";
 import { cn } from "@/lib/utils";
 
 type CardSelectorProps = {

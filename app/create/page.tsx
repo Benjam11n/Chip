@@ -18,12 +18,18 @@ type GameData = {
   initialBuyIn: number;
 };
 
+// todo: move to a constants file
+const MAXIMUM_VALUE = 1000;
+const DEFAULT_MAX_PLAYERS = 6;
+const MINIMUM_BUY_IN = 100;
+const BUY_IN_ROUND_TO = 5;
+
 export default function CreateGamePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
-  const [maxPlayers, setMaxPlayers] = useState(6);
-  const [initialBuyIn, setInitialBuyIn] = useState(1000);
+  const [maxPlayers, setMaxPlayers] = useState(DEFAULT_MAX_PLAYERS);
+  const [initialBuyIn, setInitialBuyIn] = useState(MAXIMUM_VALUE);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,7 +79,10 @@ export default function CreateGamePage() {
   const handleBuyInChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
     // Round to nearest $5 and ensure minimum of $100
-    const roundedValue = Math.max(100, Math.round(value / 5) * 5);
+    const roundedValue = Math.max(
+      MINIMUM_BUY_IN,
+      Math.round(value / BUY_IN_ROUND_TO) * BUY_IN_ROUND_TO
+    );
     setInitialBuyIn(roundedValue);
   };
 

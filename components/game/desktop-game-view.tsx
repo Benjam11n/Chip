@@ -2,7 +2,7 @@ import { HandInput } from "@/components/hand-input/hand-input";
 import { MoveHistory } from "@/components/move-history";
 import { PlayerCard } from "@/components/player-card";
 import { Card } from "@/components/ui/card";
-import type { LoadingState } from "@/stores/useGameStore";
+import type { LoadingState } from "@/stores/use-game-store";
 import type { GameView, MoveHistoryView, PlayerView } from "@/types";
 
 const PLAYER_SKELETON_KEYS = ["p1", "p2", "p3"] as const;

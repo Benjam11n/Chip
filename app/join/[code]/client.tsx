@@ -5,14 +5,14 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-import { JoinForm } from "@/components/game/JoinForm";
+import { JoinForm } from "@/components/game/join-form";
 import { PlayerList } from "@/components/game/player-list";
-import { QRCodeSection } from "@/components/game/QRCodeSection";
+import { QRCodeSection } from "@/components/game/qr-code-section";
 import { JoinSkeleton } from "@/components/skeletons";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useGameLoader } from "@/hooks/useGameLoader";
-import { useJoinForm } from "@/hooks/useJoinForm";
+import { useGameLoader } from "@/hooks/use-game-loader";
+import { useJoinForm } from "@/hooks/use-join-form";
 import { ROUTES } from "@/lib/routes";
 
 type JoinGameClientProps = {

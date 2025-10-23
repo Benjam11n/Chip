@@ -97,7 +97,7 @@ export const RoomSettings = ({
     setShowQR(true);
   };
 
-  const handleEndGame = async (gameId: string) => {
+  const handleEndGame = async (gameIdentification: string) => {
     try {
       // Check if current player exists in localStorage first
       const currentPlayer = localStorage.getItem("currentPlayer");
@@ -106,7 +106,10 @@ export const RoomSettings = ({
         return;
       }
 
-      const { error } = await supabase.from("games").delete().eq("id", gameId);
+      const { error } = await supabase
+        .from("games")
+        .delete()
+        .eq("id", gameIdentification);
       if (error) {
         throw error;
       }
