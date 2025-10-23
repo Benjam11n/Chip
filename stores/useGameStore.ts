@@ -128,7 +128,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   subscribeToChanges: () => {
     const { gameId, fetchPlayers, fetchGame, fetchMoves } = get();
     if (!gameId) {
-      return () => {};
+      return () => undefined;
     }
 
     const channel = supabase
@@ -152,8 +152,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
           filter: `id=eq.${gameId}`,
         },
         (payload) => {
+          const current = get().game;
           if (payload.new?.pot !== undefined) {
-            set({ game: { ...get().game!, pot: payload.new.pot } });
+            if (current) {
+              set({ game: { ...current, pot: payload.new.pot } });
+            } else {
+              fetchGame();
+            }
           } else {
             fetchGame();
           }

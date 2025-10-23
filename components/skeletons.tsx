@@ -2,6 +2,9 @@ import { Card } from "./ui/card";
 import { ScrollArea } from "./ui/scroll-area";
 import { Skeleton } from "./ui/skeleton";
 
+const MOVE_SKELETON_KEYS = ["mh1", "mh2", "mh3", "mh4", "mh5"] as const;
+const PLAYER_COLUMN_SKELETON_KEYS = ["pc1", "pc2", "pc3"] as const;
+
 export const PlayerCardSkeleton = () => (
   <Card className="p-4">
     <div className="animate-pulse space-y-3">
@@ -23,10 +26,10 @@ export const MoveHistorySkeleton = () => (
     </div>
     <ScrollArea className="h-[380px] pr-4">
       <div className="space-y-4">
-        {Array.from({ length: 5 }).map((_, i) => (
+        {MOVE_SKELETON_KEYS.map((k) => (
           <div
             className="flex items-center justify-between border-border border-b py-2 last:border-0"
-            key={i}
+            key={k}
           >
             <Skeleton className="h-5 w-48" />
             <Skeleton className="h-4 w-24" />
@@ -79,10 +82,10 @@ export const GameRoomSkeleton = () => {
                 <Skeleton className="h-6 w-24" />
               </div>
               <div className="space-y-4">
-                {[1, 2, 3, 4, 5].map((i) => (
+                {MOVE_SKELETON_KEYS.map((k) => (
                   <div
                     className="flex items-center justify-between py-2"
-                    key={i}
+                    key={k}
                   >
                     <Skeleton className="h-4 w-48" />
                     <Skeleton className="h-4 w-24" />
@@ -112,10 +115,10 @@ export const GameRoomSkeleton = () => {
                 <Skeleton className="h-6 w-24" />
               </div>
               <div className="space-y-4">
-                {[1, 2, 3, 4, 5].map((i) => (
+                {MOVE_SKELETON_KEYS.map((k) => (
                   <div
                     className="flex items-center justify-between py-2"
-                    key={i}
+                    key={k}
                   >
                     <Skeleton className="h-4 w-48" />
                     <Skeleton className="h-4 w-24" />
@@ -135,8 +138,8 @@ export const GameRoomSkeleton = () => {
 
           {/* Player Cards Column */}
           <div className="grid grid-cols-1 content-start gap-6">
-            {[1, 2, 3].map((i) => (
-              <div className="rounded-lg border p-4" key={i}>
+            {PLAYER_COLUMN_SKELETON_KEYS.map((k) => (
+              <div className="rounded-lg border p-4" key={k}>
                 <div className="space-y-3">
                   <Skeleton className="h-6 w-32" />
                   <Skeleton className="h-8 w-full" />

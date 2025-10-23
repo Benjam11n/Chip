@@ -5,6 +5,8 @@ import { Card } from "@/components/ui/card";
 import type { LoadingState } from "@/stores/useGameStore";
 import type { GameView, MoveHistoryView, PlayerView } from "@/types";
 
+const PLAYER_SKELETON_KEYS = ["p1", "p2", "p3"] as const;
+
 type DesktopGameViewProps = {
   players: PlayerView[];
   currentUsername: string;
@@ -41,18 +43,16 @@ export const DesktopGameView = ({
 
     <div className="grid grid-cols-1 content-start gap-6">
       {loading.players
-        ? new Array(3)
-            .fill(0)
-            .map((_, i) => (
-              <PlayerCard
-                isCurrentUser={false}
-                isLoading={true}
-                key={i}
-                onPotAction={executePotAction}
-                player={null}
-                pot={game?.pot}
-              />
-            ))
+        ? PLAYER_SKELETON_KEYS.map((k) => (
+            <PlayerCard
+              isCurrentUser={false}
+              isLoading={true}
+              key={k}
+              onPotAction={executePotAction}
+              player={null}
+              pot={game?.pot}
+            />
+          ))
         : players.map((player) => (
             <PlayerCard
               isCurrentUser={player.name === currentUsername}

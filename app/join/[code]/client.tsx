@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 
 import { JoinForm } from "@/components/game/JoinForm";
-import { PlayerList } from "@/components/game/PlayerList";
+import { PlayerList } from "@/components/game/player-list";
 import { QRCodeSection } from "@/components/game/QRCodeSection";
 import { JoinSkeleton } from "@/components/skeletons";
 import { Button } from "@/components/ui/button";

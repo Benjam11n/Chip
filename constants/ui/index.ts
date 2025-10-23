@@ -4,6 +4,8 @@
 
 import { Dices, Plus, Users } from "lucide-react";
 
+export const HAND_STRENGTH_PROGRESS_MULTIPLIER = 25;
+
 export const FEATURES = [
   {
     icon: Users,

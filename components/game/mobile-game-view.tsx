@@ -15,6 +15,8 @@ import {
 } from "../ui/collapsible";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
+const PLAYER_SKELETON_KEYS = ["p1", "p2", "p3"] as const;
+
 type MobileGameViewProps = {
   players: PlayerView[];
   currentUsername: string;
@@ -82,9 +84,7 @@ export const MobileGameView = ({
           <TabsContent value="players">
             <div className="grid grid-cols-1 content-start gap-3">
               {loading.players
-                ? [...new Array(3)].map((_, i) => (
-                    <PlayerCardSkeleton key={i} />
-                  ))
+                ? PLAYER_SKELETON_KEYS.map((k) => <PlayerCardSkeleton key={k} />)
                 : players
                     .sort((a, b) => {
                       if (a.name === currentUsername) {

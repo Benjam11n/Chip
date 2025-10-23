@@ -6,4 +6,4 @@
 export { HAND_STRENGTHS, RANKS, SUIT_COLORS, SUITS } from "./poker";
 
 // UI constants
-export { FEATURES } from "./ui";
+export { FEATURES, HAND_STRENGTH_PROGRESS_MULTIPLIER } from "./ui";

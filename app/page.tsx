@@ -10,12 +10,17 @@ import { Card } from "@/components/ui/card";
 import { FEATURES } from "@/constants";
 import { ROUTES } from "@/lib/routes";
 
+const MotionButton = motion.create(Button);
+
+const ROTATION_MS = 3000;
+const ROTATION_DEGREES = 360;
+const FEATURE_STAGGER_SECONDS = 0.2;
+
 const Home = () => {
   const router = useRouter();
   const time = useTime();
-  const MotionButton = motion.create(Button);
 
-  const rotate = useTransform(time, [0, 3000], [0, 360], {
+  const rotate = useTransform(time, [0, ROTATION_MS], [0, ROTATION_DEGREES], {
     clamp: false,
   });
   const rotationBg = useTransform(
@@ -54,8 +59,8 @@ const Home = () => {
                 className="relative w-full px-8"
                 onClick={() => router.push(ROUTES.CREATE)}
                 size="lg"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
               >
                 <Plus className="mr-2 size-5" />
                 Create Game
@@ -96,14 +101,14 @@ const Home = () => {
               className="h-full"
               initial={{ opacity: 0, y: 20 }}
               key={feature.title}
-              transition={{ delay: index * 0.2 }}
+              transition={{ delay: index * FEATURE_STAGGER_SECONDS }}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
             >
               <Card className="flex h-full flex-col p-6">
                 <motion.div
                   className="mb-4 flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10"
                   transition={{ duration: 0.3 }}
-                  whileHover={{ scale: 1.1, rotate: 360 }}
+                  whileHover={{ scale: 1.07, rotate: 360 }}
                 >
                   <feature.icon className="size-6 text-primary" />
                 </motion.div>
