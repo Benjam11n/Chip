@@ -1,6 +1,6 @@
-import { notFound } from 'next/navigation';
+import { notFound } from "next/navigation";
 
-import { GameRoomClient } from '@/components/game/game-room-client';
+import { GameRoomClient } from "@/components/game/game-room-client";
 
 export default async function GameRoom({ params }: Readonly<RouteParams>) {
   const { id } = await params;

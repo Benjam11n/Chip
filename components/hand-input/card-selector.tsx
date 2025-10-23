@@ -1,17 +1,20 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-import { Button } from '@/components/ui/button';
-import { RANKS, SUIT_COLORS, SUITS } from '@/constants';
-import { cn } from '@/lib/utils';
+import { Button } from "@/components/ui/button";
+import { RANKS, SUIT_COLORS, SUITS } from "@/constants";
+import { cn } from "@/lib/utils";
 
-interface CardSelectorProps {
+type CardSelectorProps = {
   selectedCards: string[];
   onSelectCard: (card: string) => void;
-}
+};
 
-export const CardSelector = ({ selectedCards, onSelectCard }: Readonly<CardSelectorProps>) => {
+export const CardSelector = ({
+  selectedCards,
+  onSelectCard,
+}: Readonly<CardSelectorProps>) => {
   const [selectedRank, setSelectedRank] = useState<string | null>(null);
   const [selectedSuit, setSelectedSuit] = useState<string | null>(null);
 
@@ -32,15 +35,15 @@ export const CardSelector = ({ selectedCards, onSelectCard }: Readonly<CardSelec
       <div className="grid grid-cols-4 gap-2">
         {SUITS.map((suit) => (
           <Button
-            key={suit}
-            variant={selectedSuit === suit ? 'default' : 'outline'}
             className={cn(
-              'h-12 text-2xl font-normal',
+              "h-12 font-normal text-2xl",
               selectedSuit === suit
-                ? SUIT_COLORS[suit as keyof typeof SUIT_COLORS] + '/90'
-                : SUIT_COLORS[suit as keyof typeof SUIT_COLORS],
+                ? `${SUIT_COLORS[suit as keyof typeof SUIT_COLORS]}/90`
+                : SUIT_COLORS[suit as keyof typeof SUIT_COLORS]
             )}
+            key={suit}
             onClick={() => setSelectedSuit(suit === selectedSuit ? null : suit)}
+            variant={selectedSuit === suit ? "default" : "outline"}
           >
             {suit}
           </Button>
@@ -49,29 +52,34 @@ export const CardSelector = ({ selectedCards, onSelectCard }: Readonly<CardSelec
       <div className="grid grid-cols-7 gap-2">
         {RANKS.map((rank) => (
           <Button
-            key={rank}
-            variant={selectedRank === rank ? 'default' : 'outline'}
             className="h-12"
+            key={rank}
             onClick={() => setSelectedRank(rank === selectedRank ? null : rank)}
+            variant={selectedRank === rank ? "default" : "outline"}
           >
             {rank}
           </Button>
         ))}
       </div>
-      {selectedRank && selectedSuit ? <Button className="w-full" onClick={() => handleCardClick(selectedRank, selectedSuit)}>
+      {selectedRank && selectedSuit ? (
+        <Button
+          className="w-full"
+          onClick={() => handleCardClick(selectedRank, selectedSuit)}
+        >
           Add {selectedRank}
           {selectedSuit}
-        </Button> : null}
+        </Button>
+      ) : null}
       <div className="flex justify-center gap-4">
         {selectedCards.map((card) => (
           <Button
-            key={card}
-            variant="outline"
             className={cn(
-              'h-16 w-12 text-xl font-normal',
-              SUIT_COLORS[card[1] as keyof typeof SUIT_COLORS],
+              "h-16 w-12 font-normal text-xl",
+              SUIT_COLORS[card[1] as keyof typeof SUIT_COLORS]
             )}
+            key={card}
             onClick={() => onSelectCard(card)}
+            variant="outline"
           >
             {card[0]}
             {card[1]}
@@ -80,4 +88,4 @@ export const CardSelector = ({ selectedCards, onSelectCard }: Readonly<CardSelec
       </div>
     </div>
   );
-}
+};

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { Card } from '@/components/ui/card';
-import type { Game } from '@/types';
+import { Card } from "@/components/ui/card";
+import type { Game } from "@/types";
 
-interface PlayerListProps {
+type PlayerListProps = {
   game: Game;
-}
+};
 
 export function PlayerList({ game }: PlayerListProps) {
   if (!game?.players?.length) {
@@ -18,12 +18,12 @@ export function PlayerList({ game }: PlayerListProps) {
       <div className="space-y-2">
         {game?.players?.map((player) => (
           <div
-            key={player.id}
             className="flex items-center justify-between border-b py-2 last:border-0"
+            key={player.id}
           >
             <span>{player.name}</span>
             {player.id === game.createdBy && (
-              <span className="bg-primary/10 text-primary rounded-full px-2 py-1 text-xs">
+              <span className="rounded-full bg-primary/10 px-2 py-1 text-primary text-xs">
                 Host
               </span>
             )}

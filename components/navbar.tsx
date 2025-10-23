@@ -1,11 +1,9 @@
-'use client';
+"use client";
 
-import { useTheme } from 'next-themes';
-
-import { ThemeToggle } from './theme-toggle';
-
-import { THEME_HOTKEY } from '@/constants/hotkeys.const';
-import { useHotKeys } from '@/hooks/use-hot-keys';
+import { useTheme } from "next-themes";
+import { THEME_HOTKEY } from "@/constants/hotkeys.const";
+import { useHotKeys } from "@/hooks/use-hot-keys";
+import { ThemeToggle } from "./theme-toggle";
 
 export const Navbar = () => {
   const { setTheme, theme } = useTheme();
@@ -13,9 +11,9 @@ export const Navbar = () => {
   useHotKeys(
     THEME_HOTKEY,
     () => {
-      setTheme(theme === 'light' ? 'dark' : 'light');
+      setTheme(theme === "light" ? "dark" : "light");
     },
-    `Switched to ${theme === 'light' ? 'dark' : 'light'} mode`,
+    `Switched to ${theme === "light" ? "dark" : "light"} mode`
   );
 
   return (

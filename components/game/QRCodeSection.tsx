@@ -1,22 +1,28 @@
-'use client';
+"use client";
 
-import { QrCode, Copy } from 'lucide-react';
-import Image from 'next/image';
+import { Copy, QrCode } from "lucide-react";
+import Image from "next/image";
 
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
-interface QRCodeSectionProps {
+type QRCodeSectionProps = {
   qrCode: string;
   onCopyLink: () => Promise<void>;
-}
+};
 
 export function QRCodeSection({ qrCode, onCopyLink }: QRCodeSectionProps) {
   return (
     <div className="space-y-4">
       {qrCode ? (
         <div className="flex justify-center">
-          <Image width={256} height={256} src={qrCode} alt="Join QR Code" className="rounded-md" />
+          <Image
+            alt="Join QR Code"
+            className="rounded-md"
+            height={256}
+            src={qrCode}
+            width={256}
+          />
         </div>
       ) : (
         <div className="flex justify-center">
@@ -25,11 +31,15 @@ export function QRCodeSection({ qrCode, onCopyLink }: QRCodeSectionProps) {
       )}
 
       <div className="flex gap-2">
-        <Button variant="outline" className="flex-1" onClick={onCopyLink}>
+        <Button className="flex-1" onClick={onCopyLink} variant="outline">
           <Copy className="mr-2 size-4" />
           Copy Link
         </Button>
-        <Button variant="outline" className="flex-1" onClick={() => window.print()}>
+        <Button
+          className="flex-1"
+          onClick={() => window.print()}
+          variant="outline"
+        >
           <QrCode className="mr-2 size-4" />
           Save QR
         </Button>

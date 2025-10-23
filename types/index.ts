@@ -1,24 +1,24 @@
-interface Player {
+type Player = {
   id: string;
   name: string;
   stack: number;
   total_buy_in: number;
-}
+};
 
-export interface PlayerView {
+export type PlayerView = {
   id: string;
   name: string;
   stack: number;
   totalBuyIn: number;
-}
+};
 
-export interface MoveHistoryView {
+export type MoveHistoryView = {
   id: string;
   player_id: string;
   created_at: string | null;
   action_type: string;
   amount: number | null;
-}
+};
 
 export type Game = {
   id: string;

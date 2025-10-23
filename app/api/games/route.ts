@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     // 2. Define the insert object explicitly using the generated type
     const insertData: GameInsert = {
       name,
-      code: code,
+      code,
       max_players: maxPlayers,
       initial_buy_in: initialBuyIn,
       is_locked: false,
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
       { error: "Failed to create game" },
       {
         status: 500,
-      },
+      }
     );
   }
 }

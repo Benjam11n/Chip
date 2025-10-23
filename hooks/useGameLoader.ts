@@ -8,9 +8,9 @@ import { logger } from "@/lib/logger";
 import { supabase } from "@/lib/supabase/client";
 import type { Game } from "@/types";
 
-interface UseGameLoaderOptions {
+type UseGameLoaderOptions = {
   code: string;
-}
+};
 
 export function useGameLoader({ code }: UseGameLoaderOptions) {
   const [game, setGame] = useState<Game | null>(null);
@@ -82,7 +82,7 @@ export function useGameLoader({ code }: UseGameLoaderOptions) {
           } catch (error) {
             logger.error(error, "Error processing game update");
           }
-        },
+        }
       )
       .subscribe();
 

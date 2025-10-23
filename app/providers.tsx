@@ -1,17 +1,15 @@
-'use client';
+"use client";
 
-import { ThemeProvider } from '@/components/theme-provider';
-import { Toaster } from '@/components/ui/sonner';
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 
-interface ProvidersProps {
+type ProvidersProps = {
   children: React.ReactNode;
-}
+};
 
-export const Providers = ({ children }: Readonly<ProvidersProps>) => {
-  return (
-    <ThemeProvider>
-      {children}
-      <Toaster closeButton position="bottom-left" />
-    </ThemeProvider>
-  );
-}
+export const Providers = ({ children }: Readonly<ProvidersProps>) => (
+  <ThemeProvider>
+    {children}
+    <Toaster closeButton position="bottom-left" />
+  </ThemeProvider>
+);

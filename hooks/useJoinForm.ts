@@ -20,9 +20,9 @@ const JoinGameSchema = z.object({
 
 type FormValues = z.infer<typeof JoinGameSchema>;
 
-interface UseJoinFormOptions {
+type UseJoinFormOptions = {
   game: Game | null;
-}
+};
 
 export function useJoinForm({ game }: UseJoinFormOptions) {
   const router = useRouter();
@@ -35,7 +35,9 @@ export function useJoinForm({ game }: UseJoinFormOptions) {
   });
 
   const handleJoin = async (data: FormValues) => {
-    if (!game) return;
+    if (!game) {
+      return;
+    }
     const { name } = data;
 
     try {
@@ -64,7 +66,7 @@ export function useJoinForm({ game }: UseJoinFormOptions) {
         JSON.stringify({
           name,
           gameId: game.id,
-        }),
+        })
       );
 
       toast.success("Success", {
@@ -75,9 +77,8 @@ export function useJoinForm({ game }: UseJoinFormOptions) {
     } catch (error) {
       logger.error(error, "Failed to join game");
       toast.error("Error", {
-        description: error instanceof Error
-          ? error.message
-          : "Failed to join game",
+        description:
+          error instanceof Error ? error.message : "Failed to join game",
       });
     }
   };

@@ -27,7 +27,7 @@ type GameStore = {
   handlePotAction: (
     playerId: string,
     amount: number,
-    action_type: "add" | "remove",
+    action_type: "add" | "remove"
   ) => Promise<void>;
   handleKickPlayer: (playerId: string) => Promise<void>;
 };
@@ -45,16 +45,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   fetchPlayers: async () => {
     const { gameId } = get();
-    if (!gameId) return;
+    if (!gameId) {
+      return;
+    }
 
     set({ loading: { ...get().loading, players: true } });
     try {
-      const { data, error } = await supabase.from("players").select("*").eq(
-        "game_id",
-        gameId,
-      );
+      const { data, error } = await supabase
+        .from("players")
+        .select("*")
+        .eq("game_id", gameId);
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
       set({ players: data.map((p) => ({ ...p, totalBuyIn: p.total_buy_in })) });
     } catch (err) {
       logger.error(err, "Failed to fetch players");
@@ -65,7 +69,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   fetchGame: async () => {
     const { gameId } = get();
-    if (!gameId) return;
+    if (!gameId) {
+      return;
+    }
 
     set({ loading: { ...get().loading, game: true } });
     try {
@@ -80,13 +86,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
         // Handle redirect (e.g., via router in component)
         return;
       }
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       set({ game });
       return game;
     } catch (err) {
       logger.error(err, "Failed to fetch game");
-      return undefined;
+      return;
     } finally {
       set({ loading: { ...get().loading, game: false } });
     }
@@ -94,7 +102,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   fetchMoves: async () => {
     const { gameId } = get();
-    if (!gameId) return;
+    if (!gameId) {
+      return;
+    }
 
     set({ loading: { ...get().loading, moves: true } });
     try {
@@ -104,7 +114,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         .eq("game_id", gameId)
         .order("created_at", { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
       set({ moves: data.map((m) => ({ ...m, created_at: m.created_at })) });
     } catch (err) {
       logger.error(err, "Failed to fetch moves");
@@ -115,7 +127,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   subscribeToChanges: () => {
     const { gameId, fetchPlayers, fetchGame, fetchMoves } = get();
-    if (!gameId) return () => {};
+    if (!gameId) {
+      return () => {};
+    }
 
     const channel = supabase
       .channel(`room:${gameId}`)
@@ -127,7 +141,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           table: "players",
           filter: `game_id=eq.${gameId}`,
         },
-        fetchPlayers,
+        fetchPlayers
       )
       .on(
         "postgres_changes",
@@ -143,7 +157,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           } else {
             fetchGame();
           }
-        },
+        }
       )
       .on(
         "postgres_changes",
@@ -153,7 +167,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           table: "game_actions",
           filter: `game_id=eq.${gameId}`,
         },
-        fetchMoves,
+        fetchMoves
       );
 
     channel.subscribe();
@@ -164,7 +178,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   handlePotAction: async (playerId, amount, action_type) => {
     const { game, players } = get();
-    if (!game) return;
+    if (!game) {
+      return;
+    }
 
     try {
       set({ actionLoading: true });
@@ -176,17 +192,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const updatedPlayers = players.map((player) =>
         player.id === playerId
           ? {
-            ...player,
-            stack: action_type === "add"
-              ? player.stack - amount
-              : player.stack + amount,
-          }
+              ...player,
+              stack:
+                action_type === "add"
+                  ? player.stack - amount
+                  : player.stack + amount,
+            }
           : player
       );
 
-      const updatedPot = action_type === "add"
-        ? game.pot + amount
-        : game.pot - amount;
+      const updatedPot =
+        action_type === "add" ? game.pot + amount : game.pot - amount;
 
       set({
         players: updatedPlayers,
@@ -220,19 +236,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
   handleKickPlayer: async (playerId) => {
     try {
       const { gameId } = get();
-      if (!gameId) return;
+      if (!gameId) {
+        return;
+      }
 
       await supabase.rpc("set_config", {
         key: "app.current_game_id",
         value: gameId,
       });
 
-      const { error } = await supabase.from("players").delete().eq(
-        "id",
-        playerId,
-      );
+      const { error } = await supabase
+        .from("players")
+        .delete()
+        .eq("id", playerId);
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       // Refresh players list
       await get().fetchPlayers();

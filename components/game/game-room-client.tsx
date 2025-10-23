@@ -1,21 +1,19 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useState, useEffect, useCallback } from 'react';
-import { toast } from 'sonner';
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { ROUTES } from "@/lib/routes";
+import { useGameStore } from "@/stores/useGameStore";
+import { GameRoomSkeleton } from "../skeletons";
+import { DesktopGameView } from "./desktop-game-view";
+import { GameHeader } from "./game-header";
+import { GameNotFound } from "./game-not-found";
+import { MobileGameView } from "./mobile-game-view";
 
-import { GameRoomSkeleton } from '../skeletons';
-import { DesktopGameView } from './desktop-game-view';
-import { GameHeader } from './game-header';
-import { GameNotFound } from './game-not-found';
-import { MobileGameView } from './mobile-game-view';
-
-import { ROUTES } from '@/lib/routes';
-import { useGameStore } from '@/stores/useGameStore';
-
-interface GameRoomClientProps {
+type GameRoomClientProps = {
   gameId: string;
-}
+};
 
 export const GameRoomClient = ({ gameId }: Readonly<GameRoomClientProps>) => {
   const router = useRouter();
@@ -40,16 +38,16 @@ export const GameRoomClient = ({ gameId }: Readonly<GameRoomClientProps>) => {
 
   // Wrapper for pot actions with error handling
   const executePotAction = useCallback(
-    async (playerId: string, amount: number, action_type: 'add' | 'remove') => {
+    async (playerId: string, amount: number, action_type: "add" | "remove") => {
       try {
         await handlePotAction(playerId, amount, action_type);
       } catch {
-        toast.error('Error handling pot action', {
-          description: 'Changes have been reverted',
+        toast.error("Error handling pot action", {
+          description: "Changes have been reverted",
         });
       }
     },
-    [handlePotAction],
+    [handlePotAction]
   );
 
   // Wrapper for kick player with error handling
@@ -57,12 +55,12 @@ export const GameRoomClient = ({ gameId }: Readonly<GameRoomClientProps>) => {
     async (playerId: string) => {
       try {
         await handleKickPlayer(playerId);
-        toast.success('Success', { description: 'Player removed from game' });
+        toast.success("Success", { description: "Player removed from game" });
       } catch {
-        toast.error('Error kicking player');
+        toast.error("Error kicking player");
       }
     },
-    [handleKickPlayer],
+    [handleKickPlayer]
   );
 
   // Initialize game ID and fetch data
@@ -70,7 +68,9 @@ export const GameRoomClient = ({ gameId }: Readonly<GameRoomClientProps>) => {
     const initializeGame = async () => {
       setGameId(gameId);
       const gameData = await fetchGame();
-      if (!gameData) router.push(ROUTES.HOME); // Redirect if game not found
+      if (!gameData) {
+        router.push(ROUTES.HOME); // Redirect if game not found
+      }
 
       fetchPlayers();
       fetchMoves();
@@ -80,11 +80,19 @@ export const GameRoomClient = ({ gameId }: Readonly<GameRoomClientProps>) => {
 
     const unsubscribe = subscribeToChanges();
     return unsubscribe;
-  }, [gameId, setGameId, fetchGame, fetchPlayers, fetchMoves, subscribeToChanges, router]);
+  }, [
+    gameId,
+    setGameId,
+    fetchGame,
+    fetchPlayers,
+    fetchMoves,
+    subscribeToChanges,
+    router,
+  ]);
 
   // Load current user from localStorage
   useEffect(() => {
-    const currentPlayer = localStorage.getItem('currentPlayer');
+    const currentPlayer = localStorage.getItem("currentPlayer");
     if (currentPlayer) {
       setCurrentUsername(JSON.parse(currentPlayer).name);
     }
@@ -106,7 +114,9 @@ export const GameRoomClient = ({ gameId }: Readonly<GameRoomClientProps>) => {
       return null;
     }
 
-    const inGame = players.map((player) => player.name).includes(currentUsername);
+    const inGame = players
+      .map((player) => player.name)
+      .includes(currentUsername);
 
     if (!inGame) {
       router.push(ROUTES.JOIN_WITH_CODE(game.code));
@@ -117,37 +127,37 @@ export const GameRoomClient = ({ gameId }: Readonly<GameRoomClientProps>) => {
   return (
     <div className="min-h-screen">
       <GameHeader
-        gameName={game.name}
+        currentUsername={currentUsername}
         gameCode={game.code}
         gameId={game.id}
-        players={players}
-        currentUsername={currentUsername}
+        gameName={game.name}
         onKickPlayer={executeKickPlayer}
+        players={players}
       />
 
       <div className="mx-auto max-w-7xl space-y-3 p-4">
         {/* Mobile view */}
         <MobileGameView
-          players={players}
           currentUsername={currentUsername}
-          game={game}
-          moves={moves}
-          loading={loading}
           executePotAction={executePotAction}
-          showAnalysis={showAnalysis}
+          game={game}
+          loading={loading}
+          moves={moves}
+          players={players}
           setShowAnalysis={setShowAnalysis}
-          showPokerHands={showPokerHands}
           setShowPokerHands={setShowPokerHands}
+          showAnalysis={showAnalysis}
+          showPokerHands={showPokerHands}
         />
 
         {/* Desktop view */}
         <DesktopGameView
-          players={players}
           currentUsername={currentUsername}
-          game={game}
-          moves={moves}
-          loading={loading}
           executePotAction={executePotAction}
+          game={game}
+          loading={loading}
+          moves={moves}
+          players={players}
         />
       </div>
     </div>

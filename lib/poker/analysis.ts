@@ -1,21 +1,21 @@
 import { HAND_STRENGTHS, RANKS } from "@/constants";
 
-interface HandStrength {
+type HandStrength = {
   value: number;
   label: string;
-}
+};
 
-interface PossibleHand {
+type PossibleHand = {
   name: string;
   description: string;
   requiredCards: string[];
   completed: boolean;
-}
+};
 
-export interface HandAnalysis {
+export type HandAnalysis = {
   strength: HandStrength;
   possibleHands: PossibleHand[];
-}
+};
 
 export function analyzeHand(cards: string[]): HandAnalysis {
   const [card1, card2] = cards;
@@ -42,16 +42,14 @@ export function analyzeHand(cards: string[]): HandAnalysis {
     value: 1,
   };
 
-  const getStrengthLabel = (category: string, value: number): HandStrength => {
-    return {
-      label: category,
-      value: value,
-    };
-  };
+  const getStrengthLabel = (category: string, value: number): HandStrength => ({
+    label: category,
+    value,
+  });
 
   const strengthAssessment = getStrengthLabel(
     handInfo.category,
-    handInfo.value,
+    handInfo.value
   );
   const possibleHands = calculatePossibleHands(cards);
 
@@ -89,19 +87,28 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
   const royalCards = ["A", "K", "Q", "J", "T"];
   // First, check if we have any royal cards
   if (
-    royalCards.includes(rank1 as string) || royalCards.includes(rank2 as string)
+    royalCards.includes(rank1 as string) ||
+    royalCards.includes(rank2 as string)
   ) {
     // Get unique suits that have royal cards
     const suitMap = new Set<string>();
-    if (royalCards.includes(rank1 as string)) suitMap.add(suit1 as string);
-    if (royalCards.includes(rank2 as string)) suitMap.add(suit2 as string);
+    if (royalCards.includes(rank1 as string)) {
+      suitMap.add(suit1 as string);
+    }
+    if (royalCards.includes(rank2 as string)) {
+      suitMap.add(suit2 as string);
+    }
 
     // For each suit that has a royal card
     suitMap.forEach((suit) => {
       // Get the ranks we have in this suit
       const existingRanks: string[] = [];
-      if (suit1 === suit) existingRanks.push(rank1 as string);
-      if (suit2 === suit) existingRanks.push(rank2 as string);
+      if (suit1 === suit) {
+        existingRanks.push(rank1 as string);
+      }
+      if (suit2 === suit) {
+        existingRanks.push(rank2 as string);
+      }
 
       const neededCards = royalCards
         .filter((rank) => !existingRanks.includes(rank))
@@ -118,15 +125,15 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
 
   // 2. Straight Flush
   if (isSuited) {
-    const highRankIndex = RANKS.indexOf(highRank as typeof RANKS[number]);
-    const lowRankIndex = RANKS.indexOf(lowRank as typeof RANKS[number]);
+    const highRankIndex = RANKS.indexOf(highRank as (typeof RANKS)[number]);
+    const lowRankIndex = RANKS.indexOf(lowRank as (typeof RANKS)[number]);
     const distance = Math.abs(highRankIndex - lowRankIndex);
 
     if (distance <= 4) {
       const lowIndex = Math.max(0, Math.min(highRankIndex, lowRankIndex) - 4);
       const highIndex = Math.min(
         RANKS.length - 1,
-        Math.max(highRankIndex, lowRankIndex) + 4,
+        Math.max(highRankIndex, lowRankIndex) + 4
       );
       const possibleCards = RANKS.slice(lowIndex, highIndex + 1)
         .filter((rank) => rank !== highRank && rank !== lowRank)
@@ -148,9 +155,7 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
       `${highRank}♥`,
       `${highRank}♦`,
       `${highRank}♣`,
-    ].filter(
-      (c) => !cards.includes(c),
-    );
+    ].filter((c) => !cards.includes(c));
 
     possibleHands.push({
       name: "Four of a Kind",
@@ -189,18 +194,18 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
   }
 
   // 6. Straight
-  const highRankIndex = RANKS.indexOf(highRank as typeof RANKS[number]);
-  const lowRankIndex = RANKS.indexOf(lowRank as typeof RANKS[number]);
+  const highRankIndex = RANKS.indexOf(highRank as (typeof RANKS)[number]);
+  const lowRankIndex = RANKS.indexOf(lowRank as (typeof RANKS)[number]);
   const distance = Math.abs(highRankIndex - lowRankIndex);
 
   if (distance <= 4) {
     const lowIndex = Math.max(0, Math.min(highRankIndex, lowRankIndex) - 4);
     const highIndex = Math.min(
       RANKS.length - 1,
-      Math.max(highRankIndex, lowRankIndex) + 4,
+      Math.max(highRankIndex, lowRankIndex) + 4
     );
     const possibleCards = RANKS.slice(lowIndex, highIndex + 1).filter(
-      (rank) => rank !== highRank && rank !== lowRank,
+      (rank) => rank !== highRank && rank !== lowRank
     );
 
     possibleHands.push({
@@ -219,8 +224,8 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
       : "Need two matching cards",
     requiredCards: isPair
       ? [`${highRank}♠`, `${highRank}♥`, `${highRank}♦`, `${highRank}♣`]
-        .filter((c) => !cards.includes(c))
-        .slice(0, 1)
+          .filter((c) => !cards.includes(c))
+          .slice(0, 1)
       : [],
     completed: false,
   });

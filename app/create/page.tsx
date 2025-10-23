@@ -1,33 +1,35 @@
-'use client';
+"use client";
 
-import { ArrowLeft, Dices } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { toast } from 'sonner';
+import { ArrowLeft, Dices } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
-import { ROUTES } from '@/lib/routes';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { ROUTES } from "@/lib/routes";
 
-interface GameData {
+type GameData = {
   name: string;
   maxPlayers: number;
   initialBuyIn: number;
-}
+};
 
 export default function CreateGamePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [maxPlayers, setMaxPlayers] = useState(6);
   const [initialBuyIn, setInitialBuyIn] = useState(1000);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return;
+    if (!name.trim()) {
+      return;
+    }
 
     setLoading(true);
 
@@ -39,28 +41,29 @@ export default function CreateGamePage() {
 
     try {
       const response = await fetch(ROUTES.API.GAMES, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(gameData),
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message ?? 'Failed to create game');
+        throw new Error(error.message ?? "Failed to create game");
       }
 
       const data = await response.json();
 
-      toast.success('Success', {
-        description: 'Game created successfully',
+      toast.success("Success", {
+        description: "Game created successfully",
       });
 
       router.push(ROUTES.JOIN_WITH_CODE(data.code));
     } catch (error) {
-      toast.error('Error', {
-        description: error instanceof Error ? error.message : 'Failed to create game',
+      toast.error("Error", {
+        description:
+          error instanceof Error ? error.message : "Failed to create game",
       });
     } finally {
       setLoading(false);
@@ -78,9 +81,9 @@ export default function CreateGamePage() {
     <div className="min-h-screen p-4">
       <div className="mx-auto max-w-md space-y-6">
         <Button
-          variant="ghost"
           className="flex items-center gap-2"
           onClick={() => router.push(ROUTES.HOME)}
+          variant="ghost"
         >
           <ArrowLeft className="size-4" />
           Back
@@ -88,31 +91,31 @@ export default function CreateGamePage() {
 
         <div className="mt-6 flex items-center justify-center gap-2">
           <Dices className="size-8" />
-          <h1 className="text-3xl font-bold">Create Game</h1>
+          <h1 className="font-bold text-3xl">Create Game</h1>
         </div>
 
         <Card className="p-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <Label htmlFor="name">Game Name</Label>
               <Input
+                disabled={loading}
                 id="name"
-                value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter game name"
-                disabled={loading}
+                value={name}
               />
             </div>
 
             <div className="space-y-4">
               <Label>Maximum Players: {maxPlayers}</Label>
               <Slider
-                value={[maxPlayers]}
-                onValueChange={(value) => setMaxPlayers(value[0] as number)}
-                min={2}
-                max={20}
-                step={1}
                 disabled={loading}
+                max={20}
+                min={2}
+                onValueChange={(value) => setMaxPlayers(value[0] as number)}
+                step={1}
+                value={[maxPlayers]}
               />
               <p className="text-muted-foreground text-sm">
                 Set the maximum number of players that can join your game.
@@ -122,23 +125,28 @@ export default function CreateGamePage() {
             <div className="space-y-2">
               <Label htmlFor="buyIn">Initial Buy-in Amount ($)</Label>
               <Input
+                disabled={loading}
                 id="buyIn"
-                type="number"
+                max={100_000_000}
                 min={100}
-                max={100000000}
-                step={5}
-                value={initialBuyIn}
                 onChange={handleBuyInChange}
                 placeholder="Enter initial buy-in amount"
-                disabled={loading}
+                step={5}
+                type="number"
+                value={initialBuyIn}
               />
               <p className="text-muted-foreground text-sm">
-                Set the initial amount each player starts with. Minimum $100, in increments of $5.
+                Set the initial amount each player starts with. Minimum $100, in
+                increments of $5.
               </p>
             </div>
 
-            <Button type="submit" className="w-full" disabled={!name.trim() || loading}>
-              {loading ? 'Creating...' : 'Create Game'}
+            <Button
+              className="w-full"
+              disabled={!name.trim() || loading}
+              type="submit"
+            >
+              {loading ? "Creating..." : "Create Game"}
             </Button>
           </form>
         </Card>

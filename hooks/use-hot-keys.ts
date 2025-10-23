@@ -1,5 +1,5 @@
-import { useHotkeys } from 'react-hotkeys-hook';
-import { toast } from 'sonner';
+import { useHotkeys } from "react-hotkeys-hook";
+import { toast } from "sonner";
 
 export type HotKeyConfig = {
   key: string;
@@ -31,16 +31,28 @@ export type HotKeyConfig = {
  * );
  * ```
  */
-export function useHotKeys(config: HotKeyConfig, callback: () => void, toastMessage?: string) {
+export function useHotKeys(
+  config: HotKeyConfig,
+  callback: () => void,
+  toastMessage?: string
+) {
   const { key, shift, alt, cmdOrCtrl } = config;
   const modifiers: string[] = [];
 
-  if (cmdOrCtrl === true) modifiers.push('mod');
-  if (shift === true) modifiers.push('shift');
-  if (alt === true) modifiers.push('alt');
+  if (cmdOrCtrl === true) {
+    modifiers.push("mod");
+  }
+  if (shift === true) {
+    modifiers.push("shift");
+  }
+  if (alt === true) {
+    modifiers.push("alt");
+  }
 
   const hotkey =
-    modifiers.length > 0 ? `${modifiers.join('+')}+${key.toLowerCase()}` : key.toLowerCase();
+    modifiers.length > 0
+      ? `${modifiers.join("+")}+${key.toLowerCase()}`
+      : key.toLowerCase();
 
   useHotkeys(
     hotkey,
@@ -52,6 +64,6 @@ export function useHotKeys(config: HotKeyConfig, callback: () => void, toastMess
         toast.success(toastMessage);
       }
     },
-    { enableOnFormTags: ['input', 'textarea', 'select'] },
+    { enableOnFormTags: ["input", "textarea", "select"] }
   );
 }

@@ -1,50 +1,56 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-interface LoadingProps {
+type LoadingProps = {
   className?: string;
-}
+};
 
 export default function Loading({ className }: Readonly<LoadingProps>) {
   return (
-    <div className={cn('flex min-h-screen items-center justify-center', className)}>
+    <div
+      className={cn("flex min-h-screen items-center justify-center", className)}
+    >
       <div className="relative size-20 animate-spin">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="size-full">
+        <svg
+          className="size-full"
+          viewBox="0 0 100 100"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           {/* Outer ring of the poker chip */}
           <circle
+            className="text-primary"
             cx="50"
             cy="50"
-            r="45"
             fill="none"
+            r="45"
             stroke="currentColor"
-            strokeWidth="8"
             strokeDasharray="70.1 23.4"
-            className="text-primary"
+            strokeWidth="8"
           />
 
           {/* Inner details */}
           <circle
+            className="text-muted-foreground opacity-50"
             cx="50"
             cy="50"
-            r="35"
             fill="none"
+            r="35"
             stroke="currentColor"
             strokeWidth="6"
-            className="text-muted-foreground opacity-50"
           />
 
           {/* Decorative patterns */}
           {[0, 60, 120, 180, 240, 300].map((rotation) => (
             <rect
+              className="text-primary"
+              fill="currentColor"
+              height="10"
               key={rotation}
+              transform={`rotate(${rotation} 50 50)`}
+              width="4"
               x="48"
               y="15"
-              width="4"
-              height="10"
-              fill="currentColor"
-              className="text-primary"
-              transform={`rotate(${rotation} 50 50)`}
             />
           ))}
         </svg>

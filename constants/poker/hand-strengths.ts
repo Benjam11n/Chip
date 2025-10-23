@@ -3,10 +3,10 @@
  * This replaces the massive hardcoded HAND_STRENGTHS object
  */
 
-interface HandStrengthData {
+type HandStrengthData = {
   category: string;
   value: number;
-}
+};
 
 const HAND_CATEGORIES = {
   FOLD: { category: "Fold", value: 0 },
