@@ -37,7 +37,7 @@ export function analyzeHand(cards: string[]): HandAnalysis {
     : `${highRank}${lowRank}${isSuited ? "s" : "o"}`;
 
   // Lookup the hand information
-  const handInfo = HAND_STRENGTHS[handKey as keyof typeof HAND_STRENGTHS] || {
+  const handInfo = HAND_STRENGTHS[handKey as keyof typeof HAND_STRENGTHS] ?? {
     category: "Weak",
     value: 1,
   };
@@ -99,7 +99,7 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
     // For each suit that has a royal card
     suitMap.forEach((suit) => {
       // Get the ranks we have in this suit
-      const existingRanks = [] as typeof RANKS;
+      const existingRanks: string[] = [];
       if (suit1 === suit) existingRanks.push(rank1 as string);
       if (suit2 === suit) existingRanks.push(rank2 as string);
 
@@ -118,8 +118,8 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
 
   // 2. Straight Flush
   if (isSuited) {
-    const highRankIndex = RANKS.indexOf(highRank as string);
-    const lowRankIndex = RANKS.indexOf(lowRank as string);
+    const highRankIndex = RANKS.indexOf(highRank as typeof RANKS[number]);
+    const lowRankIndex = RANKS.indexOf(lowRank as typeof RANKS[number]);
     const distance = Math.abs(highRankIndex - lowRankIndex);
 
     if (distance <= 4) {
@@ -189,8 +189,8 @@ function calculatePossibleHands(cards: string[]): PossibleHand[] {
   }
 
   // 6. Straight
-  const highRankIndex = RANKS.indexOf(highRank as string);
-  const lowRankIndex = RANKS.indexOf(lowRank as string);
+  const highRankIndex = RANKS.indexOf(highRank as typeof RANKS[number]);
+  const lowRankIndex = RANKS.indexOf(lowRank as typeof RANKS[number]);
   const distance = Math.abs(highRankIndex - lowRankIndex);
 
   if (distance <= 4) {
