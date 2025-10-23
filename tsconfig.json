@@ -2,7 +2,12 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "esnext",
-    "lib": ["dom", "dom.iterable", "esnext", "ES2022"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext",
+      "ES2022"
+    ],
     "moduleResolution": "bundler",
     "isolatedModules": true,
     "strict": true,
@@ -28,11 +33,17 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "@zod/*": ["prisma/generated/zod/*"],
-      "@/public/*": ["./public/*"]
+      "@/*": [
+        "./*"
+      ],
+      "@zod/*": [
+        "prisma/generated/zod/*"
+      ],
+      "@/public/*": [
+        "./public/*"
+      ]
     },
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "noEmit": true,
     "plugins": [
@@ -54,6 +65,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    ".next/dev/types/**/*.ts"
   ]
 }
