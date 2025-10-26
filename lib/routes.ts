@@ -22,8 +22,3 @@ export const ROUTES = {
 export const EXTERNAL_ROUTES = {
   GITHUB: "https://github.com/Benjam11n/Chip",
 } as const;
-
-// Type exports for route strings
-export type RoutePath = typeof ROUTES;
-export type GameRoomRoute = ReturnType<typeof ROUTES.GAME_ROOM>;
-export type JoinWithCodeRoute = ReturnType<typeof ROUTES.JOIN_WITH_CODE>;

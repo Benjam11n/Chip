@@ -10,6 +10,13 @@ export default {
     "app/**/error.tsx",
     "components/ui/**/*.{ts,tsx}",
     "lib/supabase/**/*.{ts,tsx}",
+    "proxy.ts",
   ],
-  ignoreDependencies: ["tailwindcss", "tailwindcss-animate", "postcss"],
+  ignoreDependencies: [
+    "tailwindcss",
+    "@biomejs/biome",
+    "tailwindcss-animate",
+    "postcss",
+    "pino-pretty",
+  ],
 };
