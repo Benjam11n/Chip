@@ -11,10 +11,16 @@ export const ROUTES = {
   API: {
     GAMES: "/api/games",
   },
+  TERMS: "/terms",
+  PRIVACY: "/privacy",
 
   // Dynamic route templates
   GAME_ROOM: (id: string) => `/game/${id}`,
   JOIN_WITH_CODE: (code: string) => `/join/${code}`,
+} as const;
+
+export const EXTERNAL_ROUTES = {
+  GITHUB: "https://github.com/Benjam11n/Chip",
 } as const;
 
 // Type exports for route strings
