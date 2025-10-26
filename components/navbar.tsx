@@ -1,6 +1,7 @@
 "use client";
 
-import { Dices, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/routes";
@@ -15,8 +16,8 @@ export const Navbar = () => {
           className="flex items-center space-x-2 transition-opacity hover:opacity-80"
           href={ROUTES.HOME}
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-            <Dices className="h-5 w-5 text-primary-foreground" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg">
+            <Image alt="Chip Logo" height={70} src="/logo.png" width={70} />
           </div>
           <span className="hidden font-bold sm:inline-block">
             Poker Chip Tracker

@@ -4,7 +4,8 @@
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Dices, Plus, PlusCircle } from "lucide-react";
+import { Plus, PlusCircle } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { AnimatedPokerCard } from "@/components/animated-poker-card";
@@ -38,11 +39,6 @@ const Home = () => {
   const iconRefs = useRef<(HTMLDivElement | null)[]>([]);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const decorativeCardsRef = useRef<(HTMLDivElement | null)[]>([]);
-
-  // Check for reduced motion preference
-  const prefersReducedMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // Hero section entrance animations
   useGSAP(() => {
@@ -497,7 +493,7 @@ const Home = () => {
         {/* Main content */}
         <div className="relative z-10 flex flex-col items-center px-4 text-foreground">
           <div className="mb-8 flex items-center gap-4">
-            <Dices className="size-16 text-primary" ref={dicesIconRef} />
+            <Image alt="Chip Logo" height={70} src="/logo.png" width={70} />
             <h1 className="font-bold text-5xl md:text-6xl" ref={heroTitleRef}>
               Chip
             </h1>
