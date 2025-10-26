@@ -3,6 +3,7 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,9 +19,11 @@ export const ThemeToggle = () => {
   const { setTheme, theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  useHotKeys(THEME_HOTKEY, () =>
-    setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"))
-  );
+  useHotKeys(THEME_HOTKEY, () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    toast.success(`Switched to ${newTheme} mode`);
+  });
 
   useEffect(() => {
     setMounted(true);
@@ -38,7 +41,9 @@ export const ThemeToggle = () => {
   const isDarkMode = theme === "dark";
 
   const toggleTheme = () => {
-    setTheme(isDarkMode ? "light" : "dark");
+    const newTheme = isDarkMode ? "light" : "dark";
+    setTheme(newTheme);
+    toast.success(`Switched to ${newTheme} mode`);
   };
 
   return (
