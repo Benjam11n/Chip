@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npm run build)",
-      "Read(//Users/benjaminwang/Desktop/Random/**)"
+      "Read(//Users/benjaminwang/Desktop/Random/**)",
+      "Bash(npx shadcn@latest add:*)"
     ],
     "deny": [],
     "ask": []
