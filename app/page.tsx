@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/static-components */
 "use client";
 
-import { Dices, Plus, Users } from "lucide-react";
+import { Dices, Plus, PlusCircle } from "lucide-react";
 import { motion, useTime, useTransform } from "motion/react";
 import { useRouter } from "next/navigation";
 
@@ -80,7 +80,7 @@ const Home = () => {
                 size="lg"
                 variant="outline"
               >
-                <Users className="mr-2 size-5" />
+                <PlusCircle className="mr-2 size-5" />
                 Join Game
               </MotionButton>
             </div>
