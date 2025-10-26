@@ -130,7 +130,7 @@ export const CardDealAnimation = () => {
   return (
     <div
       aria-hidden="true"
-      className="fixed bottom-20 left-4 z-40 flex h-32 w-64 items-center justify-center"
+      className="fixed right-4 bottom-4 z-40 flex h-32 w-64 items-center justify-center"
       ref={containerRef}
     >
       {SUITS.slice(0, 5).map((suit, index) => (
