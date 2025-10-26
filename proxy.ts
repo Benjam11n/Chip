@@ -15,7 +15,7 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  return request;
+  return NextResponse.next();
 }
 
 export const config = {
