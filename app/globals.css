@@ -4,46 +4,41 @@
 @plugin 'tailwindcss-animate';
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.3424 0.0337 64.4735);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2174 0.0019 106.5582);
+  --background: oklch(0.9818 0.0054 95.0986);
+  --foreground: oklch(0.3438 0.0269 95.7226);
+  --card: oklch(0.9818 0.0054 95.0986);
+  --card-foreground: oklch(0.1908 0.002 106.5859);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2646 0.0233 66.5333);
-  --primary: oklch(0.6119 0.2237 23.4441);
+  --popover-foreground: oklch(0.2671 0.0196 98.939);
+  --primary: oklch(0.5548 0.2128 27.8435);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.9502 0.0101 58.2141);
-  --secondary-foreground: oklch(0.4414 0.0219 69.8739);
-  --muted: oklch(0.9592 0.0101 58.2158);
-  --muted-foreground: oklch(0.6232 0.0085 61.3755);
-  --accent: oklch(0.9502 0.0101 58.2141);
-  --accent-foreground: oklch(0.2646 0.0233 66.5333);
-  --destructive: oklch(0.2174 0.0019 106.5582);
+  --secondary: oklch(0.9245 0.0138 92.9892);
+  --secondary-foreground: oklch(0.4334 0.0177 98.6048);
+  --muted: oklch(0.9341 0.0153 90.239);
+  --muted-foreground: oklch(0.6059 0.0075 97.4233);
+  --accent: oklch(0.9245 0.0138 92.9892);
+  --accent-foreground: oklch(0.2671 0.0196 98.939);
+  --destructive: oklch(0.1908 0.002 106.5859);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.914 0.0063 75.4039);
-  --input: oklch(0.7811 0.0162 67.5869);
-  --ring: oklch(0.6119 0.2237 23.4441);
-  --chart-1: oklch(0.5628 0.2238 27.869);
-  --chart-2: oklch(0.7329 0.1386 275.1997);
-  --chart-3: oklch(0.8983 0.0267 61.9778);
-  --chart-4: oklch(0.9158 0.034 282.0662);
-  --chart-5: oklch(0.5726 0.2302 28.0527);
-  --sidebar: oklch(0.9967 0.0013 106.423);
-  --sidebar-foreground: oklch(0.3686 0.0058 78.2568);
-  --sidebar-primary: oklch(0.6119 0.2237 23.4441);
+  --border: oklch(0.8847 0.0069 97.3627);
+  --input: oklch(0.7621 0.0156 98.3528);
+  --ring: oklch(0.6171 0.1375 39.0427);
+  --chart-1: oklch(0.5583 0.1276 42.9956);
+  --chart-2: oklch(0.6898 0.1581 290.4107);
+  --chart-3: oklch(0.8816 0.0276 93.128);
+  --chart-4: oklch(0.8822 0.0403 298.1792);
+  --chart-5: oklch(0.5608 0.1348 42.0584);
+  --sidebar: oklch(0.9663 0.008 98.8792);
+  --sidebar-foreground: oklch(0.359 0.0051 106.6524);
+  --sidebar-primary: oklch(0.6171 0.1375 39.0427);
   --sidebar-primary-foreground: oklch(0.9881 0 0);
-  --sidebar-accent: oklch(0.9502 0.0101 58.2141);
+  --sidebar-accent: oklch(0.9245 0.0138 92.9892);
   --sidebar-accent-foreground: oklch(0.325 0 0);
   --sidebar-border: oklch(0.9401 0 0);
   --sidebar-ring: oklch(0.7731 0 0);
-  --font-sans:
-    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol", "Noto Color Emoji";
-  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
+  --font-sans: Geist Mono, ui-monospace, monospace;
+  --font-serif: serif;
+  --font-mono: JetBrains Mono, monospace;
   --radius: 0.5rem;
   --shadow-x: 0;
   --shadow-y: 1px;
@@ -68,46 +63,41 @@
 }
 
 .dark {
-  --background: oklch(0.2731 0.0039 84.5825);
-  --foreground: oklch(0.8288 0.014 60.5315);
-  --card: oklch(0.2731 0.0039 84.5825);
-  --card-foreground: oklch(1 0 0);
-  --popover: oklch(0.3174 0.0038 84.5785);
-  --popover-foreground: oklch(0.9526 0.0017 67.8019);
-  --primary: oklch(0.6586 0.216 20.8758);
+  --background: oklch(0 0 0);
+  --foreground: oklch(0.8074 0.0142 93.0137);
+  --card: oklch(0.23 0.0038 106.6929);
+  --card-foreground: oklch(0.9818 0.0054 95.0986);
+  --popover: oklch(0.3085 0.0035 106.6039);
+  --popover-foreground: oklch(0.9211 0.004 106.4781);
+  --primary: oklch(0.6519 0.2165 25.5601);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(1 0 0);
-  --secondary-foreground: oklch(0.3174 0.0038 84.5785);
-  --muted: oklch(0.2268 0.0041 84.5874);
-  --muted-foreground: oklch(0.7903 0.0173 70.4849);
-  --accent: oklch(0.2179 0.011 60.8482);
-  --accent-foreground: oklch(0.9967 0.0013 106.423);
-  --destructive: oklch(0.6747 0.2255 5.7366);
+  --secondary: oklch(0.9818 0.0054 95.0986);
+  --secondary-foreground: oklch(0.3085 0.0035 106.6039);
+  --muted: oklch(0.2213 0.0038 106.707);
+  --muted-foreground: oklch(0.7713 0.0169 99.0657);
+  --accent: oklch(0.213 0.0078 95.4245);
+  --accent-foreground: oklch(0.9663 0.008 98.8792);
+  --destructive: oklch(0.6368 0.2078 25.3313);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.3721 0.0124 87.5508);
-  --input: oklch(0.4424 0.0125 67.4968);
-  --ring: oklch(0.6586 0.216 20.8758);
-  --chart-1: oklch(0.5628 0.2238 27.869);
-  --chart-2: oklch(0.7329 0.1386 275.1997);
-  --chart-3: oklch(0.2179 0.011 60.8482);
-  --chart-4: oklch(0.3135 0.0671 272.7679);
-  --chart-5: oklch(0.5726 0.2302 28.0527);
-  --sidebar: oklch(0.2384 0.0046 17.4816);
-  --sidebar-foreground: oklch(0.8288 0.014 60.5315);
+  --border: oklch(0.3618 0.0101 106.8928);
+  --input: oklch(0.4336 0.0113 100.2195);
+  --ring: oklch(0.6263 0.2 25.0579);
+  --chart-1: oklch(0.5583 0.1276 42.9956);
+  --chart-2: oklch(0.6898 0.1581 290.4107);
+  --chart-3: oklch(0.213 0.0078 95.4245);
+  --chart-4: oklch(0.3074 0.0516 289.323);
+  --chart-5: oklch(0.5608 0.1348 42.0584);
+  --sidebar: oklch(0.2357 0.0024 67.7077);
+  --sidebar-foreground: oklch(0.8074 0.0142 93.0137);
   --sidebar-primary: oklch(0.325 0 0);
   --sidebar-primary-foreground: oklch(0.9881 0 0);
-  --sidebar-accent: oklch(0.2181 0.0041 84.5884);
-  --sidebar-accent-foreground: oklch(0.8288 0.014 60.5315);
+  --sidebar-accent: oklch(0.168 0.002 106.6177);
+  --sidebar-accent-foreground: oklch(0.8074 0.0142 93.0137);
   --sidebar-border: oklch(0.9401 0 0);
   --sidebar-ring: oklch(0.7731 0 0);
-  --font-sans:
-    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol", "Noto Color Emoji";
-  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
+  --font-sans: Geist Mono, ui-monospace, monospace;
+  --font-serif: serif;
+  --font-mono: JetBrains Mono, monospace;
   --radius: 0.5rem;
   --shadow-x: 0;
   --shadow-y: 1px;
