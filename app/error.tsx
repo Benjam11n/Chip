@@ -35,7 +35,7 @@ export default function GlobalError({ error, reset }: ErrorProps) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+    <div className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="font-bold text-2xl text-destructive">
