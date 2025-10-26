@@ -4,11 +4,11 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { useRef } from "react";
 import { Card } from "@/components/ui/card";
+import { SUIT_COLORS, SUITS } from "@/constants/poker/ranks-suits";
 import { cn } from "@/lib/utils";
-import { SUITS, SUIT_COLORS } from "@/constants/poker/ranks-suits";
 
-interface AnimatedPokerCardProps {
-  suit?: typeof SUITS[number];
+type AnimatedPokerCardProps = {
+  suit?: (typeof SUITS)[number];
   rank?: string;
   isDecorative?: boolean;
   className?: string;
@@ -16,7 +16,7 @@ interface AnimatedPokerCardProps {
   rotationSpeed?: number;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
-}
+};
 
 export const AnimatedPokerCard = ({
   suit = "♠",
@@ -34,7 +34,9 @@ export const AnimatedPokerCard = ({
   const cardBackRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    if (!cardRef.current || !cardInnerRef.current) return;
+    if (!(cardRef.current && cardInnerRef.current)) {
+      return;
+    }
 
     // Floating animation
     gsap.to(cardRef.current, {
@@ -85,11 +87,15 @@ export const AnimatedPokerCard = ({
 
   // 3D tilt effect based on mouse position
   useGSAP(() => {
-    if (!cardRef.current) return;
+    if (!cardRef.current) {
+      return;
+    }
 
     const handleMouseMove = (e: MouseEvent) => {
       const card = cardRef.current;
-      if (!card) return;
+      if (!card) {
+        return;
+      }
 
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -130,28 +136,28 @@ export const AnimatedPokerCard = ({
 
   return (
     <div
-      ref={cardRef}
       className={cn(
-        "relative preserve-3d",
-        isDecorative && "opacity-10 dark:opacity-20",
+        "preserve-3d relative",
+        isDecorative && "opacity-40 dark:opacity-50",
         className
       )}
+      ref={cardRef}
       style={{
         transformStyle: "preserve-3d",
         perspective: "1000px",
       }}
     >
       <div
+        className="relative h-full w-full transition-transform duration-600"
         ref={cardInnerRef}
-        className="relative w-full h-full transition-transform duration-600"
         style={{
           transformStyle: "preserve-3d",
         }}
       >
         {/* Card Front */}
         <div
+          className="backface-hidden absolute inset-0 h-full w-full"
           ref={cardFrontRef}
-          className="absolute inset-0 w-full h-full backface-hidden"
           style={{
             backfaceVisibility: "hidden",
           }}
@@ -159,24 +165,24 @@ export const AnimatedPokerCard = ({
           <Card
             className={cn(
               "flex h-full w-full items-center justify-center rounded-lg border-4 shadow-xl",
-              isDecorative ? "border-muted-foreground bg-muted" : "border-primary bg-card"
+              isDecorative
+                ? "border-muted-foreground bg-muted"
+                : "border-primary bg-card"
             )}
           >
             <div className="text-center">
-              <div className={cn("text-6xl font-bold", SUIT_COLORS[suit])}>
+              <div className={cn("font-bold text-6xl", SUIT_COLORS[suit])}>
                 {rank}
               </div>
-              <div className={cn("text-4xl", SUIT_COLORS[suit])}>
-                {suit}
-              </div>
+              <div className={cn("text-4xl", SUIT_COLORS[suit])}>{suit}</div>
             </div>
           </Card>
         </div>
 
         {/* Card Back */}
         <div
+          className="backface-hidden absolute inset-0 h-full w-full"
           ref={cardBackRef}
-          className="absolute inset-0 w-full h-full backface-hidden"
           style={{
             backfaceVisibility: "hidden",
             transform: "rotateY(180deg)",
@@ -187,14 +193,14 @@ export const AnimatedPokerCard = ({
               <div className="grid grid-cols-2 gap-1">
                 {SUITS.map((s) => (
                   <div
+                    className={cn("font-bold text-2xl", SUIT_COLORS[s])}
                     key={s}
-                    className={cn("text-2xl font-bold", SUIT_COLORS[s])}
                   >
                     {s}
                   </div>
                 ))}
               </div>
-              <div className="mt-2 text-primary-foreground text-sm font-semibold">
+              <div className="mt-2 font-semibold text-primary-foreground text-sm">
                 Chip Poker
               </div>
             </div>

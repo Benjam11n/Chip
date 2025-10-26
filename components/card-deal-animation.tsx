@@ -1,53 +1,97 @@
+/** biome-ignore-all lint/style/noMagicNumbers: <explanation> */
 "use client";
 
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import { RANKS, SUITS } from "@/constants/poker/ranks-suits";
 import { AnimatedPokerCard } from "./animated-poker-card";
-import { SUITS, RANKS } from "@/constants/poker/ranks-suits";
 
 export const CardDealAnimation = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useGSAP(() => {
-    if (!containerRef.current) return;
-
-    // Create a deck of cards to deal
-    const deck = [];
-    for (let i = 0; i < 5; i++) {
-      deck.push({
-        suit: SUITS[i % SUITS.length],
-        rank: RANKS[i % RANKS.length],
-      });
+    if (!containerRef.current) {
+      return;
     }
 
-    // Deal animation
-    cardsRef.current.forEach((card, index) => {
-      if (!card) return;
+    const cards = cardsRef.current.filter(Boolean) as HTMLDivElement[];
 
-      // Initial position: stacked in center
-      gsap.set(card, {
-        x: 0,
-        y: 0,
-        rotation: 0,
-        scale: 0.8,
-        opacity: 0,
-      });
+    // Set initial stacked state
+    gsap.set(cards, {
+      x: 0,
+      y: 0,
+      rotation: 0,
+      scale: 0.8,
+      opacity: 0,
+    });
 
-      // Deal animation with stagger
-      gsap.to(card, {
-        x: (index - 2) * 60, // Spread cards horizontally
-        y: -20,
-        rotation: (index - 2) * 5,
-        scale: 1,
-        opacity: 1,
-        duration: 0.5,
-        delay: index * 0.1,
-        ease: "power2.out",
-      });
+    const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
 
-      // Hover effect for each card
+    // Deal animation with stagger
+    for (let index = 0; index < cards.length; index++) {
+      const card = cards[index];
+      if (!card) {
+        continue;
+      }
+      tl.to(
+        card,
+        {
+          x: (index - 2) * 60,
+          y: -20,
+          rotation: (index - 2) * 5,
+          scale: 1,
+          opacity: 1,
+          duration: 0.5,
+        },
+        index * 0.1
+      );
+    }
+
+    // Hold cards visible for a moment
+    tl.to({}, { duration: 3 });
+
+    // Collect animation (return to stack)
+    tl.to(cards, {
+      x: 0,
+      y: 0,
+      rotation: 0,
+      scale: 0.8,
+      opacity: 0,
+      duration: 0.3,
+      stagger: 0.05,
+      ease: "power2.in",
+    });
+
+    // Brief pause before repeating
+    tl.to({}, { duration: 1 });
+
+    // Deal again
+    for (let index = 0; index < cards.length; index++) {
+      const card = cards[index];
+      if (!card) {
+        continue;
+      }
+      tl.to(
+        card,
+        {
+          x: (index - 2) * 60,
+          y: -20,
+          rotation: (index - 2) * 5,
+          scale: 1,
+          opacity: 1,
+          duration: 0.5,
+        },
+        index * 0.1
+      );
+    }
+
+    tl.repeat(-1).repeatDelay(0.5);
+
+    // Hover interaction
+    const cleanups: Array<() => void> = [];
+    for (const card of cards) {
       const handleMouseEnter = () => {
         gsap.to(card, {
           y: -40,
@@ -69,69 +113,40 @@ export const CardDealAnimation = () => {
       card.addEventListener("mouseenter", handleMouseEnter);
       card.addEventListener("mouseleave", handleMouseLeave);
 
-      return () => {
+      cleanups.push(() => {
         card.removeEventListener("mouseenter", handleMouseEnter);
         card.removeEventListener("mouseleave", handleMouseLeave);
-      };
-    });
-
-    // Collect animation after delay
-    const timer = setTimeout(() => {
-      cardsRef.current.forEach((card, index) => {
-        if (!card) return;
-
-        gsap.to(card, {
-          x: 0,
-          y: 0,
-          rotation: 0,
-          scale: 0.8,
-          opacity: 0,
-          duration: 0.3,
-          delay: index * 0.05,
-          ease: "power2.in",
-          onComplete: () => {
-            // Restart the animation
-            setTimeout(() => {
-              if (card && containerRef.current) {
-                gsap.to(card, {
-                  x: (index - 2) * 60,
-                  y: -20,
-                  rotation: (index - 2) * 5,
-                  scale: 1,
-                  opacity: 1,
-                  duration: 0.5,
-                  ease: "power2.out",
-                });
-              }
-            }, 1000);
-          },
-        });
       });
-    }, 3000);
+    }
 
-    return () => clearTimeout(timer);
+    return () => {
+      tl.kill();
+      for (const fn of cleanups) {
+        fn();
+      }
+    };
   }, []);
 
   return (
     <div
-      ref={containerRef}
-      className="fixed bottom-20 left-4 flex items-center justify-center w-64 h-32 z-40"
       aria-hidden="true"
+      className="fixed bottom-20 left-4 z-40 flex h-32 w-64 items-center justify-center"
+      ref={containerRef}
     >
       {SUITS.slice(0, 5).map((suit, index) => (
         <div
-          key={index}
+          className="absolute"
+          key={`${suit}-${RANKS[index]}`}
           ref={(el) => {
             cardsRef.current[index] = el;
           }}
-          className="absolute"
         >
           <AnimatedPokerCard
-            suit={suit}
-            rank={RANKS[index]}
-            floatDuration={2}
-            rotationSpeed={0}
             className="h-20 w-16"
+            floatDuration={2}
+            rank={RANKS[index]}
+            rotationSpeed={0}
+            suit={suit}
           />
         </div>
       ))}

@@ -7,11 +7,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Plus, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { AnimatedPokerCard } from "@/components/animated-poker-card";
 import { CardDealAnimation } from "@/components/card-deal-animation";
 import { FloatingParticles } from "@/components/floating-particles";
-import { PokerChipCounter } from "@/components/poker-chip-counter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { FEATURES } from "@/constants/ui";
@@ -32,118 +31,78 @@ const Home = () => {
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroSubtitleRef = useRef<HTMLParagraphElement>(null);
   const heroButtonsRef = useRef<HTMLDivElement>(null);
-  const dicesIconRef = useRef<SVGSVGElement>(null);
+  // removed unused refs: dicesIconRef, iconRefs, buttonRefs
   const featuresTitleRef = useRef<HTMLHeadingElement>(null);
   const featuresGridRef = useRef<HTMLDivElement>(null);
   const featureCardsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const iconRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const decorativeCardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const heroSectionRef = useRef<HTMLDivElement>(null);
+
+  // Animation constants
+  const DEFAULT_EASE = "power2.out";
+  const TITLE_DURATION = 0.6;
+  const SUBTITLE_DURATION = 0.6;
+  const BUTTONS_DURATION = 0.5;
+  const BUTTONS_STAGGER = 0.2;
+  const DECORATIVE_FINAL_OPACITY = 0.4;
+  const DECORATIVE_START_ROTATION = -180;
+  const DECORATIVE_ROT_LEFT = -12;
+  const DECORATIVE_ROT_RIGHT = 12;
+  const DECORATIVE_DURATION = 1;
+  const DECORATIVE_STAGGER = 0.3;
+  const PARALLAX_BASE = -50;
+  const BUTTON_PRIMARY_CLASSES =
+    "group relative w-full overflow-hidden px-8 transition-transform duration-200 hover:scale-105 active:scale-95";
+  const BUTTON_OUTLINE_CLASSES =
+    "group relative z-10 w-full overflow-hidden px-8 transition-transform duration-200 hover:scale-105 active:scale-95";
+  const FEATURE_CARD_CLASSES =
+    "flex h-full flex-col p-6 transition-transform duration-200 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-lg";
 
   // Hero section entrance animations
   useGSAP(() => {
-    // Staggered text reveal for title
+    const tl = gsap.timeline({ defaults: { ease: DEFAULT_EASE } });
+
     if (heroTitleRef.current) {
-      const title = heroTitleRef.current;
-      const text = title.innerText;
-      title.innerHTML = "";
-
-      text.split("").forEach((char, index) => {
-        const span = document.createElement("span");
-        span.innerText = char === " " ? "\u00A0" : char;
-        span.style.display = "inline-block";
-        span.style.opacity = "0";
-        span.style.transform = "rotateY(90deg) translateZ(50px)";
-        title.appendChild(span);
-
-        gsap.to(span, {
-          opacity: 1,
-          rotationY: 0,
-          z: 0,
-          duration: 0.5,
-          delay: index * 0.05,
-          ease: "back.out(1.7)",
-        });
-      });
+      tl.from(heroTitleRef.current, { opacity: 0, y: 20, duration: TITLE_DURATION });
     }
 
-    // Dices icon animation
-    if (dicesIconRef.current) {
-      gsap.fromTo(
-        dicesIconRef.current,
-        { rotation: -180, scale: 0 },
-        {
-          rotation: 0,
-          scale: 1,
-          duration: 0.8,
-          delay: 0.3,
-          ease: "elastic.out(1, 0.5)",
-        }
-      );
-
-      // Subtle wobble after initial animation
-      gsap.to(dicesIconRef.current, {
-        rotation: 5,
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 1.5,
-      });
-    }
-
-    // Subtitle fade in
     if (heroSubtitleRef.current) {
-      gsap.fromTo(
-        heroSubtitleRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6, delay: 0.5, ease: "power2.out" }
-      );
+      tl.from(heroSubtitleRef.current, { opacity: 0, y: 20, duration: SUBTITLE_DURATION });
     }
 
-    // Buttons slide up with stagger
     if (heroButtonsRef.current) {
-      const buttons = heroButtonsRef.current.children;
-      gsap.fromTo(
-        buttons,
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-          stagger: 0.2,
-          delay: 0.8,
-          ease: "power2.out",
-        }
-      );
+      tl.from(heroButtonsRef.current.children, {
+        opacity: 0,
+        y: 30,
+        duration: BUTTONS_DURATION,
+        stagger: BUTTONS_STAGGER,
+      });
     }
 
     // Decorative cards entrance
     if (decorativeCardsRef.current.length > 0) {
-      gsap.fromTo(
+      tl.fromTo(
         decorativeCardsRef.current,
-        { opacity: 0, scale: 0, rotation: -180 },
+        { opacity: 0, scale: 0, rotation: DECORATIVE_START_ROTATION },
         {
-          opacity: 0.1,
+          opacity: DECORATIVE_FINAL_OPACITY,
           scale: 1,
-          rotation: (index) => (index === 0 ? -12 : 12),
-          duration: 1,
-          stagger: 0.3,
-          delay: 1,
-          ease: "back.out(1.7)",
+          rotation: (index: number) => (index === 0 ? DECORATIVE_ROT_LEFT : DECORATIVE_ROT_RIGHT),
+          duration: DECORATIVE_DURATION,
+          stagger: DECORATIVE_STAGGER,
         }
       );
     }
 
-    // Parallax effect for decorative cards on scroll
+    // Parallax effect for decorative cards on scroll, scoped to hero section
     decorativeCardsRef.current.forEach((card, index) => {
-      if (card) {
+      if (card && heroSectionRef.current) {
         gsap.to(card, {
-          yPercent: -50 * (index + 1),
+          yPercent: PARALLAX_BASE * (index + 1),
           ease: "none",
           scrollTrigger: {
-            trigger: document.body,
-            start: "top top",
+            trigger: heroSectionRef.current,
+            start: "top center",
             end: "bottom top",
             scrub: 1,
           },
@@ -247,200 +206,21 @@ const Home = () => {
   }, []);
 
   // Enhanced card hover effects with 3D transforms
-  useEffect(() => {
-    const validCards = featureCardsRef.current.filter(Boolean);
-    const validIcons = iconRefs.current.filter(Boolean);
-
-    const handleCardMouseEnter = (e: Event) => {
-      const target = e.currentTarget as HTMLElement;
-      const index = featureCardsRef.current.indexOf(target as HTMLDivElement);
-      const icon = validIcons[index];
-
-      // 3D lift and rotation effect
-      gsap.to(target, {
-        y: -10,
-        rotationY: 5,
-        rotationX: -5,
-        scale: 1.02,
-        duration: 0.3,
-        ease: "power2.out",
-        transformPerspective: 1000,
-      });
-
-      // Icon animation
-      if (icon) {
-        gsap.to(icon, {
-          scale: 1.15,
-          rotation: 360,
-          duration: 0.5,
-          ease: "back.out(1.7)",
-        });
-      }
-
-      // Add glow effect
-      gsap.to(target, {
-        boxShadow: "0 20px 40px rgba(59, 130, 246, 0.3)",
-        duration: 0.3,
-      });
-    };
-
-    const handleCardMouseLeave = (e: Event) => {
-      const target = e.currentTarget as HTMLElement;
-      const index = featureCardsRef.current.indexOf(target as HTMLDivElement);
-      const icon = validIcons[index];
-
-      gsap.to(target, {
-        y: 0,
-        rotationY: 0,
-        rotationX: 0,
-        scale: 1,
-        duration: 0.3,
-        ease: "power2.out",
-      });
-
-      if (icon) {
-        gsap.to(icon, {
-          scale: 1,
-          rotation: 0,
-          duration: 0.4,
-          ease: "power2.out",
-        });
-      }
-
-      // Remove glow
-      gsap.to(target, {
-        boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-        duration: 0.3,
-      });
-    };
-
-    const handleCardMouseMove = (e: MouseEvent) => {
-      const target = e.currentTarget as HTMLElement;
-      const rect = target.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      const rotateY = ((x - centerX) / centerX) * 5;
-      const rotateX = ((centerY - y) / centerY) * 5;
-
-      gsap.to(target, {
-        rotationY: rotateY,
-        rotationX: rotateX,
-        duration: 0.1,
-        ease: "power2.out",
-      });
-    };
-
-    for (const card of validCards) {
-      if (card) {
-        card.style.transformStyle = "preserve-3d";
-        (card as any).style.transformPerspective = "1000px";
-        card.addEventListener("mouseenter", handleCardMouseEnter);
-        card.addEventListener("mouseleave", handleCardMouseLeave);
-        card.addEventListener(
-          "mousemove",
-          handleCardMouseMove as EventListener
-        );
-      }
-    }
-
-    return () => {
-      for (const card of validCards) {
-        if (card) {
-          card.removeEventListener("mouseenter", handleCardMouseEnter);
-          card.removeEventListener("mouseleave", handleCardMouseLeave);
-          card.removeEventListener(
-            "mousemove",
-            handleCardMouseMove as EventListener
-          );
-        }
-      }
-    };
-  }, []);
+  // Using CSS transitions for hover interactions on cards; GSAP hover removed
 
   // Enhanced button hover effects with ripple
-  useEffect(() => {
-    const buttonElements = buttonRefs.current.filter(Boolean);
-
-    const handleMouseEnter = (e: Event) => {
-      const target = e.currentTarget as HTMLElement;
-      gsap.to(target, { scale: 1.03, duration: 0.2, ease: "power2.out" });
-    };
-
-    const handleMouseLeave = (e: Event) => {
-      const target = e.currentTarget as HTMLElement;
-      gsap.to(target, { scale: 1, duration: 0.2, ease: "power2.out" });
-    };
-
-    const handleMouseDown = (e: MouseEvent) => {
-      const target = e.currentTarget as HTMLElement;
-      const rect = target.getBoundingClientRect();
-      const ripple = document.createElement("span");
-
-      // Create ripple element
-      ripple.className = "ripple";
-      ripple.style.width = ripple.style.height = "20px";
-      ripple.style.left = `${e.clientX - rect.left - 10}px`;
-      ripple.style.top = `${e.clientY - rect.top - 10}px`;
-
-      target.appendChild(ripple);
-
-      // Animate button press
-      gsap.to(target, { scale: 0.97, duration: 0.1, ease: "power2.out" });
-
-      // Remove ripple after animation
-      setTimeout(() => {
-        ripple.remove();
-      }, 600);
-    };
-
-    const handleMouseUp = (e: Event) => {
-      const target = e.currentTarget as HTMLElement;
-      gsap.to(target, { scale: 1.03, duration: 0.1, ease: "power2.out" });
-    };
-
-    for (const button of buttonElements) {
-      if (button) {
-        button.style.position = "relative";
-        button.style.overflow = "hidden";
-        button.addEventListener("mouseenter", handleMouseEnter);
-        button.addEventListener("mouseleave", handleMouseLeave);
-        button.addEventListener("mousedown", handleMouseDown as EventListener);
-        button.addEventListener("mouseup", handleMouseUp);
-      }
-    }
-
-    return () => {
-      for (const button of buttonElements) {
-        if (button) {
-          button.removeEventListener("mouseenter", handleMouseEnter);
-          button.removeEventListener("mouseleave", handleMouseLeave);
-          button.removeEventListener(
-            "mousedown",
-            handleMouseDown as EventListener
-          );
-          button.removeEventListener("mouseup", handleMouseUp);
-        }
-      }
-    };
-  }, []);
+  // Using CSS transitions for hover interactions on buttons; ripple removed
 
   return (
     <div className="gpu-accelerated relative mt-20 flex min-h-screen flex-col">
       {/* Floating particles background */}
       <FloatingParticles />
 
-      {/* Poker chip counter */}
-      <PokerChipCounter />
-
       {/* Card deal animation */}
       <CardDealAnimation />
 
       {/* Hero Section */}
-      <div className="relative flex min-h-[400px] flex-1 items-center justify-center overflow-hidden py-16">
+      <div className="relative flex min-h-[400px] flex-1 items-center justify-center overflow-hidden py-16" ref={heroSectionRef}>
         {/* Decorative animated cards */}
         <div className="absolute inset-0">
           <div
@@ -508,11 +288,8 @@ const Home = () => {
           <div className="flex flex-col gap-4 sm:flex-row" ref={heroButtonsRef}>
             <div className="relative flex-1 sm:w-48">
               <Button
-                className="group relative w-full overflow-hidden px-8"
+                className={BUTTON_PRIMARY_CLASSES}
                 onClick={() => router.push(ROUTES.CREATE)}
-                ref={(el) => {
-                  buttonRefs.current[0] = el;
-                }}
                 size="lg"
               >
                 <Plus className="mr-2 size-5 transition-transform duration-200 group-hover:rotate-90" />
@@ -521,11 +298,8 @@ const Home = () => {
             </div>
             <div className="relative flex-1 sm:w-48">
               <Button
-                className="group relative z-10 w-full overflow-hidden px-8"
+                className={BUTTON_OUTLINE_CLASSES}
                 onClick={() => router.push(ROUTES.JOIN)}
-                ref={(el) => {
-                  buttonRefs.current[1] = el;
-                }}
                 size="lg"
                 variant="outline"
               >
@@ -557,12 +331,9 @@ const Home = () => {
                 featureCardsRef.current[index] = el;
               }}
             >
-              <Card className="flex h-full flex-col p-6">
+              <Card className={FEATURE_CARD_CLASSES}>
                 <div
                   className="mb-4 flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10"
-                  ref={(el) => {
-                    iconRefs.current[index] = el;
-                  }}
                 >
                   <feature.icon className="size-6 text-primary" />
                 </div>
