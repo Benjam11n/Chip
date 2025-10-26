@@ -90,11 +90,19 @@ const Home = () => {
 
       {/* Features Section */}
       <div className="mx-auto max-w-7xl px-4 py-16">
+        <motion.h2
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12 text-center font-bold text-3xl text-foreground"
+          initial={{ opacity: 0, y: 20 }}
+          transition={{ duration: 0.5 }}
+        >
+          Features
+        </motion.h2>
         <motion.div
           animate={{ opacity: 1, y: 0 }}
           className="grid grid-cols-1 gap-8 md:grid-cols-3"
           initial={{ opacity: 0, y: 20 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
           {FEATURES.map((feature, index) => (
             <motion.div
