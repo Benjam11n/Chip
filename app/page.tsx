@@ -11,10 +11,13 @@ import { useRef } from "react";
 import { AnimatedPokerCard } from "@/components/animated-poker-card";
 import { CardDealAnimation } from "@/components/card-deal-animation";
 import { FloatingParticles } from "@/components/floating-particles";
+import { HotkeyTooltip } from "@/components/hotkey-tooltip";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { CREATE_GAME_HOTKEY, JOIN_GAME_HOTKEY } from "@/constants/hotkeys.const";
 import { FEATURES } from "@/constants/ui";
 import { ROUTES } from "@/lib/routes";
+import { useHotKeys } from "@/hooks/use-hot-keys";
 import "@/styles/animations.css";
 
 // Register GSAP plugins
@@ -37,6 +40,19 @@ const Home = () => {
   const featureCardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const decorativeCardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const heroSectionRef = useRef<HTMLDivElement>(null);
+
+  // Hotkey actions
+  const handleCreateGame = () => {
+    router.push(ROUTES.CREATE);
+  };
+
+  const handleJoinGame = () => {
+    router.push(ROUTES.JOIN);
+  };
+
+  // Register hotkeys
+  useHotKeys(CREATE_GAME_HOTKEY, handleCreateGame, "Creating new game...");
+  useHotKeys(JOIN_GAME_HOTKEY, handleJoinGame, "Opening join game...");
 
   // Animation constants
   const DEFAULT_EASE = "power2.out";
@@ -287,25 +303,35 @@ const Home = () => {
 
           <div className="flex flex-col gap-4 sm:flex-row" ref={heroButtonsRef}>
             <div className="relative flex-1 sm:w-48">
-              <Button
-                className={BUTTON_PRIMARY_CLASSES}
-                onClick={() => router.push(ROUTES.CREATE)}
-                size="lg"
+              <HotkeyTooltip
+                hotkey={CREATE_GAME_HOTKEY}
+                description="Create new game"
               >
-                <Plus className="mr-2 size-5 transition-transform duration-200 group-hover:rotate-90" />
-                Create Game
-              </Button>
+                <Button
+                  className={BUTTON_PRIMARY_CLASSES}
+                  onClick={handleCreateGame}
+                  size="lg"
+                >
+                  <Plus className="mr-2 size-5 transition-transform duration-200 group-hover:rotate-90" />
+                  Create Game
+                </Button>
+              </HotkeyTooltip>
             </div>
             <div className="relative flex-1 sm:w-48">
-              <Button
-                className={BUTTON_OUTLINE_CLASSES}
-                onClick={() => router.push(ROUTES.JOIN)}
-                size="lg"
-                variant="outline"
+              <HotkeyTooltip
+                hotkey={JOIN_GAME_HOTKEY}
+                description="Join existing game"
               >
-                <PlusCircle className="mr-2 size-5 transition-transform duration-200 group-hover:scale-110" />
-                Join Game
-              </Button>
+                <Button
+                  className={BUTTON_OUTLINE_CLASSES}
+                  onClick={handleJoinGame}
+                  size="lg"
+                  variant="outline"
+                >
+                  <PlusCircle className="mr-2 size-5 transition-transform duration-200 group-hover:scale-110" />
+                  Join Game
+                </Button>
+              </HotkeyTooltip>
             </div>
           </div>
         </div>
