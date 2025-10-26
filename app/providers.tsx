@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { logger } from "@/lib/logger";
 
 type ProvidersProps = {
@@ -42,8 +43,10 @@ export const Providers = ({ children }: Readonly<ProvidersProps>) => {
 
   return (
     <ThemeProvider>
-      {children}
-      <Toaster closeButton position="bottom-left" />
+      <TooltipProvider delayDuration={200}>
+        {children}
+        <Toaster closeButton position="bottom-left" />
+      </TooltipProvider>
     </ThemeProvider>
   );
 };
